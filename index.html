@@ -88,7 +88,9 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 ═══════════════════════════════════════════ */
 .hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:0}
 .hero-bg{position:absolute;inset:0}
-.hero-bg .ph{width:100%;height:100%;filter:brightness(.7)}
+.hero-bg .ph{width:100%;height:100%;filter:brightness(.7);align-items:flex-end;justify-content:flex-start;padding:22px;border:none}
+.hero-bg .ph-icon{width:24px;height:24px;font-size:12px;margin-bottom:2px}
+.hero-bg .ph-txt{font-size:7px;text-align:left}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,4,.15) 0%,rgba(20,12,4,.6) 100%);pointer-events:none}
 .hero-content{position:relative;text-align:center;padding:0 24px;max-width:860px;z-index:2}
 .hero-eyebrow{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-l);margin-bottom:28px;opacity:0;transform:translateY(12px);animation:fadeUp 1s .3s forwards}
@@ -114,6 +116,15 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .intro-body p{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:var(--brown);margin-bottom:28px;font-weight:700}
 .text-link{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-l);padding-bottom:2px;display:inline-block;margin-top:8px;transition:color .2s,border-color .2s}
 .text-link:hover{color:var(--brown);border-color:var(--brown)}
+@media(max-width:768px){
+  .intro-section{padding:44px 24px 40px}
+  .intro-headline{font-size:clamp(26px,7vw,40px);margin-bottom:28px;line-height:1.1}
+  .intro-body-wrap{display:flex;flex-direction:column;gap:0}
+  .intro-side-img{display:none}
+  .intro-mobile-img{display:block;width:100%;height:220px;margin-bottom:28px}
+  .intro-body{padding:0}
+  .intro-body p{font-size:13px;line-height:1.85;font-weight:400;margin-bottom:20px}
+}
 
 /* ═══════════════════════════════════════════
    FILMSTRIP SCROLLER — placed right after intro
@@ -183,7 +194,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .testi-section h2{font-family:'Cormorant SC',serif;font-size:clamp(28px,4vw,52px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em;margin-bottom:48px}
 .testi-avatars{display:flex;align-items:center;gap:26px;justify-content:center;margin-bottom:40px}
 .testi-avatar{width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s}
-.testi-avatar .ph{width:100%;height:100%}
+.testi-avatar .ph{width:100%;height:100%;border:none;background:var(--rule)}
 .testi-avatar.active{border-color:var(--gold);transform:scale(1.1)}
 .testi-card{max-width:680px;margin:0 auto;transition:opacity .25s ease,transform .25s ease}
 .testi-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--brown);margin-bottom:18px}
@@ -230,7 +241,6 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .share-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
 .share-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold)}
 .share-btn.primary:hover{background:transparent;color:var(--gold)}
-
 /* ═══════════════════════════════════════════
    SOUL + CINEMA — full-bleed background video
 ═══════════════════════════════════════════ */
@@ -476,8 +486,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
     <p class="testi-quote">Nothing about the day felt staged in front of the camera — and yet every photograph we got back looked composed, like someone had been quietly paying attention the whole time. We're still finding little details in the gallery weeks later.</p>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════
      YOUTUBE LIVE (Krish Photography live section reference)
 ═══════════════════════════════════════════ -->
 <section class="live-section" id="live">
