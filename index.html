@@ -555,7 +555,6 @@ nav.scrolled .nav-tier2{padding:10px 24px}
     </div>
   </div>
 </section>
-
 <!-- ═══════════════════════════════════════════
      SOUL + CINEMA — full-bleed background video
 ═══════════════════════════════════════════ -->
@@ -735,12 +734,12 @@ function switchTesti(i){
   }, 220);
 }
 
-/* ── JSONBIN — plug in your own bin to drive frames / stories / testimonials / intro / hero / films video / live link ──
-   const BIN_ID = 'YOUR_BIN_ID';
-   const API_KEY = 'YOUR_JSONBIN_MASTER_KEY';
-   Until a bin is connected, every image slot stays a placeholder block. */
-const BIN_ID = '';
-const API_KEY = '';
+/* ── JSONBIN — connected to the Photowalla admin panel.
+   Drives frames / stories / testimonials / intro / hero /
+   films video / live link. Keep this Master Key private —
+   it has write access to your content bin. ── */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 
 async function loadFromBin(){
   if (!BIN_ID || !API_KEY){ handleLiveLink(null); return; }
