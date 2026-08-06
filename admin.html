@@ -138,7 +138,6 @@ input,textarea{font-family:'Montserrat',sans-serif}
     <div class="login-error" id="pwError"></div>
   </div>
 </div>
-
 <!-- ═══════════════════════ ADMIN APP ═══════════════════════ -->
 <div id="adminApp" class="hidden">
   <aside class="sidebar" id="sidebar">
@@ -153,7 +152,6 @@ input,textarea{font-family:'Montserrat',sans-serif}
       <div class="nav-item" data-section="live"><span class="ic">●</span> Live Stream</div>
       <div class="nav-item" data-section="films"><span class="ic">▶</span> Soul + Cinema Film</div>
       <div class="nav-item" data-section="videos"><span class="ic">🎬</span> Video Portfolio</div>
-      <div class="nav-item" data-section="settings"><span class="ic">⚙</span> Settings</div>
     </nav>
     <div class="sidebar-foot">
       <a href="index.html" target="_blank">↗ Preview Website</a>
@@ -185,6 +183,11 @@ input,textarea{font-family:'Montserrat',sans-serif}
    AUTH
 ══════════════════════════════════════════ */
 const ADMIN_PASSWORD = 'photowalla.in2026';
+
+/* Storage connection — fixed in code so it never appears as an
+   editable/visible field in the admin interface. */
+const STORAGE_BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const STORAGE_API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 const loginScreen = document.getElementById('loginScreen');
 const adminApp = document.getElementById('adminApp');
 
@@ -241,15 +244,11 @@ function markSaved(){
 }
 
 function getBinConfig(){
-  return {
-    binId: localStorage.getItem('pw_bin_id') || '',
-    apiKey: localStorage.getItem('pw_bin_key') || ''
-  };
+  return { binId: STORAGE_BIN_ID, apiKey: STORAGE_API_KEY };
 }
 
 async function loadState(){
   const { binId, apiKey } = getBinConfig();
-  if (!binId || !apiKey) return;
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': apiKey } });
     if (!res.ok) throw new Error('fetch failed');
@@ -279,11 +278,6 @@ function padFrames(arr){
 
 async function saveState(){
   const { binId, apiKey } = getBinConfig();
-  if (!binId || !apiKey){
-    showToast('Add your JSONBin ID + Master Key in Settings first', true);
-    renderSection('settings');
-    return;
-  }
   const btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try{
@@ -360,7 +354,7 @@ function ytId(url){
 const titles = {
   hero:'Hero Section', intro:'Intro Section', grid:'Photography Grid',
   filmstrip:'Selected Frames', stories:'Love Stories', testimonials:'Testimonials',
-  live:'Live Stream', films:'Soul + Cinema Film', videos:'Video Portfolio', settings:'Settings'
+  live:'Live Stream', films:'Soul + Cinema Film', videos:'Video Portfolio'
 };
 let currentSection = 'hero';
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -381,7 +375,7 @@ function renderSection(name){
   c.innerHTML = '';
   const renderers = { hero:renderHero, intro:renderIntro, grid:renderGrid, filmstrip:renderFilmstrip,
     stories:renderStories, testimonials:renderTestimonials, live:renderLive, films:renderFilms,
-    videos:renderVideos, settings:renderSettings };
+    videos:renderVideos };
   renderers[name](c);
 }
 
@@ -452,8 +446,7 @@ function noteBox(text){
   d.innerHTML = text;
   return d;
 }
-
-/* ══════════════════════════════════════════
+  /* ══════════════════════════════════════════
    HERO
 ══════════════════════════════════════════ */
 function renderHero(c){
@@ -579,7 +572,8 @@ function renderStories(c){
   c.appendChild(addBtn);
   c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB.'));
 }
-  /* ══════════════════════════════════════════
+
+/* ══════════════════════════════════════════
    TESTIMONIALS
 ══════════════════════════════════════════ */
 function renderTestimonials(c){
@@ -729,37 +723,6 @@ function renderVideos(c){
   c.appendChild(noteBox('<b>Uploaded from gallery:</b> 1080 × 1920 px (vertical) or 1920 × 1080 px (landscape) · MP4 · under 25 MB — compress longer clips before uploading. <br><b>YouTube link:</b> no size limit, loads faster on the website — best for full films.'));
 }
 
-/* ══════════════════════════════════════════
-   SETTINGS
-══════════════════════════════════════════ */
-function renderSettings(c){
-  c.innerHTML = `<p class="panel-intro">This admin panel saves everything to a free <b>JSONBin.io</b> bin, and your website reads from the same bin to show your content live. Set this up once.</p>`;
-  const { binId, apiKey } = getBinConfig();
-  const card = document.createElement('div'); card.className='card';
-  card.innerHTML = `
-    <div class="card-title">Storage Connection</div>
-    <div class="form-row"><label>Bin ID</label><input id="binIdInput" value="${binId}" placeholder="e.g. 64f1a2b3c4d5e6f7a8b9c0d1"></div>
-    <div class="form-row"><label>Master Key</label><input id="binKeyInput" value="${apiKey}" placeholder="Your JSONBin Master Key"></div>
-  `;
-  const btnRow = document.createElement('div'); btnRow.style.display='flex'; btnRow.style.gap='12px'; btnRow.style.marginTop='16px';
-  const saveConnBtn = document.createElement('button'); saveConnBtn.className='add-btn'; saveConnBtn.textContent='Save Connection';
-  const loadBtn = document.createElement('button'); loadBtn.className='add-btn'; loadBtn.textContent='Reload From Bin';
-  saveConnBtn.onclick = () => {
-    localStorage.setItem('pw_bin_id', document.getElementById('binIdInput').value.trim());
-    localStorage.setItem('pw_bin_key', document.getElementById('binKeyInput').value.trim());
-    showToast('Connection saved');
-  };
-  loadBtn.onclick = async () => { await loadState(); renderSection('settings'); };
-  btnRow.appendChild(saveConnBtn); btnRow.appendChild(loadBtn);
-  card.appendChild(btnRow);
-  c.appendChild(card);
-  c.appendChild(noteBox(`
-    <b>First time setup:</b><br>
-    1. Create a free account at jsonbin.io and create a new bin.<br>
-    2. Copy its <b>Bin ID</b> and your <b>X-Master-Key</b> into the fields above and click Save Connection.<br>
-    3. Open your website's HTML file and paste the same two values into <code>BIN_ID</code> and <code>API_KEY</code> near the bottom of the script — this is what lets the live site pull the content you upload here.
-  `));
-}
 </script>
 </body>
 </html>
