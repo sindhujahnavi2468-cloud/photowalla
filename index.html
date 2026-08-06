@@ -85,7 +85,8 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   .nav-tier1{padding:16px 60px 14px}
   .hamburger{display:flex}
 }
-  /* ═══════════════════════════════════════════
+
+/* ═══════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════ */
 .hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:0}
@@ -145,8 +146,8 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 @media(max-width:768px){
   .fs-frame{width:180px;height:240px}
   .fs-arrow{display:none}
-             }
-  
+}
+
 /* ═══════════════════════════════════════════
    FRAMES — magazine collage grid (admin driven)
 ═══════════════════════════════════════════ */
@@ -191,6 +192,33 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 @media(max-width:420px){
   .stories-grid{grid-template-columns:1fr;max-width:260px}
 }
+
+/* ═══════════════════════════════════════════
+   VIDEO PORTFOLIO
+═══════════════════════════════════════════ */
+.videos-section{background:var(--warm);padding:100px 60px;border-top:1px solid var(--rule)}
+.videos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:900px;margin:0 auto}
+.video-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:var(--parchment)}
+.video-card video,.video-card img{width:100%;height:100%;object-fit:cover;display:block}
+.play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(12,9,6,0) 45%,rgba(12,9,6,.6) 100%);transition:background .25s}
+.video-card:hover .play-badge{background:linear-gradient(180deg,rgba(12,9,6,.15) 0%,rgba(12,9,6,.7) 100%)}
+.play-icon{width:50px;height:50px;border-radius:50%;border:1px solid rgba(250,248,244,.7);display:flex;align-items:center;justify-content:center;color:#FAF8F4;font-size:15px;padding-left:3px;transition:background .25s,transform .25s,border-color .25s}
+.video-card:hover .play-icon{background:var(--gold);border-color:var(--gold);transform:scale(1.08)}
+.video-card-title{position:absolute;left:14px;right:14px;bottom:14px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:#FAF8F4;z-index:2;line-height:1.4}
+.videos-empty{grid-column:1/-1;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--grey);padding:20px 0}
+@media(max-width:768px){
+  .videos-section{padding:60px 24px}
+  .videos-grid{grid-template-columns:repeat(2,1fr);gap:16px;max-width:420px}
+}
+@media(max-width:420px){
+  .videos-grid{grid-template-columns:1fr;max-width:260px}
+}
+
+.video-lightbox{position:fixed;inset:0;background:rgba(10,7,4,.94);z-index:4000;display:none;align-items:center;justify-content:center;padding:24px}
+.video-lightbox.open{display:flex}
+.lightbox-inner{width:100%;max-width:920px}
+.lightbox-inner iframe,.lightbox-inner video{width:100%;aspect-ratio:16/9;background:#000;display:block}
+.lightbox-close{position:absolute;top:22px;right:26px;background:none;border:none;color:#FAF8F4;font-size:32px;cursor:pointer;line-height:1;z-index:4001}
 
 /* ═══════════════════════════════════════════
    TESTIMONIALS
@@ -293,6 +321,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .submit-btn{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#fff;background:var(--gold);padding:16px 52px;border:none;cursor:pointer;transition:background .3s}
 .submit-btn:hover{background:var(--gold-l)}
 @media(max-width:900px){.contact-v2-grid{grid-template-columns:1fr;gap:48px}.contact-section-v2{padding:60px 24px}}
+
 /* ═══════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════ */
@@ -349,6 +378,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   <a href="#hero" onclick="closeMobileMenu()">Home</a>
   <a href="#photography" onclick="closeMobileMenu()">Galleries</a>
   <a href="#stories" onclick="closeMobileMenu()">Stories</a>
+  <a href="#videos" onclick="closeMobileMenu()">Videos</a>
   <a href="#testimonials" onclick="closeMobileMenu()">Testimonials</a>
   <a href="#live" onclick="closeMobileMenu()">Live</a>
   <a href="#films" onclick="closeMobileMenu()">Films</a>
@@ -366,6 +396,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
     <a href="#hero">Home</a>
     <a href="#photography">Galleries</a>
     <a href="#stories">Stories</a>
+    <a href="#videos">Videos</a>
     <a href="#testimonials">Testimonials</a>
     <a href="#live">Live</a>
     <a href="#films">Films</a>
@@ -475,22 +506,25 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 </section>
 
 <!-- ═══════════════════════════════════════════
-     TESTIMONIALS
+     VIDEO PORTFOLIO
 ═══════════════════════════════════════════ -->
-<section class="testi-section" id="testimonials">
-  <span class="section-label">Testimonials</span>
-  <h2>What Our Couples Say</h2>
-  <div class="testi-avatars" id="testiAvatars">
-    <div class="testi-avatar active" onclick="switchTesti(0)"><div class="ph"></div></div>
-    <div class="testi-avatar" onclick="switchTesti(1)"><div class="ph"></div></div>
-    <div class="testi-avatar" onclick="switchTesti(2)"><div class="ph"></div></div>
+<section class="videos-section" id="videos">
+  <div class="stories-header">
+    <span class="section-label">Video Portfolio</span>
+    <h2>Films Worth Watching</h2>
+    <p>A curated reel of our favourite wedding films — cinematic, honest, unhurried.</p>
   </div>
-  <div class="testi-card" id="testiContent">
-    <div class="testi-name">Couple Name</div>
-    <p class="testi-quote">Nothing about the day felt staged in front of the camera — and yet every photograph we got back looked composed, like someone had been quietly paying attention the whole time. We're still finding little details in the gallery weeks later.</p>
+  <div class="videos-grid" id="videosGrid">
+    <div class="videos-empty">More films coming soon.</div>
   </div>
-    </section>
-  
+</section>
+
+<!-- Video Lightbox -->
+<div class="video-lightbox" id="videoLightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <div class="lightbox-inner" id="lightboxInner"></div>
+</div>
+
 <!-- ═══════════════════════════════════════════
      TESTIMONIALS
 ═══════════════════════════════════════════ -->
@@ -659,6 +693,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
       <p class="footer-col-title">Navigate</p>
       <a href="#photography">Galleries</a>
       <a href="#stories">Stories</a>
+      <a href="#videos">Videos</a>
       <a href="#testimonials">Testimonials</a>
       <a href="#live">Live</a>
       <a href="#films">Films</a>
@@ -770,6 +805,7 @@ async function loadFromBin(){
     if (state.hero) renderHeroImg(state.hero);
     if (state.filmstrip) renderFilmstrip(state.filmstrip);
     if (state.testimonials && state.testimonials.length) renderTestimonials(state.testimonials);
+    if (state.videoPortfolio) renderVideoPortfolio(state.videoPortfolio);
     if (state.filmsVideo) renderFilmsVideo(state.filmsVideo);
     handleLiveLink(state.liveLink || null);
   } catch(e){
@@ -853,6 +889,50 @@ function renderFilmsVideo(url){
   video.style.display = 'block';
   ph.style.display = 'none';
 }
+
+/* ── VIDEO PORTFOLIO ── */
+function renderVideoPortfolio(list){
+  const grid = document.getElementById('videosGrid');
+  if (!grid) return;
+  if (!list || !list.length){
+    grid.innerHTML = `<div class="videos-empty">More films coming soon.</div>`;
+    return;
+  }
+  grid.innerHTML = '';
+  list.forEach(v => {
+    if (!v.src) return;
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    let thumbHtml = '';
+    if (v.type === 'youtube'){
+      const id = getYouTubeId(v.src);
+      thumbHtml = id ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="">` : '';
+    } else {
+      thumbHtml = `<video muted playsinline preload="metadata" src="${v.src}"></video>`;
+    }
+    card.innerHTML = `${thumbHtml}<div class="play-badge"><div class="play-icon">&#9658;</div></div>${v.title ? `<div class="video-card-title">${v.title}</div>` : ''}`;
+    card.addEventListener('click', () => openVideoLightbox(v));
+    grid.appendChild(card);
+  });
+  if (!grid.children.length) grid.innerHTML = `<div class="videos-empty">More films coming soon.</div>`;
+}
+function openVideoLightbox(v){
+  const box = document.getElementById('videoLightbox');
+  const inner = document.getElementById('lightboxInner');
+  if (v.type === 'youtube'){
+    const id = getYouTubeId(v.src);
+    inner.innerHTML = id ? `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>` : '';
+  } else {
+    inner.innerHTML = `<video src="${v.src}" controls autoplay playsinline></video>`;
+  }
+  box.classList.add('open');
+}
+function closeVideoLightbox(){
+  document.getElementById('videoLightbox').classList.remove('open');
+  document.getElementById('lightboxInner').innerHTML = '';
+}
+document.getElementById('lightboxClose').addEventListener('click', closeVideoLightbox);
+document.getElementById('videoLightbox').addEventListener('click', e => { if (e.target.id === 'videoLightbox') closeVideoLightbox(); });
 
 /* ── LIVE STREAM ── */
 function getYouTubeId(url){
