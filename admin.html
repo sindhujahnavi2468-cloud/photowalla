@@ -572,30 +572,56 @@ function renderFilmstrip(c){
    LOVE STORIES
 ══════════════════════════════════════════ */
 function renderStories(c){
-  c.innerHTML = `<p class="panel-intro">Each card links to a couple's full story page. Add a cover image, couple name, and location.</p>`;
+  c.innerHTML = `<p class="panel-intro">Each card links to a couple's own full story page. Add a cover photo, name, location, a short story, and as many gallery photos as you like — your client can add unlimited photos per story.</p>`;
   const wrap = document.createElement('div'); c.appendChild(wrap);
   function paint(){
     wrap.innerHTML = '';
     state.stories.forEach((s,i) => {
+      if (!s.photos) s.photos = [];
       const card = document.createElement('div'); card.className='repeat-card';
-      const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove';
+      const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove Story';
       rm.onclick = () => { state.stories.splice(i,1); markDirty(); paint(); };
       card.appendChild(rm);
       card.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='' }));
       const fields = document.createElement('div'); fields.className='repeat-fields';
       fields.innerHTML = `
         <div class="form-row"><label>Couple Name</label><input data-f="name" value="${s.name||''}" placeholder="e.g. Riya & Aarav"></div>
-        <div class="form-row"><label>Location</label><input data-f="location" value="${s.location||''}" placeholder="e.g. Udaipur"></div>`;
-      fields.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { s[inp.dataset.f] = inp.value; markDirty(); }));
+        <div class="form-row"><label>Location</label><input data-f="location" value="${s.location||''}" placeholder="e.g. Udaipur"></div>
+        <div class="form-row"><label>Their Story (optional)</label><textarea data-f="text" placeholder="A few lines about their day...">${s.text||''}</textarea></div>`;
+      fields.querySelectorAll('input,textarea').forEach(inp => inp.addEventListener('input', () => { s[inp.dataset.f] = inp.value; markDirty(); }));
       card.appendChild(fields);
       wrap.appendChild(card);
+
+      // gallery photos for this story's sub-page
+      const galWrap = document.createElement('div'); galWrap.style.gridColumn = '1 / -1';
+      const galTitle = document.createElement('div'); galTitle.className='card-title'; galTitle.style.marginTop='6px'; galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`;
+      galWrap.appendChild(galTitle);
+      const galGrid = document.createElement('div'); galGrid.className='slot-grid';
+      function paintGal(){
+        galGrid.innerHTML = '';
+        s.photos.forEach((p,pi) => {
+          galGrid.appendChild(buildSlot({
+            value:p, label:'Add photo',
+            onFile: v => { s.photos[pi] = v; },
+            onRemove: () => { s.photos.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; }
+          }));
+        });
+        galGrid.appendChild(buildSlot({
+          value:'', label:'Add photo',
+          onFile: v => { s.photos.push(v); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; },
+          onRemove: ()=>{}
+        }));
+      }
+      paintGal();
+      galWrap.appendChild(galGrid);
+      card.appendChild(galWrap);
     });
   }
   paint();
   const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Love Story';
-  addBtn.onclick = () => { state.stories.push({ id: Date.now(), cover:'', name:'', location:'' }); markDirty(); paint(); };
+  addBtn.onclick = () => { state.stories.push({ id: Date.now(), cover:'', name:'', location:'', text:'', photos:[] }); markDirty(); paint(); };
   c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB.'));
+  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB, for both the cover and gallery photos. Add as many gallery photos as the story needs — the sub-page grows to fit them.'));
 }
 
 /* ══════════════════════════════════════════
