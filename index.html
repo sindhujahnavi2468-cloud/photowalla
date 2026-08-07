@@ -6,36 +6,46 @@
 <title>Photowalla — Luxury &amp; Editorial Photography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --cream:#FAF8F4;
-  --warm:#F5F2EC;
-  --parchment:#EDE8DF;
-  --charcoal:#1C1C1C;
-  --brown:#2A1A0E;
-  --gold:#A8844A;
-  --gold-l:#C9A96E;
-  --grey:#7A7065;
-  --rule:#DDD8CF;
-}
+:root{--cream:#FAF8F4;--warm:#F5F2EC;--parchment:#EDE8DF;--charcoal:#1C1C1C;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF}
 html{scroll-behavior:smooth}
 body{background:var(--cream);color:var(--charcoal);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden}
 body.locked{overflow:hidden}
-img{max-width:100%}
-section{scroll-margin-top:120px}
-
-/* placeholder image blocks — swap for real photos via admin */
+img{max-width:100%;display:block}
+section{scroll-margin-top:110px}
 .ph{background:var(--parchment);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(168,132,74,.3)}
 .ph-icon{width:32px;height:32px;border:1px solid rgba(168,132,74,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px}
 .ph-txt{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(168,132,74,.5);text-align:center;line-height:1.9}
 
-/* ═══════════════════════════════════════════
-   ENTRANCE — grid of portfolio photos with the
-   brand panel centered. Reuses the same 14
-   Photography Grid images uploaded via admin.
-═══════════════════════════════════════════ */
+/* NAV */
+.site-nav{background:rgba(250,248,244,.98);border-bottom:1px solid var(--rule);padding:18px 24px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:500}
+.nav-logo img{height:32px;display:block}
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;row-gap:10px}
+.nav-links a{font-family:'Cormorant SC',serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brown);text-decoration:none;padding-bottom:3px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);border-color:var(--gold-l)}
+.nav-links a.nav-enquire{color:var(--gold)}
+@media(max-width:640px){.nav-links{gap:14px 18px}.nav-links a{font-size:9.5px;letter-spacing:2px}.nav-logo img{height:26px}}
+
+/* FOOTER */
+.site-footer{background:var(--brown);border-top:1px solid rgba(255,255,255,.08)}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:60px 60px 44px}
+.footer-logo{height:30px;filter:brightness(0) invert(1)}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold-l);margin-top:14px;line-height:1.5}
+.footer-location{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.35);margin-top:8px}
+.footer-col{display:flex;flex-direction:column;gap:11px}
+.footer-col-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.footer-col a{font-size:12px;color:rgba(250,248,244,.55);text-decoration:none;transition:color .2s}
+.footer-col a:hover{color:#FAF8F4}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 60px;display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:30px;padding:40px 24px 30px}.footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ENTRANCE */
 #entrance{position:fixed;inset:0;z-index:5000;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);background:#0c0906;transition:opacity 1s ease,visibility 1s ease}
 #entrance.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .ent-cell{position:relative;overflow:hidden}
@@ -44,57 +54,21 @@ section{scroll-margin-top:120px}
 .ent-cell .ph-txt{color:rgba(201,169,110,.4)}
 .ent-cell img{width:100%;height:100%;object-fit:cover;display:block}
 .ent-mid{position:relative;grid-column:3;grid-row:2;background:#0c0906;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:2;padding:20px}
-.ent-brand{font-family:'Cormorant SC',serif;font-size:26px;letter-spacing:6px;color:#FAF8F4;text-transform:uppercase}
+.ent-brand-logo{height:34px;filter:brightness(0) invert(1)}
 .ent-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;letter-spacing:1px;color:var(--gold-l)}
 .ent-btn{margin-top:10px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FAF8F4;border:1px solid rgba(250,248,244,.55);padding:14px 40px;background:transparent;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .ent-btn:hover{background:var(--gold);border-color:var(--gold);color:#fff}
 @media(max-width:768px){
   #entrance{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,1fr)}
   .ent-mid{grid-column:2;grid-row:3}
-  .ent-brand{font-size:19px;letter-spacing:4px}
+  .ent-brand-logo{height:26px}
 }
 
-/* ═══════════════════════════════════════════
-   NAV — Naman Verma two-tier style
-═══════════════════════════════════════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(250,248,244,.98);border-bottom:1px solid var(--rule);transition:transform .4s ease,padding .3s}
-nav.nav-hidden{transform:translateY(-100%)}
-.nav-tier1{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 24px 16px;text-align:center}
-.nav-tier1 .nav-word{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:34px;color:var(--brown);text-decoration:none;transition:font-size .3s}
-nav.scrolled .nav-tier1{padding:14px 24px 10px}
-nav.scrolled .nav-tier1 .nav-word{font-size:24px}
-.nav-tier2{display:flex;align-items:center;justify-content:center;gap:44px;padding:14px 24px;border-top:1px solid var(--rule)}
-nav.scrolled .nav-tier2{padding:10px 24px}
-.nav-tier2 a{font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--brown);text-decoration:none;transition:color .2s}
-.nav-tier2 a:hover{color:var(--gold)}
-.nav-tier2 a.enquire{color:var(--gold);border-bottom:1px solid var(--gold-l);padding-bottom:2px}
-
-.hamburger{display:none;position:fixed;top:26px;right:22px;z-index:1100;flex-direction:column;justify-content:space-between;width:24px;height:16px;cursor:pointer;background:none;border:none;padding:0}
-.hamburger span{display:block;height:1px;background:var(--brown);transition:all .3s}
-.hamburger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
-
-.mobile-menu{position:fixed;inset:0;background:var(--cream);z-index:1050;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);padding:80px 40px 40px;pointer-events:none}
-.mobile-menu.open{transform:translateX(0);pointer-events:auto}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,7vw,36px);font-style:italic;color:var(--brown);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--rule);width:100%;text-align:center}
-.mobile-menu a:last-child{border-bottom:none}
-
-@media(max-width:768px){
-  .nav-tier2{display:none}
-  .nav-tier1{padding:16px 60px 14px}
-  .hamburger{display:flex}
-}
-
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
-.hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:0}
-.hero-bg{position:absolute;inset:0}
-#heroImg{width:100%;height:100%;display:block;background-size:cover;background-position:center}
-.hero-bg .ph{filter:brightness(.7);align-items:flex-end;justify-content:flex-start;padding:22px;border:none}
-.hero-bg .ph-icon{width:24px;height:24px;font-size:12px;margin-bottom:2px}
-.hero-bg .ph-txt{font-size:7px;text-align:left}
+/* HERO — synced slideshow */
+.hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:#181310}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
+.hero-slide.on{opacity:1}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,4,.15) 0%,rgba(20,12,4,.6) 100%);pointer-events:none}
 .hero-content{position:relative;text-align:center;padding:0 24px;max-width:860px;z-index:2}
 .hero-eyebrow{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-l);margin-bottom:28px;opacity:0;transform:translateY(12px);animation:fadeUp 1s .3s forwards}
@@ -107,9 +81,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
 
-/* ═══════════════════════════════════════════
-   INTRO — A Modern Approach to an Age Old Tradition
-═══════════════════════════════════════════ */
+/* INTRO */
 .intro-section{background:var(--warm);padding:100px 60px 80px;border-top:1px solid var(--rule)}
 .intro-headline{font-family:'Cormorant SC',serif;font-size:clamp(34px,5.5vw,86px);font-weight:600;line-height:1.0;letter-spacing:.01em;color:var(--brown);margin-bottom:52px;text-transform:uppercase}
 .intro-headline .italic-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;text-transform:none;font-size:.85em;letter-spacing:0}
@@ -118,8 +90,7 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .intro-body{padding:0 52px}
 .intro-mobile-img{display:none}
 .intro-body p{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2;color:var(--brown);margin-bottom:28px;font-weight:700}
-.text-link{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-l);padding-bottom:2px;display:inline-block;margin-top:8px;transition:color .2s,border-color .2s}
-.text-link:hover{color:var(--brown);border-color:var(--brown)}
+.text-link{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-l);padding-bottom:2px;display:inline-block;margin-top:8px}
 @media(max-width:768px){
   .intro-section{padding:44px 24px 40px}
   .intro-headline{font-size:clamp(26px,7vw,40px);margin-bottom:28px;line-height:1.1}
@@ -130,29 +101,18 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   .intro-body p{font-size:13px;line-height:1.85;font-weight:400;margin-bottom:20px}
 }
 
-/* ═══════════════════════════════════════════
-   FILMSTRIP SCROLLER — placed right after intro
-═══════════════════════════════════════════ */
+/* FILMSTRIP — synced with hero */
 .filmstrip-section{background:var(--charcoal);padding:56px 0;position:relative;border-top:1px solid var(--rule)}
 .filmstrip-label{display:block;padding:0 32px;margin-bottom:22px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,248,244,.5)}
 .filmstrip-inner{position:relative}
 .filmstrip-track{display:flex;gap:0;overflow-x:auto;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}
 .filmstrip-track::-webkit-scrollbar{display:none}
-.fs-frame{flex:0 0 auto;width:260px;height:340px;overflow:hidden;position:relative}
+.fs-frame{flex:0 0 auto;width:260px;height:340px;overflow:hidden;position:relative;opacity:.5;transition:opacity .6s ease}
+.fs-frame.fs-active{opacity:1}
 .fs-frame .ph{width:100%;height:100%;background:#242017;border:none;border-right:1px solid rgba(201,169,110,.12)}
-.fs-frame:last-child .ph{border-right:none}
-.fs-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:44px;height:44px;border-radius:50%;background:rgba(250,248,244,.1);border:1px solid rgba(250,248,244,.3);color:#FAF8F4;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background .25s}
-.fs-arrow:hover{background:var(--gold)}
-.fs-arrow.left{left:20px}
-.fs-arrow.right{right:20px}
-@media(max-width:768px){
-  .fs-frame{width:180px;height:240px}
-  .fs-arrow{display:none}
-}
+@media(max-width:768px){.fs-frame{width:180px;height:240px}}
 
-/* ═══════════════════════════════════════════
-   FRAMES — magazine collage grid (admin driven)
-═══════════════════════════════════════════ */
+/* PHOTOGRAPHY GRID */
 .portfolio-section{background:var(--cream);padding:0}
 .magazine-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:260px 340px 260px;gap:3px}
 @media(max-width:768px){
@@ -173,186 +133,10 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 .mg-cell{overflow:hidden;position:relative}
 .mg-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
 .mg-cell:hover img{transform:scale(1.05)}
-
-/* ═══════════════════════════════════════════
-   LOVE STORIES — Naman Verma reference layout
-═══════════════════════════════════════════ */
-.stories-section{background:var(--cream);padding:100px 60px;border-top:1px solid var(--rule)}
-.stories-header{text-align:center;margin-bottom:56px}
-.stories-header .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block}
-.stories-header h2{font-family:'Cormorant SC',serif;font-size:clamp(28px,4vw,52px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em;margin-bottom:14px}
-.stories-header p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--grey);letter-spacing:.5px}
-.stories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:760px;margin:0 auto}
-.story-card{text-decoration:none;display:block}
-.story-card .ph{width:100%;aspect-ratio:3/4}
-.story-cap{margin-top:12px;font-family:'Cormorant SC',serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brown)}
-.story-cap .story-loc{color:var(--gold)}
-@media(max-width:768px){
-  .stories-section{padding:60px 24px}
-  .stories-grid{grid-template-columns:repeat(2,1fr);gap:16px;max-width:420px}
-}
-@media(max-width:420px){
-  .stories-grid{grid-template-columns:1fr;max-width:260px}
-}
-
-/* ═══════════════════════════════════════════
-   VIDEO PORTFOLIO
-═══════════════════════════════════════════ */
-.videos-section{background:var(--warm);padding:100px 60px;border-top:1px solid var(--rule)}
-.videos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:900px;margin:0 auto}
-.video-card{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:var(--parchment)}
-.video-card video,.video-card img{width:100%;height:100%;object-fit:cover;display:block}
-.play-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(12,9,6,0) 45%,rgba(12,9,6,.6) 100%);transition:background .25s}
-.video-card:hover .play-badge{background:linear-gradient(180deg,rgba(12,9,6,.15) 0%,rgba(12,9,6,.7) 100%)}
-.play-icon{width:50px;height:50px;border-radius:50%;border:1px solid rgba(250,248,244,.7);display:flex;align-items:center;justify-content:center;color:#FAF8F4;font-size:15px;padding-left:3px;transition:background .25s,transform .25s,border-color .25s}
-.video-card:hover .play-icon{background:var(--gold);border-color:var(--gold);transform:scale(1.08)}
-.video-card-title{position:absolute;left:14px;right:14px;bottom:14px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:#FAF8F4;z-index:2;line-height:1.4}
-.videos-empty{grid-column:1/-1;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--grey);padding:20px 0}
-@media(max-width:768px){
-  .videos-section{padding:60px 24px}
-  .videos-grid{grid-template-columns:repeat(2,1fr);gap:16px;max-width:420px}
-}
-@media(max-width:420px){
-  .videos-grid{grid-template-columns:1fr;max-width:260px}
-}
-
-.video-lightbox{position:fixed;inset:0;background:rgba(10,7,4,.94);z-index:4000;display:none;align-items:center;justify-content:center;padding:24px}
-.video-lightbox.open{display:flex}
-.lightbox-inner{width:100%;max-width:920px}
-.lightbox-inner iframe,.lightbox-inner video{width:100%;aspect-ratio:16/9;background:#000;display:block}
-.lightbox-close{position:absolute;top:22px;right:26px;background:none;border:none;color:#FAF8F4;font-size:32px;cursor:pointer;line-height:1;z-index:4001}
-
-/* ═══════════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════════ */
-.testi-section{background:var(--parchment);padding:100px 60px;text-align:center;border-top:1px solid var(--rule)}
-.testi-section .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block}
-.testi-section h2{font-family:'Cormorant SC',serif;font-size:clamp(28px,4vw,52px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em;margin-bottom:48px}
-.testi-avatars{display:flex;align-items:center;gap:26px;justify-content:center;margin-bottom:40px}
-.testi-avatar{width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s}
-.testi-avatar .ph{width:100%;height:100%;border:none;background:var(--rule)}
-.testi-avatar.active{border-color:var(--gold);transform:scale(1.1)}
-.testi-card{max-width:680px;margin:0 auto;transition:opacity .25s ease,transform .25s ease}
-.testi-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--brown);margin-bottom:18px}
-.testi-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,2vw,22px);line-height:1.85;color:var(--grey);position:relative}
-.testi-quote::before{content:'\201C';font-size:4.2rem;color:var(--gold-l);opacity:.35;line-height:0;position:absolute;top:1rem;left:-1.6rem;font-family:'Cormorant Garamond',serif}
-@media(max-width:768px){.testi-section{padding:60px 24px}.testi-quote::before{display:none}}
-
-/* ═══════════════════════════════════════════
-   YOUTUBE LIVE (Krish Photography reference — live section only)
-═══════════════════════════════════════════ */
-.live-section{background:var(--warm);padding:100px 60px;border-top:1px solid var(--rule)}
-.live-section .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block;text-align:center}
-.live-section h2{font-family:'Cormorant SC',serif;font-size:clamp(28px,4vw,52px);font-weight:600;color:var(--brown);text-align:center;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
-.live-section-script{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.6vw,26px);color:var(--gold);display:block;text-align:center;margin-bottom:14px}
-.live-section-sub{font-family:'Libre Baskerville',serif;font-style:italic;font-size:14px;color:var(--grey);line-height:1.9;text-align:center;margin-bottom:44px;max-width:520px;margin-left:auto;margin-right:auto}
-.live-status-bar{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:24px}
-.live-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:.4rem 1.1rem;border:1px solid #b13a2f;color:#b13a2f}
-.live-badge-dot{width:7px;height:7px;border-radius:50%;background:#b13a2f;animation:livePulse 1.5s infinite}
-@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
-.stream-container{max-width:960px;margin:0 auto}
-.stream-card{border:1px solid var(--rule);background:var(--cream);overflow:hidden}
-.stream-iframe-wrap{position:relative;width:100%;background:var(--brown);display:none}
-.stream-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;padding:4rem 2rem;background:var(--parchment);text-align:center;border-bottom:1px solid var(--rule)}
-.placeholder-icon{width:68px;height:68px;border:1.5px solid var(--rule);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:2rem;color:var(--gold)}
-.placeholder-icon svg{width:26px;height:26px}
-.placeholder-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--brown);margin-bottom:.6rem}
-.placeholder-msg{font-family:'Libre Baskerville',serif;font-style:italic;font-size:14px;color:var(--grey);line-height:1.85;max-width:400px}
-.placeholder-rule{width:40px;height:1px;background:var(--gold-l);margin:1.6rem auto}
-.placeholder-hint{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
-.stream-error{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:220px;padding:3rem 2rem;background:var(--parchment);text-align:center;border-bottom:1px solid var(--rule)}
-.stream-error p{font-family:'Libre Baskerville',serif;font-style:italic;font-size:14px;color:var(--grey)}
-.stream-info{padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid var(--rule)}
-.stream-info-label{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
-.stream-info-value{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--grey)}
-.stream-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;padding:4rem 2rem;background:var(--parchment);border-bottom:1px solid var(--rule)}
-.spinner{width:34px;height:34px;border:1.5px solid var(--rule);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;margin-bottom:1.4rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--grey)}
-.share-strip{margin-top:2rem;padding:1.8rem 2.2rem;border:1px solid var(--rule);background:var(--parchment);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.2rem}
-.share-strip-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--brown);margin-bottom:.2rem}
-.share-strip-sub{font-family:'Libre Baskerville',serif;font-style:italic;font-size:13px;color:var(--grey)}
-.share-btns{display:flex;gap:.7rem;flex-wrap:wrap}
-.share-btn{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:.7rem 1.3rem;border:1px solid var(--gold-l);color:var(--brown);background:transparent;cursor:pointer;display:inline-block;transition:all .2s}
-.share-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
-.share-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold)}
-.share-btn.primary:hover{background:transparent;color:var(--gold)}
-
-/* ═══════════════════════════════════════════
-   SOUL + CINEMA — full-bleed background video
-═══════════════════════════════════════════ */
-.films-section{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;overflow:hidden;clip-path:polygon(0 4%,100% 0,100% 96%,0 100%);background:#0c0906}
-.films-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.5)}
-.films-video-ph{position:absolute;inset:0}
-.films-video-ph .ph{width:100%;height:100%;background:#181310;border:none}
-.films-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,9,6,.35),rgba(12,9,6,.55))}
-.films-content{position:relative;z-index:2;text-align:center;padding:60px 24px;max-width:760px}
-.soul-cinema-title{font-family:'Cormorant SC',serif;font-size:clamp(40px,8vw,110px);font-weight:600;color:#FAF8F4;letter-spacing:.06em;line-height:1}
-.soul-cinema-plus{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.55em;vertical-align:middle;letter-spacing:0;color:var(--gold-l)}
-.films-section-sub{font-family:'Libre Baskerville',serif;font-size:clamp(13px,1.4vw,16px);line-height:2;color:rgba(250,248,244,.82);max-width:640px;margin:32px auto 0;font-style:italic;font-weight:700}
-@media(max-width:768px){
-  .films-section{min-height:70vh;clip-path:polygon(0 3%,100% 0,100% 97%,0 100%)}
-}
-
-/* ═══════════════════════════════════════════
-   CONTACT (Seven Frames layout)
-═══════════════════════════════════════════ */
-.contact-section-v2{background:var(--parchment);padding:100px 60px;border-top:1px solid var(--rule)}
-.contact-v2-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;max-width:1300px;margin:0 auto;align-items:start}
-.contact-v2-left{padding-top:8px}
-.contact-v2-left .section-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:block}
-.contact-v2-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,52px);font-weight:600;font-style:italic;color:var(--brown);margin-bottom:28px;line-height:1.15}
-.contact-v2-left p{font-family:'Libre Baskerville',serif;font-size:14px;line-height:2;color:var(--grey);margin-bottom:36px;max-width:440px}
-.contact-v2-social{display:flex;gap:14px;margin-bottom:40px}
-.fs-icon{width:40px;height:40px;border-radius:50%;background:rgba(168,132,74,.08);border:1px solid rgba(168,132,74,.25);color:var(--brown);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:background .25s,border-color .25s,transform .25s}
-.fs-icon svg{width:18px;height:18px}
-.fs-icon:hover{background:var(--gold);border-color:var(--gold);color:#fff;transform:translateY(-2px)}
-.contact-v2-details{font-size:13px;color:var(--brown);line-height:1.9;letter-spacing:.3px}
-.contact-v2-details a{color:var(--brown);text-decoration:none;border-bottom:1px solid var(--gold-l);transition:color .2s}
-.contact-v2-details a:hover{color:var(--gold)}
-.contact-v2-details .det-block{margin-bottom:22px}
-.contact-v2-details .det-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
-.enquiry-form{max-width:660px;margin:0 auto;text-align:left}
-.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.form-group label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
-.form-group input:not([type=checkbox]),.form-group select,.form-group textarea{width:100%;background:var(--warm);border:1px solid var(--rule);padding:14px 16px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--charcoal);outline:none;transition:border-color .25s;-webkit-appearance:none;border-radius:0}
-.form-group textarea{resize:vertical;min-height:110px}
-.event-checkbox{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:11px;letter-spacing:1px;color:var(--brown)}
-.event-checkbox input[type=checkbox]{width:14px;height:14px;border:1px solid var(--rule);accent-color:var(--gold);cursor:pointer;flex-shrink:0}
-.form-submit{margin-top:32px;text-align:center}
-.submit-btn{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#fff;background:var(--gold);padding:16px 52px;border:none;cursor:pointer;transition:background .3s}
-.submit-btn:hover{background:var(--gold-l)}
-@media(max-width:900px){.contact-v2-grid{grid-template-columns:1fr;gap:48px}.contact-section-v2{padding:60px 24px}}
-
-/* ═══════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════ */
-.footer-new{background:var(--brown);border-top:1px solid rgba(255,255,255,.08)}
-.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding:64px 60px 48px}
-.footer-brand .footer-word{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:34px;color:#FAF8F4}
-.footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--gold-l);margin-top:16px;line-height:1.5}
-.footer-location{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.35);margin-top:8px}
-.footer-col{display:flex;flex-direction:column;gap:12px}
-.footer-col-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.footer-col a{font-size:12px;letter-spacing:.5px;color:rgba(250,248,244,.55);text-decoration:none;transition:color .2s}
-.footer-col a:hover{color:#FAF8F4}
-.footer-hours{font-size:11px;color:rgba(250,248,244,.35);letter-spacing:.3px;margin-top:4px}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 60px;display:flex;align-items:center;justify-content:space-between}
-.footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
-@media(max-width:768px){
-  .footer-top{grid-template-columns:1fr;gap:32px;padding:40px 24px 32px}
-  .footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}
-}
-
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body class="locked">
 
-<!-- ═══════════════════════════════════════════
-     ENTRANCE
-═══════════════════════════════════════════ -->
 <div id="entrance">
   <div class="ent-cell" id="entC1"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>
   <div class="ent-cell" id="entC2"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>
@@ -369,51 +153,30 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   <div class="ent-cell" id="entC13"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>
   <div class="ent-cell" id="entC14"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>
   <div class="ent-mid">
-    <span class="ent-brand">Photowalla</span>
+    <img class="ent-brand-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
     <span class="ent-sub">Luxury &amp; Editorial Photography</span>
     <button class="ent-btn" id="enterBtn">Enter</button>
   </div>
 </div>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#hero" onclick="closeMobileMenu()">Home</a>
-  <a href="#photography" onclick="closeMobileMenu()">Galleries</a>
-  <a href="#stories" onclick="closeMobileMenu()">Stories</a>
-  <a href="#videos" onclick="closeMobileMenu()">Videos</a>
-  <a href="#testimonials" onclick="closeMobileMenu()">Testimonials</a>
-  <a href="#live" onclick="closeMobileMenu()">Live</a>
-  <a href="#films" onclick="closeMobileMenu()">Films</a>
-  <a href="#contact" onclick="closeMobileMenu()">Enquire</a>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     NAV — Naman Verma two-tier style
-═══════════════════════════════════════════ -->
-<nav id="mainNav">
-  <div class="nav-tier1">
-    <a href="#hero" class="nav-word">Photowalla</a>
+<nav class="site-nav">
+  <a href="/index.html" class="nav-logo"><img src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla"></a>
+  <div class="nav-links">
+    <a href="/index.html" class="active">Home</a>
+    <a href="/stories.html">Stories</a>
+    <a href="/testimonials.html">Testimonials</a>
+    <a href="/about.html">About</a>
+    <a href="/store.html">Store</a>
+    <a href="/films.html">Films</a>
+    <a href="/enquiry.html" class="nav-enquire">Enquiry</a>
   </div>
-  <div class="nav-tier2">
-    <a href="#hero">Home</a>
-    <a href="#photography">Galleries</a>
-    <a href="#stories">Stories</a>
-    <a href="#videos">Videos</a>
-    <a href="#testimonials">Testimonials</a>
-    <a href="#live">Live</a>
-    <a href="#films">Films</a>
-    <a href="#contact" class="enquire">Enquire</a>
-  </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
-<!-- ═══════════════════════════════════════════
-     HERO
-═══════════════════════════════════════════ -->
 <section class="hero" id="hero">
-  <div class="hero-bg"><div class="ph" id="heroImg"><div class="ph-icon">+</div><p class="ph-txt">Hero image<br>via admin</p></div></div>
+  <div class="hero-bg">
+    <div class="hero-slide" id="heroSlideA"></div>
+    <div class="hero-slide" id="heroSlideB"></div>
+  </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Photowalla &nbsp;&middot;&nbsp; Luxury &amp; Editorial</p>
@@ -425,9 +188,6 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     INTRO — A Modern Approach to an Age Old Tradition
-═══════════════════════════════════════════ -->
 <section class="intro-section" id="intro">
   <h2 class="intro-headline reveal">
     A Modern Approach<br>
@@ -439,27 +199,19 @@ nav.scrolled .nav-tier2{padding:10px 24px}
       <div class="intro-mobile-img ph" id="introImgMobile" style="height:220px;margin-bottom:28px"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>
       <p>Photowalla was built on a simple idea — that a wedding deserves to be documented the way a story is told, not the way an event is logged. Every frame is composed with the same care an editor gives a magazine cover: considered light, honest emotion, nothing rushed.</p>
       <p>Working out of Bhilwara, Jaipur and Udaipur, Photowalla brings a distinctly modern, editorial sensibility to Rajasthan's rich wedding traditions — celebrating families who want their biggest day held with the same warmth they felt living it.</p>
-      <a href="#contact" class="text-link">Begin Your Story</a>
+      <a href="/enquiry.html" class="text-link">Begin Your Story</a>
     </div>
     <div class="intro-side-img ph" id="introImgRight"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     FILMSTRIP SCROLLER
-═══════════════════════════════════════════ -->
 <section class="filmstrip-section">
   <span class="filmstrip-label">Selected Frames</span>
   <div class="filmstrip-inner">
-    <button class="fs-arrow left" onclick="scrollFilm(-1)">&#8249;</button>
-    <button class="fs-arrow right" onclick="scrollFilm(1)">&#8250;</button>
     <div class="filmstrip-track" id="filmTrack"></div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     FRAMES — magazine collage grid (admin driven)
-═══════════════════════════════════════════ -->
 <section class="portfolio-section" id="photography">
   <div class="magazine-grid">
     <div class="mg-cell mg-r1c1 ph"><div class="ph-icon">+</div><p class="ph-txt">Add image<br>via admin</p></div>
@@ -484,224 +236,21 @@ nav.scrolled .nav-tier2{padding:10px 24px}
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     LOVE STORIES — Naman Verma reference layout
-═══════════════════════════════════════════ -->
-<section class="stories-section" id="stories">
-  <div class="stories-header">
-    <span class="section-label">Real Love Stories</span>
-    <h2>Every Couple, a Poem</h2>
-    <p>Like a river flows surely to the sea, so it goes — some things are meant to be.</p>
-  </div>
-  <div class="stories-grid" id="storiesGrid">
-    <a class="story-card" href="stories/story-1.html">
-      <div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Add image<br>via admin</p></div>
-      <div class="story-cap">Couple Name &nbsp;//&nbsp; <span class="story-loc">Udaipur</span> &nbsp;//</div>
-    </a>
-    <a class="story-card" href="stories/story-2.html">
-      <div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Add image<br>via admin</p></div>
-      <div class="story-cap">Couple Name &nbsp;//&nbsp; <span class="story-loc">Jaipur</span> &nbsp;//</div>
-    </a>
-    <a class="story-card" href="stories/story-3.html">
-      <div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Add image<br>via admin</p></div>
-      <div class="story-cap">Couple Name &nbsp;//&nbsp; <span class="story-loc">Bhilwara</span> &nbsp;//</div>
-    </a>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     VIDEO PORTFOLIO
-═══════════════════════════════════════════ -->
-<section class="videos-section" id="videos">
-  <div class="stories-header">
-    <span class="section-label">Video Portfolio</span>
-    <h2>Films Worth Watching</h2>
-    <p>A curated reel of our favourite wedding films — cinematic, honest, unhurried.</p>
-  </div>
-  <div class="videos-grid" id="videosGrid">
-    <div class="videos-empty">More films coming soon.</div>
-  </div>
-</section>
-
-<!-- Video Lightbox -->
-<div class="video-lightbox" id="videoLightbox">
-  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-  <div class="lightbox-inner" id="lightboxInner"></div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     TESTIMONIALS
-═══════════════════════════════════════════ -->
-<section class="testi-section" id="testimonials">
-  <span class="section-label">Testimonials</span>
-  <h2>What Our Couples Say</h2>
-  <div class="testi-avatars" id="testiAvatars">
-    <div class="testi-avatar active" onclick="switchTesti(0)"><div class="ph"></div></div>
-    <div class="testi-avatar" onclick="switchTesti(1)"><div class="ph"></div></div>
-    <div class="testi-avatar" onclick="switchTesti(2)"><div class="ph"></div></div>
-  </div>
-  <div class="testi-card" id="testiContent">
-    <div class="testi-name">Couple Name</div>
-    <p class="testi-quote">Nothing about the day felt staged in front of the camera — and yet every photograph we got back looked composed, like someone had been quietly paying attention the whole time. We're still finding little details in the gallery weeks later.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     YOUTUBE LIVE (Krish Photography live section reference)
-═══════════════════════════════════════════ -->
-<section class="live-section" id="live">
-  <span class="section-label">Live Event</span>
-  <h2>Live Wedding Streaming</h2>
-  <span class="live-section-script">Be there, wherever you are</span>
-  <p class="live-section-sub">Watch the celebration unfold in real time — share with family and friends across the world.</p>
-
-  <div class="live-status-bar" id="liveStatusBar" style="display:none">
-    <div class="live-badge"><span class="live-badge-dot"></span> Live Now</div>
-  </div>
-
-  <div class="stream-container">
-    <div class="stream-card">
-      <div class="stream-loading" id="streamLoading">
-        <div class="spinner"></div>
-        <p class="loading-text">Checking for live stream&hellip;</p>
-      </div>
-      <div class="stream-iframe-wrap" id="streamIframeWrap">
-        <iframe id="liveFrame" width="100%" height="480" src="" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
-      </div>
-      <div class="stream-placeholder" id="streamPlaceholder" style="display:none">
-        <div class="placeholder-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
-        </div>
-        <div class="placeholder-title">No Live Stream at This Moment</div>
-        <p class="placeholder-msg">The live stream will appear here automatically when the event begins. Share this page with family and friends so they can tune in.</p>
-        <div class="placeholder-rule"></div>
-        <span class="placeholder-hint">Photowalla &middot; Bhilwara / Jaipur / Udaipur</span>
-      </div>
-      <div class="stream-error" id="streamError">
-        <p>Unable to load stream details. Please refresh or try again shortly.</p>
-      </div>
-      <div class="stream-info">
-        <div>
-          <div class="stream-info-label">Streaming by</div>
-          <div class="stream-info-value">Photowalla</div>
-        </div>
-        <div>
-          <div class="stream-info-label">Powered by</div>
-          <div class="stream-info-value">YouTube Live</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="share-strip">
-      <div>
-        <div class="share-strip-title">Share this stream with loved ones</div>
-        <div class="share-strip-sub">Let family and friends watch from anywhere in the world</div>
-      </div>
-      <div class="share-btns">
-        <a href="https://wa.me/?text=Watch%20the%20wedding%20live%20stream%20here%3A%20" id="waShareBtn" class="share-btn primary" target="_blank" rel="noopener">Share on WhatsApp</a>
-        <button class="share-btn" onclick="copyLiveLink()">Copy Link</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SOUL + CINEMA — full-bleed background video
-═══════════════════════════════════════════ -->
-<section class="films-section" id="films">
-  <video class="films-video" id="filmsVideo" autoplay muted loop playsinline style="display:none"></video>
-  <div class="films-video-ph" id="filmsVideoPh"><div class="ph"><div class="ph-icon">▶</div><p class="ph-txt">Background film<br>via admin</p></div></div>
-  <div class="films-overlay"></div>
-  <div class="films-content">
-    <h2 class="soul-cinema-title">SOUL <span class="soul-cinema-plus">+</span> CINEMA</h2>
-    <p class="films-section-sub">Every wedding is unique and so are our films. Photowalla weaves emotion, music and light into short cinematic stories that hold the day the way it actually felt — never over-produced, always honest.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     CONTACT — Seven Frames layout
-═══════════════════════════════════════════ -->
-<section class="contact-section-v2" id="contact">
-  <div class="contact-v2-grid">
-    <div class="contact-v2-left">
-      <span class="section-label">Begin Your Story</span>
-      <h2>Let's Create Something Timeless</h2>
-      <p>Photowalla takes on a limited number of weddings each season to ensure every couple receives full attention. Fill in the form and we'll get back to you within 48 hours to check availability for your date.</p>
-
-      <div class="contact-v2-social">
-        <a href="https://www.instagram.com/photowalla.in/" target="_blank" rel="noopener" class="fs-icon" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-        </a>
-        <a href="https://www.youtube.com/channel/UCsZdjNM-W7ouNUgQ2MyxXlA" target="_blank" rel="noopener" class="fs-icon" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="3"/><polygon points="10,9 16,12 10,15" fill="currentColor" stroke="none"/></svg>
-        </a>
-        <a href="https://wa.me/917239888777" target="_blank" rel="noopener" class="fs-icon" aria-label="WhatsApp">
-          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.76 1.25-.45.07-1.02.1-1.65-.1-.38-.12-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.99-.13-.18-1.07-1.42-1.07-2.7 0-1.29.67-1.92.91-2.18.24-.27.52-.33.7-.33.18 0 .35.002.5.01.16.008.38-.06.6.46.22.53.74 1.81.8 1.94.07.13.11.28.02.45-.09.17-.14.27-.27.42-.13.15-.27.33-.39.44-.13.12-.26.25-.11.5.15.25.68 1.12 1.46 1.81.99.88 1.83 1.16 2.1 1.29.27.13.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.6-.14.24.1 1.5.71 1.76.84.26.13.43.2.49.31.07.11.07.62-.15 1.24z"/></svg>
-        </a>
-      </div>
-
-      <div class="contact-v2-details">
-        <div class="det-block">
-          <span class="det-label">Phone &amp; Email</span>
-          <a href="tel:+917239888777">+91 72398 88777</a><br>
-          <a href="mailto:Senhimaly@gmail.com">Senhimaly@gmail.com</a>
-        </div>
-        <div class="det-block">
-          <span class="det-label">Location</span>
-          Bhilwara &middot; Jaipur &middot; Udaipur
-        </div>
-        <div class="det-block">
-          <span class="det-label">Founder</span>
-          Himaly Raj Sen Sid
-        </div>
-      </div>
-    </div>
-
-    <div class="enquiry-form">
-      <div class="form-group"><label for="fname">Name <span style="font-size:9px;opacity:.65">(required)</span></label><input type="text" id="fname" placeholder="Full name"></div>
-      <div class="form-group"><label for="femail">Email <span style="font-size:9px;opacity:.65">(required)</span></label><input type="email" id="femail" placeholder="your@email.com"></div>
-      <div class="form-group"><label for="fphone">Phone <span style="font-size:9px;opacity:.65">(required)</span></label><input type="tel" id="fphone" placeholder="+91 XXXXX XXXXX"></div>
-      <div class="form-group"><label for="fguests">Estimated Guest Count <span style="font-size:9px;opacity:.65">(required)</span></label><input type="number" id="fguests" placeholder="e.g. 300"></div>
-      <div class="form-group"><label for="fdetails">Tell us more about your wedding — event flow, venues <span style="font-size:9px;opacity:.65">(required)</span></label><textarea id="fdetails" placeholder="Describe the events, ceremonies, venues…"></textarea></div>
-      <div class="form-group"><label for="flocation">Location of the wedding <span style="font-size:9px;opacity:.65">(required)</span></label><input type="text" id="flocation" placeholder="e.g. Udaipur, Rajasthan"></div>
-      <div class="form-group"><label for="fevent-date">Event Dates <span style="font-size:9px;opacity:.65">(required)</span></label><input type="text" id="fevent-date" placeholder="e.g. 15 Feb 2026 – 17 Feb 2026"></div>
-      <div class="form-group">
-        <label>What services are you looking for?</label>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
-          <label class="event-checkbox"><input type="checkbox" name="service" value="Photography"> Photography</label>
-          <label class="event-checkbox"><input type="checkbox" name="service" value="Films"> Films</label>
-          <label class="event-checkbox"><input type="checkbox" name="service" value="Both Photography and Films"> Both Photography and Films</label>
-        </div>
-      </div>
-      <div class="form-submit"><button class="submit-btn" onclick="sendToWhatsApp()">Send via WhatsApp</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════ -->
-<footer class="footer-new">
+<footer class="site-footer">
   <div class="footer-top">
     <div class="footer-brand">
-      <span class="footer-word">Photowalla</span>
+      <img class="footer-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
       <p class="footer-tagline">Luxury &amp; Editorial Photography</p>
       <p class="footer-location">Bhilwara &nbsp;&middot;&nbsp; Jaipur &nbsp;&middot;&nbsp; Udaipur</p>
     </div>
     <div class="footer-col">
       <p class="footer-col-title">Navigate</p>
-      <a href="#photography">Galleries</a>
-      <a href="#stories">Stories</a>
-      <a href="#videos">Videos</a>
-      <a href="#testimonials">Testimonials</a>
-      <a href="#live">Live</a>
-      <a href="#films">Films</a>
-      <a href="#contact">Contact</a>
+      <a href="/stories.html">Stories</a>
+      <a href="/testimonials.html">Testimonials</a>
+      <a href="/about.html">About</a>
+      <a href="/store.html">Store</a>
+      <a href="/films.html">Films</a>
+      <a href="/enquiry.html">Enquiry</a>
     </div>
     <div class="footer-col">
       <p class="footer-col-title">Connect</p>
@@ -713,7 +262,6 @@ nav.scrolled .nav-tier2{padding:10px 24px}
       <p class="footer-col-title">Get In Touch</p>
       <a href="tel:+917239888777">+91 72398 88777</a>
       <a href="mailto:Senhimaly@gmail.com">Senhimaly@gmail.com</a>
-      <p class="footer-hours">Founded by Himaly Raj Sen Sid</p>
     </div>
   </div>
   <div class="footer-bottom">
@@ -723,99 +271,73 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 </footer>
 
 <script>
-/* ── ENTRANCE ── */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
+
 document.getElementById('enterBtn').addEventListener('click', function(){
   document.getElementById('entrance').classList.add('hidden');
   document.body.classList.remove('locked');
 });
 
-/* ── NAV SCROLL ── */
-const nav = document.getElementById('mainNav');
-let lastScrollY = window.scrollY;
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  nav.classList.toggle('scrolled', y > 60);
-  if (y > lastScrollY && y > 160) nav.classList.add('nav-hidden');
-  else nav.classList.remove('nav-hidden');
-  lastScrollY = y;
-});
-
-/* ── MOBILE MENU ── */
-function toggleMobileMenu(){
-  const menu = document.getElementById('mobileMenu');
-  const hb = document.getElementById('hamburger');
-  menu.classList.toggle('open');
-  hb.classList.toggle('open');
-  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-}
-function closeMobileMenu(){
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-/* ── SCROLL REVEAL ── */
 const obs = new IntersectionObserver(es => {
   es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
 }, { threshold: .1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* ── FILMSTRIP GALLERY (fills from admin frames, else stays empty placeholders) ── */
-const track = document.getElementById('filmTrack');
-for (let i = 0; i < 5; i++){
-  const div = document.createElement('div');
-  div.className = 'fs-frame';
-  div.innerHTML = `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>`;
-  track.appendChild(div);
+/* ── HERO + FILMSTRIP SYNCED SLIDESHOW ── */
+let heroSlides = [];
+let heroIdx = 0;
+let activeLayer = 'A';
+function buildFilmTrack(images){
+  const track = document.getElementById('filmTrack');
+  track.innerHTML = '';
+  images.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'fs-frame';
+    div.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover">`;
+    track.appendChild(div);
+  });
 }
-function scrollFilm(dir){
-  track.scrollBy({ left: dir * 560, behavior: 'smooth' });
+function highlightFilm(i){
+  const track = document.getElementById('filmTrack');
+  const kids = Array.from(track.children);
+  kids.forEach((f,idx) => f.classList.toggle('fs-active', idx === i));
+  if (kids[i]) kids[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+}
+function initHeroFilmstrip(images){
+  heroSlides = (images || []).filter(Boolean);
+  if (!heroSlides.length) return;
+  const a = document.getElementById('heroSlideA');
+  a.style.backgroundImage = `url('${heroSlides[0]}')`;
+  a.classList.add('on');
+  buildFilmTrack(heroSlides);
+  highlightFilm(0);
+  if (heroSlides.length > 1){
+    setInterval(() => {
+      heroIdx = (heroIdx + 1) % heroSlides.length;
+      const nextLayer = activeLayer === 'A' ? 'B' : 'A';
+      const nextEl = document.getElementById('heroSlide' + nextLayer);
+      const curEl = document.getElementById('heroSlide' + activeLayer);
+      nextEl.style.backgroundImage = `url('${heroSlides[heroIdx]}')`;
+      nextEl.classList.add('on');
+      curEl.classList.remove('on');
+      activeLayer = nextLayer;
+      highlightFilm(heroIdx);
+    }, 4000);
+  }
 }
 
-/* ── TESTIMONIALS ── */
-const testis = [
-  { name: "Couple Name", quote: "Nothing about the day felt staged in front of the camera — and yet every photograph we got back looked composed, like someone had been quietly paying attention the whole time. We're still finding little details in the gallery weeks later." },
-  { name: "Couple Name", quote: "We wanted our wedding photographed like a story, not a checklist of events, and that's exactly what we got. The editing has a restraint to it that we really appreciated — nothing over-processed, just honest light." },
-  { name: "Couple Name", quote: "From the first call to the final gallery, everything felt calm and considered. Our families are still talking about how comfortable everyone felt in front of the camera." }
-];
-document.querySelectorAll('.testi-avatar').forEach((a,i) => a.onclick = () => switchTesti(i));
-function switchTesti(i){
-  document.querySelectorAll('.testi-avatar').forEach(a => a.classList.remove('active'));
-  document.querySelectorAll('.testi-avatar')[i].classList.add('active');
-  const el = document.getElementById('testiContent');
-  el.style.opacity = 0; el.style.transform = 'translateY(8px)';
-  setTimeout(() => {
-    el.innerHTML = `<div class="testi-name">${testis[i].name}</div><p class="testi-quote">${testis[i].quote}</p>`;
-    el.style.opacity = 1; el.style.transform = 'translateY(0)';
-  }, 220);
-}
-
-/* ── JSONBIN — connected to the Photowalla admin panel.
-   Drives frames / stories / testimonials / intro / hero /
-   films video / live link. Keep this Master Key private —
-   it has write access to your content bin. ── */
-const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
-const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
-
+/* ── LOAD FROM JSONBIN ── */
 async function loadFromBin(){
-  if (!BIN_ID || !API_KEY){ handleLiveLink(null); return; }
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
     const data = await res.json();
     const state = data.record;
     if (state.frames) renderFramesOnSite(state.frames);
-    if (state.stories) renderStoriesOnSite(state.stories);
     if (state.intro) renderSectionImg('intro', state.intro);
-    if (state.hero) renderHeroImg(state.hero);
-    if (state.filmstrip) renderFilmstrip(state.filmstrip);
-    if (state.testimonials && state.testimonials.length) renderTestimonials(state.testimonials);
-    if (state.videoPortfolio) renderVideoPortfolio(state.videoPortfolio);
-    if (state.filmsVideo) renderFilmsVideo(state.filmsVideo);
-    handleLiveLink(state.liveLink || null);
-  } catch(e){
-    console.log('Could not load content', e);
-    handleLiveLink(null);
-  }
+    const slides = (state.filmstrip && state.filmstrip.length) ? state.filmstrip : (state.hero ? [state.hero] : []);
+    initHeroFilmstrip(slides);
+  } catch(e){ console.log('Could not load content', e); }
 }
 
 function renderFramesOnSite(frames){
@@ -834,34 +356,6 @@ function renderFramesOnSite(frames){
   }
 }
 
-function renderStoriesOnSite(stories){
-  const grid = document.getElementById('storiesGrid');
-  if (!grid || !stories.length) return;
-  grid.innerHTML = '';
-  stories.forEach(s => {
-    grid.innerHTML += `
-      <a class="story-card" href="stories/${s.slug || ('story.html?id=' + s.id)}">
-        <img src="${s.cover}" alt="${s.name}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">
-        <div class="story-cap">${s.name} &nbsp;//&nbsp; <span class="story-loc">${s.location}</span> &nbsp;//</div>
-      </a>`;
-  });
-}
-
-function renderTestimonials(list){
-  const avatarsWrap = document.getElementById('testiAvatars');
-  avatarsWrap.innerHTML = '';
-  testis.length = 0;
-  list.forEach((t,i) => {
-    testis.push({ name: t.name, quote: t.quote });
-    const av = document.createElement('div');
-    av.className = 'testi-avatar' + (i === 0 ? ' active' : '');
-    av.innerHTML = t.photo ? `<img src="${t.photo}" style="width:100%;height:100%;object-fit:cover">` : `<div class="ph"></div>`;
-    av.onclick = () => switchTesti(i);
-    avatarsWrap.appendChild(av);
-  });
-  switchTesti(0);
-}
-
 function renderSectionImg(section, data){
   if (data.left){ const el = document.getElementById(section+'ImgLeft'); if (el){ el.innerHTML=''; el.style.backgroundImage=`url('${data.left}')`; el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; el.classList.remove('ph'); } }
   if (data.right){ const el = document.getElementById(section+'ImgRight'); if (el){ el.innerHTML=''; el.style.backgroundImage=`url('${data.right}')`; el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; el.classList.remove('ph'); } }
@@ -869,147 +363,7 @@ function renderSectionImg(section, data){
   if (mob && (data.mobile || data.left)){ mob.innerHTML=''; mob.style.backgroundImage=`url('${data.mobile || data.left}')`; mob.style.backgroundSize='cover'; mob.style.backgroundPosition='center'; mob.classList.remove('ph'); }
 }
 
-function renderHeroImg(url){
-  const el = document.getElementById('heroImg');
-  if (el){ el.innerHTML=''; el.style.backgroundImage=`url('${url}')`; el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; el.classList.remove('ph'); }
-}
-
-function renderFilmstrip(images){
-  if (!images.length) return;
-  track.innerHTML = '';
-  for (let i = 0; i < 5; i++){
-    const div = document.createElement('div');
-    div.className = 'fs-frame';
-    div.innerHTML = `<img src="${images[i % images.length]}" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1)">`;
-    track.appendChild(div);
-  }
-}
-
-function renderFilmsVideo(url){
-  const video = document.getElementById('filmsVideo');
-  const ph = document.getElementById('filmsVideoPh');
-  video.innerHTML = `<source src="${url}" type="video/mp4">`;
-  video.load();
-  video.style.display = 'block';
-  ph.style.display = 'none';
-}
-
-/* ── VIDEO PORTFOLIO ── */
-function renderVideoPortfolio(list){
-  const grid = document.getElementById('videosGrid');
-  if (!grid) return;
-  if (!list || !list.length){
-    grid.innerHTML = `<div class="videos-empty">More films coming soon.</div>`;
-    return;
-  }
-  grid.innerHTML = '';
-  list.forEach(v => {
-    if (!v.src) return;
-    const card = document.createElement('div');
-    card.className = 'video-card';
-    let thumbHtml = '';
-    if (v.type === 'youtube'){
-      const id = getYouTubeId(v.src);
-      thumbHtml = id ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="">` : '';
-    } else {
-      thumbHtml = `<video muted playsinline preload="metadata" src="${v.src}"></video>`;
-    }
-    card.innerHTML = `${thumbHtml}<div class="play-badge"><div class="play-icon">&#9658;</div></div>${v.title ? `<div class="video-card-title">${v.title}</div>` : ''}`;
-    card.addEventListener('click', () => openVideoLightbox(v));
-    grid.appendChild(card);
-  });
-  if (!grid.children.length) grid.innerHTML = `<div class="videos-empty">More films coming soon.</div>`;
-}
-function openVideoLightbox(v){
-  const box = document.getElementById('videoLightbox');
-  const inner = document.getElementById('lightboxInner');
-  if (v.type === 'youtube'){
-    const id = getYouTubeId(v.src);
-    inner.innerHTML = id ? `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>` : '';
-  } else {
-    inner.innerHTML = `<video src="${v.src}" controls autoplay playsinline></video>`;
-  }
-  box.classList.add('open');
-}
-function closeVideoLightbox(){
-  document.getElementById('videoLightbox').classList.remove('open');
-  document.getElementById('lightboxInner').innerHTML = '';
-}
-document.getElementById('lightboxClose').addEventListener('click', closeVideoLightbox);
-document.getElementById('videoLightbox').addEventListener('click', e => { if (e.target.id === 'videoLightbox') closeVideoLightbox(); });
-
-/* ── LIVE STREAM ── */
-function getYouTubeId(url){
-  if (!url) return null;
-  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return m ? m[1] : null;
-}
-function handleLiveLink(liveLink){
-  const loading = document.getElementById('streamLoading');
-  const iframeWrap = document.getElementById('streamIframeWrap');
-  const iframe = document.getElementById('liveFrame');
-  const placeholder = document.getElementById('streamPlaceholder');
-  const statusBar = document.getElementById('liveStatusBar');
-  loading.style.display = 'none';
-  const ytId = getYouTubeId(liveLink);
-  if (ytId){
-    iframe.src = `https://www.youtube.com/embed/${ytId}`;
-    iframeWrap.style.display = 'block';
-    statusBar.style.display = 'flex';
-    document.getElementById('waShareBtn').href = `https://wa.me/?text=Watch%20the%20wedding%20live%20stream%20here%3A%20${encodeURIComponent(window.location.href)}`;
-  } else {
-    placeholder.style.display = 'flex';
-  }
-}
-function copyLiveLink(){
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const btn = document.querySelector('#live .share-btn:not(.primary)');
-    const orig = btn.textContent;
-    btn.textContent = 'Link Copied!';
-    setTimeout(() => { btn.textContent = orig; }, 2000);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = window.location.href;
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-  });
-}
-
 loadFromBin();
-
-/* ── WHATSAPP ENQUIRY FORM ── */
-function sendToWhatsApp(){
-  const name = document.getElementById('fname').value.trim();
-  const email = document.getElementById('femail').value.trim();
-  const phone = document.getElementById('fphone').value.trim();
-  const guests = document.getElementById('fguests').value.trim();
-  const details = document.getElementById('fdetails').value.trim();
-  const loc = document.getElementById('flocation').value.trim();
-  const date = document.getElementById('fevent-date').value.trim();
-
-  if (!name){ alert('Please enter your name.'); return; }
-  if (!email){ alert('Please enter your email.'); return; }
-  if (!phone){ alert('Please enter your phone number.'); return; }
-
-  const services = Array.from(document.querySelectorAll('input[name="service"]:checked')).map(b => b.value);
-  const serviceStr = services.length ? services.join(', ') : 'Not specified';
-
-  const msg =
-`✨ *New Enquiry — Photowalla*
-
-👤 *Name:* ${name}
-📧 *Email:* ${email}
-📞 *Phone:* ${phone}
-👥 *Guest Count:* ${guests || 'Not specified'}
-💬 *Wedding Details:* ${details || 'Not specified'}
-📍 *Location:* ${loc || 'Not specified'}
-📅 *Event Dates:* ${date || 'Not specified'}
-🎬 *Services:* ${serviceStr}
-
-_Sent from photowalla.in_`;
-
-  window.open(`https://wa.me/917239888777?text=${encodeURIComponent(msg)}`, '_blank');
-}
 </script>
 </body>
 </html>
