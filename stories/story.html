@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photowalla — Love Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF8F4; --warm:#F5F2EC; --parchment:#EDE8DF; --charcoal:#1C1C1C;
+  --brown:#2A1A0E; --gold:#A8844A; --gold-l:#C9A96E; --grey:#7A7065; --rule:#DDD8CF;
+}
+body{background:var(--cream);color:var(--charcoal);font-family:'Montserrat',sans-serif;font-weight:300}
+img{max-width:100%;display:block}
+
+/* nav */
+.story-nav{position:sticky;top:0;z-index:100;background:rgba(250,248,244,.97);border-bottom:1px solid var(--rule);padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.story-nav .brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--brown);text-decoration:none}
+.back-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-l);padding-bottom:2px}
+.back-link:hover{color:var(--brown);border-color:var(--brown)}
+
+/* hero */
+.story-hero{position:relative;height:78vh;min-height:420px;overflow:hidden;background:var(--parchment)}
+.story-hero img{width:100%;height:100%;object-fit:cover}
+.story-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,4,.05) 0%,rgba(20,12,4,.65) 100%)}
+.story-hero-content{position:absolute;left:0;right:0;bottom:0;padding:60px 24px;text-align:center}
+.story-eyebrow{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-l);margin-bottom:16px}
+.story-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(36px,6vw,68px);color:#FAF8F4;line-height:1.1}
+
+/* body */
+.story-body{max-width:760px;margin:0 auto;padding:70px 24px}
+.story-text{font-family:'Libre Baskerville',serif;font-size:16px;line-height:2;color:var(--brown);text-align:center;font-style:italic}
+
+/* gallery */
+.story-gallery-section{background:var(--warm);padding:70px 24px 90px;border-top:1px solid var(--rule)}
+.story-gallery-header{text-align:center;margin-bottom:44px}
+.story-gallery-header span{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.story-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:1100px;margin:0 auto}
+.story-gallery img{width:100%;aspect-ratio:3/4;object-fit:cover;cursor:pointer;transition:opacity .25s}
+.story-gallery img:hover{opacity:.85}
+@media(max-width:768px){
+  .story-gallery{grid-template-columns:repeat(2,1fr);gap:4px}
+  .story-body{padding:50px 24px}
+}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(10,7,4,.94);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;object-fit:contain}
+.lightbox-close{position:absolute;top:22px;right:26px;background:none;border:none;color:#FAF8F4;font-size:32px;cursor:pointer;line-height:1}
+
+/* states */
+.state-box{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;gap:18px}
+.state-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--grey)}
+.spinner{width:30px;height:30px;border:1.5px solid var(--rule);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+footer{background:var(--brown);padding:34px 24px;text-align:center}
+footer a{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#FAF8F4;text-decoration:none}
+</style>
+</head>
+<body>
+
+<nav class="story-nav">
+  <a href="../index.html" class="brand">Photowalla</a>
+  <a href="../index.html#stories" class="back-link">&larr; All Stories</a>
+</nav>
+
+<div id="loadingState" class="state-box">
+  <div class="spinner"></div>
+  <p>Loading their story&hellip;</p>
+</div>
+
+<div id="notFoundState" class="state-box" style="display:none">
+  <p>We couldn't find this story.</p>
+  <a href="../index.html#stories" class="back-link">&larr; Back to all stories</a>
+</div>
+
+<div id="storyContent" style="display:none">
+  <section class="story-hero">
+    <img id="storyHeroImg" src="" alt="">
+    <div class="story-hero-overlay"></div>
+    <div class="story-hero-content">
+      <p class="story-eyebrow" id="storyLoc"></p>
+      <h1 class="story-title" id="storyName"></h1>
+    </div>
+  </section>
+
+  <section class="story-body" id="storyTextWrap" style="display:none">
+    <p class="story-text" id="storyText"></p>
+  </section>
+
+  <section class="story-gallery-section" id="gallerySection" style="display:none">
+    <div class="story-gallery-header">
+      <span>The Full Gallery</span>
+    </div>
+    <div class="story-gallery" id="storyGallery"></div>
+  </section>
+
+  <footer><a href="../index.html">Photowalla</a></footer>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+/* Same JSONBin connection as the main site — keep in sync if it ever changes. */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
+
+function getParam(name){
+  return new URLSearchParams(window.location.search).get(name);
+}
+function getPathSlug(){
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  const last = parts[parts.length - 1];
+  if (last && last !== 'story.html') return decodeURIComponent(last);
+  return null;
+}
+
+async function loadStory(){
+  const slug = getParam('slug') || getPathSlug();
+  const id = getParam('id');
+  const loading = document.getElementById('loadingState');
+  const notFound = document.getElementById('notFoundState');
+  const content = document.getElementById('storyContent');
+
+  if (!slug && !id){ loading.style.display='none'; notFound.style.display='flex'; return; }
+
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
+    const data = await res.json();
+    const stories = (data.record && data.record.stories) || [];
+    const story = stories.find(s => (slug && s.slug === slug) || (id && String(s.id) === String(id)));
+
+    if (!story){ loading.style.display='none'; notFound.style.display='flex'; return; }
+
+    document.title = `Photowalla — ${story.name || 'Love Story'}`;
+    document.getElementById('storyHeroImg').src = story.cover || '';
+    document.getElementById('storyName').textContent = story.name || '';
+    document.getElementById('storyLoc').textContent = story.location || '';
+
+    if (story.text && story.text.trim()){
+      document.getElementById('storyText').textContent = story.text;
+      document.getElementById('storyTextWrap').style.display = 'block';
+    }
+
+    const photos = Array.isArray(story.photos) ? story.photos.filter(Boolean) : [];
+    if (photos.length){
+      const gal = document.getElementById('storyGallery');
+      gal.innerHTML = '';
+      photos.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.addEventListener('click', () => openLightbox(src));
+        gal.appendChild(img);
+      });
+      document.getElementById('gallerySection').style.display = 'block';
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch(e){
+    loading.style.display = 'none';
+    notFound.style.display = 'flex';
+  }
+}
+
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') closeLightbox(); });
+
+loadStory();
+</script>
+</body>
+</html>
