@@ -116,20 +116,27 @@ const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 function getParam(name){
   return new URLSearchParams(window.location.search).get(name);
 }
+function getPathSlug(){
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  const last = parts[parts.length - 1];
+  if (last && last !== 'story.html') return decodeURIComponent(last);
+  return null;
+}
 
 async function loadStory(){
+  const slug = getParam('slug') || getPathSlug();
   const id = getParam('id');
   const loading = document.getElementById('loadingState');
   const notFound = document.getElementById('notFoundState');
   const content = document.getElementById('storyContent');
 
-  if (!id){ loading.style.display='none'; notFound.style.display='flex'; return; }
+  if (!slug && !id){ loading.style.display='none'; notFound.style.display='flex'; return; }
 
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
     const data = await res.json();
     const stories = (data.record && data.record.stories) || [];
-    const story = stories.find(s => String(s.id) === String(id));
+    const story = stories.find(s => (slug && s.slug === slug) || (id && String(s.id) === String(id)));
 
     if (!story){ loading.style.display='none'; notFound.style.display='flex'; return; }
 
