@@ -132,8 +132,9 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 /* ═══════════════════════════════════════════
    FILMSTRIP SCROLLER — placed right after intro
 ═══════════════════════════════════════════ */
-.filmstrip-section{background:var(--charcoal);padding:0;position:relative;border-top:1px solid var(--rule)}
-.filmstrip-label{position:absolute;top:22px;left:32px;z-index:5;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,248,244,.5)}
+.filmstrip-section{background:var(--charcoal);padding:56px 0;position:relative;border-top:1px solid var(--rule)}
+.filmstrip-label{display:block;padding:0 32px;margin-bottom:22px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,248,244,.5)}
+.filmstrip-inner{position:relative}
 .filmstrip-track{display:flex;gap:0;overflow-x:auto;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}
 .filmstrip-track::-webkit-scrollbar{display:none}
 .fs-frame{flex:0 0 auto;width:260px;height:340px;overflow:hidden;position:relative}
@@ -448,9 +449,11 @@ nav.scrolled .nav-tier2{padding:10px 24px}
 ═══════════════════════════════════════════ -->
 <section class="filmstrip-section">
   <span class="filmstrip-label">Selected Frames</span>
-  <button class="fs-arrow left" onclick="scrollFilm(-1)">&#8249;</button>
-  <button class="fs-arrow right" onclick="scrollFilm(1)">&#8250;</button>
-  <div class="filmstrip-track" id="filmTrack"></div>
+  <div class="filmstrip-inner">
+    <button class="fs-arrow left" onclick="scrollFilm(-1)">&#8249;</button>
+    <button class="fs-arrow right" onclick="scrollFilm(1)">&#8250;</button>
+    <div class="filmstrip-track" id="filmTrack"></div>
+  </div>
 </section>
 
 <!-- ═══════════════════════════════════════════
