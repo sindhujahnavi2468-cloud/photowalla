@@ -306,11 +306,29 @@ function showToast(msg, isErr){
 }
 
 /* ══════════════════════════════════════════
-   FILE → COMPRESSED IMAGE (base64)
-   Resizes + compresses so galleries of photos
-   stay light enough to store and load fast.
+   CLOUDINARY — real image/video hosting.
+   Files upload here; only the short link gets
+   saved to JSONBin, so there's no size limit
+   problem anymore.
 ══════════════════════════════════════════ */
-function compressImage(file, maxDim, quality){
+const CLOUDINARY_CLOUD_NAME = 'nqapapkj';
+const CLOUDINARY_UPLOAD_PRESET = 'photo walla';
+
+async function uploadToCloudinary(blob, resourceType){
+  const form = new FormData();
+  form.append('file', blob);
+  form.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`, {
+    method: 'POST', body: form
+  });
+  if (!res.ok){
+    throw new Error('Upload failed — double check the upload preset is set to Unsigned in Cloudinary.');
+  }
+  const data = await res.json();
+  return data.secure_url;
+}
+
+function compressImageToBlob(file, maxDim, quality){
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith('image/')){ reject(new Error('Please choose an image file (JPG or PNG).')); return; }
     const reader = new FileReader();
@@ -325,7 +343,9 @@ function compressImage(file, maxDim, quality){
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob); else reject(new Error('Could not process that image.'));
+        }, 'image/jpeg', quality);
       };
       img.onerror = () => reject(new Error('Could not read that image.'));
       img.src = e.target.result;
@@ -334,14 +354,17 @@ function compressImage(file, maxDim, quality){
     reader.readAsDataURL(file);
   });
 }
-function fileToDataURL(file, maxMB){
-  return new Promise((resolve, reject) => {
-    if (file.size > maxMB * 1024 * 1024){ reject(new Error(`Please choose a file under ${maxMB}MB.`)); return; }
-    const reader = new FileReader();
-    reader.onload = e => resolve(e.target.result);
-    reader.onerror = () => reject(new Error('Could not read that file.'));
-    reader.readAsDataURL(file);
-  });
+function checkFileSize(file, maxMB){
+  if (file.size > maxMB * 1024 * 1024) throw new Error(`Please choose a file under ${maxMB}MB.`);
+  return file;
+}
+async function uploadImage(file){
+  const blob = await compressImageToBlob(file, 1400, 0.75);
+  return uploadToCloudinary(blob, 'image');
+}
+async function uploadVideo(file){
+  checkFileSize(file, 25);
+  return uploadToCloudinary(file, 'video');
 }
 function ytId(url){
   if (!url) return null;
@@ -426,9 +449,9 @@ function buildSlot({ value, label='', onFile, onRemove, kind='image', numberLabe
     if (!file) return;
     slot.classList.add('loading');
     try{
-      const dataUrl = kind === 'video' ? await fileToDataURL(file, 25) : await compressImage(file, 1400, 0.75);
-      value = dataUrl;
-      onFile(dataUrl);
+      const url = kind === 'video' ? await uploadVideo(file) : await uploadImage(file);
+      value = url;
+      onFile(url);
       markDirty();
       paint();
     } catch(err){
@@ -698,8 +721,11 @@ function renderVideos(c){
           input.addEventListener('change', async () => {
             const file = input.files[0];
             if (!file) return;
-            try{ v.src = await fileToDataURL(file, 25); v.type='upload'; markDirty(); paintThumb(); btn.textContent='Replace video'; showToast('Video added'); }
+            const origText = btn.textContent;
+            btn.textContent = 'Uploading…'; btn.disabled = true;
+            try{ v.src = await uploadVideo(file); v.type='upload'; markDirty(); paintThumb(); showToast('Video added'); }
             catch(err){ showToast(err.message, true); }
+            finally { btn.textContent = v.src ? 'Replace video' : origText; btn.disabled = false; }
             input.value = '';
           });
           btn.onclick = () => input.click();
