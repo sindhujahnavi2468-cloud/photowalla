@@ -571,13 +571,25 @@ function renderFilmstrip(c){
 /* ══════════════════════════════════════════
    LOVE STORIES
 ══════════════════════════════════════════ */
+function slugify(str){
+  return (str||'').toLowerCase().trim()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'story';
+}
+function uniqueSlug(base, excludeIndex){
+  let slug = base, n = 2;
+  while (state.stories.some((s,i) => i !== excludeIndex && s.slug === slug)) slug = `${base}-${n++}`;
+  return slug;
+}
 function renderStories(c){
-  c.innerHTML = `<p class="panel-intro">Each card links to a couple's own full story page. Add a cover photo, name, location, a short story, and as many gallery photos as you like — your client can add unlimited photos per story.</p>`;
+  c.innerHTML = `<p class="panel-intro">Each card links to a couple's own full story page at a clean URL like <b>/stories/riya-aarav</b> — generated automatically from their name. Add a cover photo, name, location, a short story, and as many gallery photos as you like.</p>`;
   const wrap = document.createElement('div'); c.appendChild(wrap);
   function paint(){
     wrap.innerHTML = '';
     state.stories.forEach((s,i) => {
       if (!s.photos) s.photos = [];
+      if (!s.slug) s.slug = uniqueSlug(slugify(s.name), i);
       const card = document.createElement('div'); card.className='repeat-card';
       const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove Story';
       rm.onclick = () => { state.stories.splice(i,1); markDirty(); paint(); };
@@ -585,10 +597,18 @@ function renderStories(c){
       card.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='' }));
       const fields = document.createElement('div'); fields.className='repeat-fields';
       fields.innerHTML = `
-        <div class="form-row"><label>Couple Name</label><input data-f="name" value="${s.name||''}" placeholder="e.g. Riya & Aarav"></div>
+        <div class="form-row"><label>Couple Name</label><input data-f="name" value="${s.name||''}" placeholder="e.g. Riya & Aarav"><div class="form-hint" id="slugHint${i}">URL: /stories/${s.slug}</div></div>
         <div class="form-row"><label>Location</label><input data-f="location" value="${s.location||''}" placeholder="e.g. Udaipur"></div>
         <div class="form-row"><label>Their Story (optional)</label><textarea data-f="text" placeholder="A few lines about their day...">${s.text||''}</textarea></div>`;
-      fields.querySelectorAll('input,textarea').forEach(inp => inp.addEventListener('input', () => { s[inp.dataset.f] = inp.value; markDirty(); }));
+      fields.querySelectorAll('input,textarea').forEach(inp => inp.addEventListener('input', () => {
+        s[inp.dataset.f] = inp.value;
+        if (inp.dataset.f === 'name'){
+          s.slug = uniqueSlug(slugify(s.name), i);
+          const hint = document.getElementById('slugHint'+i);
+          if (hint) hint.textContent = `URL: /stories/${s.slug}`;
+        }
+        markDirty();
+      }));
       card.appendChild(fields);
       wrap.appendChild(card);
 
@@ -619,7 +639,7 @@ function renderStories(c){
   }
   paint();
   const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Love Story';
-  addBtn.onclick = () => { state.stories.push({ id: Date.now(), cover:'', name:'', location:'', text:'', photos:[] }); markDirty(); paint(); };
+  addBtn.onclick = () => { state.stories.push({ id: Date.now(), slug:'', cover:'', name:'', location:'', text:'', photos:[] }); markDirty(); paint(); };
   c.appendChild(addBtn);
   c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB, for both the cover and gallery photos. Add as many gallery photos as the story needs — the sub-page grows to fit them.'));
 }
