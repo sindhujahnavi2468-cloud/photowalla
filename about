@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photowalla — About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--cream:#FAF8F4;--warm:#F5F2EC;--parchment:#EDE8DF;--charcoal:#1C1C1C;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF}
+body{background:var(--cream);color:var(--charcoal);font-family:'Montserrat',sans-serif;font-weight:300}
+img{max-width:100%;display:block}
+.ph{background:var(--parchment);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(168,132,74,.3)}
+.ph-icon{width:32px;height:32px;border:1px solid rgba(168,132,74,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px}
+.ph-txt{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(168,132,74,.5);text-align:center;line-height:1.9}
+
+.site-nav{background:rgba(250,248,244,.98);border-bottom:1px solid var(--rule);padding:18px 24px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:500}
+.nav-logo img{height:32px;display:block}
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;row-gap:10px}
+.nav-links a{font-family:'Cormorant SC',serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brown);text-decoration:none;padding-bottom:3px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);border-color:var(--gold-l)}
+.nav-links a.nav-enquire{color:var(--gold)}
+@media(max-width:640px){.nav-links{gap:14px 18px}.nav-links a{font-size:9.5px;letter-spacing:2px}.nav-logo img{height:26px}}
+
+.site-footer{background:var(--brown);border-top:1px solid rgba(255,255,255,.08)}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:60px 60px 44px}
+.footer-logo{height:30px;filter:brightness(0) invert(1)}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold-l);margin-top:14px;line-height:1.5}
+.footer-location{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.35);margin-top:8px}
+.footer-col{display:flex;flex-direction:column;gap:11px}
+.footer-col-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.footer-col a{font-size:12px;color:rgba(250,248,244,.55);text-decoration:none}
+.footer-col a:hover{color:#FAF8F4}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 60px;display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:30px;padding:40px 24px 30px}.footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}}
+
+.about-section{padding:90px 60px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:start}
+.about-left{position:sticky;top:120px}
+.about-photo{width:100%;aspect-ratio:3/4}
+.about-name{font-family:'Cormorant SC',serif;font-size:clamp(26px,3vw,38px);font-weight:600;letter-spacing:.04em;color:var(--brown);text-transform:uppercase;margin-top:26px}
+.about-tagline{font-family:'Libre Baskerville',serif;font-style:italic;font-size:13px;color:var(--gold);letter-spacing:1px;margin-top:8px}
+.about-bio p{font-family:'Libre Baskerville',serif;font-size:15px;line-height:2.1;color:var(--brown);margin-bottom:26px}
+.about-accolades{margin-top:40px;padding-top:32px;border-top:1px solid var(--rule)}
+.about-accolades-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.about-accolades ul{list-style:none}
+.about-accolades li{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--grey);padding:8px 0;border-bottom:1px solid var(--rule)}
+@media(max-width:900px){
+  .about-section{grid-template-columns:1fr;gap:40px;padding:60px 24px}
+  .about-left{position:static}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/index.html" class="nav-logo"><img src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla"></a>
+  <div class="nav-links">
+    <a href="/index.html">Home</a>
+    <a href="/stories.html">Stories</a>
+    <a href="/testimonials.html">Testimonials</a>
+    <a href="/about.html" class="active">About</a>
+    <a href="/store.html">Store</a>
+    <a href="/films.html">Films</a>
+    <a href="/enquiry.html" class="nav-enquire">Enquiry</a>
+  </div>
+</nav>
+
+<section class="about-section">
+  <div class="about-left">
+    <div class="about-photo ph" id="aboutPhoto"><div class="ph-icon">+</div><p class="ph-txt">Photo<br>via admin</p></div>
+    <div class="about-name" id="aboutName">Photowalla</div>
+    <div class="about-tagline" id="aboutTagline">Moment. Memory. Miracle.</div>
+    <div class="about-accolades">
+      <div class="about-accolades-title">Recognitions</div>
+      <ul id="aboutAccolades">
+        <li>Add your recognitions and press features via admin.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="about-bio" id="aboutBio">
+    <p>Photowalla began with a simple belief — that a wedding day holds a hundred small, unrepeatable moments, and our job is to notice them before they pass. Every frame is composed with a quiet, editorial eye: honest light, real emotion, nothing staged.</p>
+    <p>Working across Bhilwara, Jaipur and Udaipur, we bring a modern, considered sensibility to Rajasthan's rich wedding traditions. We shoot the way we'd want our own memories held — unhurried, personal, and true to how the day actually felt.</p>
+    <p>This page is ready for your own words — update the photo, name, tagline and story anytime from the admin panel.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img class="footer-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
+      <p class="footer-tagline">Luxury &amp; Editorial Photography</p>
+      <p class="footer-location">Bhilwara &nbsp;&middot;&nbsp; Jaipur &nbsp;&middot;&nbsp; Udaipur</p>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Navigate</p>
+      <a href="/stories.html">Stories</a>
+      <a href="/testimonials.html">Testimonials</a>
+      <a href="/about.html">About</a>
+      <a href="/store.html">Store</a>
+      <a href="/films.html">Films</a>
+      <a href="/enquiry.html">Enquiry</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Connect</p>
+      <a href="https://www.instagram.com/photowalla.in/" target="_blank">Instagram</a>
+      <a href="https://www.youtube.com/channel/UCsZdjNM-W7ouNUgQ2MyxXlA" target="_blank">YouTube</a>
+      <a href="https://wa.me/917239888777" target="_blank">WhatsApp</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Get In Touch</p>
+      <a href="tel:+917239888777">+91 72398 88777</a>
+      <a href="mailto:Senhimaly@gmail.com">Senhimaly@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Photowalla. All rights reserved.</p>
+    <p>Crafted with love for love stories.</p>
+  </div>
+</footer>
+
+<script>
+/* Placeholder content above shows until the admin panel gets an About
+   section — this fetch will take over automatically once that exists. */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
+
+async function loadAbout(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
+    const data = await res.json();
+    const about = data.record && data.record.about;
+    if (!about) return;
+    if (about.photo){ const el = document.getElementById('aboutPhoto'); el.innerHTML = `<img src="${about.photo}" alt="">`; el.classList.remove('ph'); }
+    if (about.name) document.getElementById('aboutName').textContent = about.name;
+    if (about.tagline) document.getElementById('aboutTagline').textContent = about.tagline;
+    if (about.bio){
+      document.getElementById('aboutBio').innerHTML = about.bio.split(/\n\s*\n/).map(p => `<p>${p}</p>`).join('');
+    }
+    if (Array.isArray(about.accolades) && about.accolades.length){
+      document.getElementById('aboutAccolades').innerHTML = about.accolades.map(a => `<li>${a}</li>`).join('');
+    }
+  } catch(e){ console.log('Could not load about content', e); }
+}
+loadAbout();
+</script>
+</body>
+</html>
