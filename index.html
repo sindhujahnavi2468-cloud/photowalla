@@ -840,7 +840,7 @@ function renderStoriesOnSite(stories){
   grid.innerHTML = '';
   stories.forEach(s => {
     grid.innerHTML += `
-      <a class="story-card" href="stories/story.html?id=${s.id}">
+      <a class="story-card" href="stories/${s.slug || ('story.html?id=' + s.id)}">
         <img src="${s.cover}" alt="${s.name}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">
         <div class="story-cap">${s.name} &nbsp;//&nbsp; <span class="story-loc">${s.location}</span> &nbsp;//</div>
       </a>`;
