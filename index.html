@@ -375,7 +375,14 @@ function highlightFilm(i){
   const track = document.getElementById('filmTrack');
   const kids = Array.from(track.children);
   kids.forEach((f,idx) => f.classList.toggle('fs-active', idx === i));
-  if (kids[i]) kids[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  const target = kids[i];
+  if (!target) return;
+  /* Scroll only the filmstrip's own horizontal track — never the page.
+     (scrollIntoView was doing this before and it was dragging the
+     whole page down to the filmstrip section on every rotation.) */
+  const targetCenter = target.offsetLeft + target.offsetWidth / 2;
+  const trackCenter = track.clientWidth / 2;
+  track.scrollTo({ left: targetCenter - trackCenter, behavior: 'smooth' });
 }
 function initHeroFilmstrip(images){
   heroSlides = (images || []).filter(Boolean);
