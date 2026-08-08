@@ -103,12 +103,12 @@ input,textarea{font-family:'Montserrat',sans-serif}
 .add-btn{border:1px solid var(--gold);background:transparent;color:var(--gold);padding:13px 30px;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;transition:all .2s}
 .add-btn:hover{background:var(--gold);color:#fff}
 
+.remove-line-btn{background:none;border:none;color:var(--grey);font-size:14px;line-height:1;padding:4px 8px}
+.remove-line-btn:hover{color:var(--red)}
+
 .tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid var(--rule)}
 .tab-btn{background:none;border:none;padding:10px 18px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:2px solid transparent;margin-bottom:-1px}
 .tab-btn.active{color:var(--brown);border-bottom-color:var(--gold)}
-
-.video-thumb{width:100%;height:100%;object-fit:cover}
-.yt-badge{position:absolute;bottom:6px;left:6px;background:rgba(28,28,28,.7);color:#fff;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;z-index:2}
 
 .toast{position:fixed;bottom:24px;right:24px;background:var(--brown);color:var(--cream);padding:14px 24px;font-size:11px;letter-spacing:1px;z-index:2000;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
@@ -148,11 +148,13 @@ input,textarea{font-family:'Montserrat',sans-serif}
       <div class="nav-item" data-section="intro"><span class="ic">✎</span> Intro Section</div>
       <div class="nav-item" data-section="grid"><span class="ic">▦</span> Photography Grid + Entrance</div>
       <div class="nav-item" data-section="filmstrip"><span class="ic">▭</span> Selected Frames</div>
+      <div class="nav-item" data-section="soulcinema"><span class="ic">◑</span> Soul &amp; Cinema Panels</div>
       <div class="nav-item" data-section="stories"><span class="ic">♥</span> Love Stories</div>
+      <div class="nav-item" data-section="films"><span class="ic">▶</span> Films</div>
       <div class="nav-item" data-section="testimonials"><span class="ic">✦</span> Testimonials</div>
+      <div class="nav-item" data-section="about"><span class="ic">☰</span> About Page</div>
+      <div class="nav-item" data-section="store"><span class="ic">$</span> Store</div>
       <div class="nav-item" data-section="live"><span class="ic">●</span> Live Stream</div>
-      <div class="nav-item" data-section="films"><span class="ic">▶</span> Soul + Cinema Film</div>
-      <div class="nav-item" data-section="videos"><span class="ic">🎬</span> Video Portfolio</div>
     </nav>
     <div class="sidebar-foot">
       <a href="index.html" target="_blank">↗ Preview Website</a>
@@ -218,18 +220,21 @@ if (localStorage.getItem('pw_admin_session') === '1') enterAdmin();
 /* ══════════════════════════════════════════
    STATE — mirrors the JSON structure the live
    website reads from JSONBin (state.frames,
-   state.stories, etc). videoPortfolio is new.
+   state.stories, state.films, state.about,
+   state.store, etc).
 ══════════════════════════════════════════ */
 let state = {
   hero: '',
   intro: { left:'', right:'', mobile:'' },
   frames: new Array(14).fill(''),
   filmstrip: [],
+  soulCinema: { photo:'', film:'' },
   stories: [],
+  films: [],
   testimonials: [],
-  filmsVideo: '',
-  liveLink: '',
-  videoPortfolio: []
+  about: { photo:'', name:'', tagline:'', bio:'', accolades:[] },
+  store: [],
+  liveLink: ''
 };
 let dirty = false;
 
@@ -260,11 +265,13 @@ async function loadState(){
       intro: rec.intro || { left:'', right:'', mobile:'' },
       frames: (rec.frames && rec.frames.length) ? padFrames(rec.frames) : new Array(14).fill(''),
       filmstrip: rec.filmstrip || [],
+      soulCinema: rec.soulCinema || { photo:'', film:'' },
       stories: rec.stories || [],
+      films: rec.films || [],
       testimonials: rec.testimonials || [],
-      filmsVideo: rec.filmsVideo || '',
-      liveLink: rec.liveLink || '',
-      videoPortfolio: rec.videoPortfolio || []
+      about: rec.about || { photo:'', name:'', tagline:'', bio:'', accolades:[] },
+      store: rec.store || [],
+      liveLink: rec.liveLink || ''
     };
     showToast('Content loaded from your bin');
   } catch(e){
@@ -371,14 +378,23 @@ function ytId(url){
   const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   return m ? m[1] : null;
 }
+/* Turn any YouTube watch/share link into a proper embed link.
+   If it's already an embed link (YouTube or Vimeo), leave it as-is. */
+function toEmbedUrl(url){
+  if (!url) return '';
+  const trimmed = url.trim();
+  const id = ytId(trimmed);
+  if (id) return `https://www.youtube.com/embed/${id}`;
+  return trimmed;
+}
 
 /* ══════════════════════════════════════════
    NAV / ROUTING
 ══════════════════════════════════════════ */
 const titles = {
   hero:'Hero Section', intro:'Intro Section', grid:'Photography Grid + Entrance',
-  filmstrip:'Selected Frames', stories:'Love Stories', testimonials:'Testimonials',
-  live:'Live Stream', films:'Soul + Cinema Film', videos:'Video Portfolio'
+  filmstrip:'Selected Frames', soulcinema:'Soul &amp; Cinema Panels', stories:'Love Stories',
+  films:'Films', testimonials:'Testimonials', about:'About Page', store:'Store', live:'Live Stream'
 };
 let currentSection = 'hero';
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -397,9 +413,11 @@ function renderSection(name){
   document.getElementById('panelTitle').textContent = titles[name];
   const c = document.getElementById('sectionContent');
   c.innerHTML = '';
-  const renderers = { hero:renderHero, intro:renderIntro, grid:renderGrid, filmstrip:renderFilmstrip,
-    stories:renderStories, testimonials:renderTestimonials, live:renderLive, films:renderFilms,
-    videos:renderVideos };
+  const renderers = {
+    hero:renderHero, intro:renderIntro, grid:renderGrid, filmstrip:renderFilmstrip,
+    soulcinema:renderSoulCinema, stories:renderStories, films:renderFilms,
+    testimonials:renderTestimonials, about:renderAbout, store:renderStore, live:renderLive
+  };
   renderers[name](c);
 }
 
@@ -542,30 +560,60 @@ function renderGrid(c){
    FILMSTRIP
 ══════════════════════════════════════════ */
 function renderFilmstrip(c){
-  c.innerHTML = `<p class="panel-intro">The horizontal scrolling strip of frames shown right after your intro story. Add up to 8 images.</p>`;
+  c.innerHTML = `<p class="panel-intro">The horizontal scrolling strip of frames shown right after your intro story (also used as the homepage hero slideshow). Add, remove, or reorder images.</p>`;
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Selected Frames</div>`;
   const grid = document.createElement('div'); grid.className='slot-grid';
   function paintGrid(){
     grid.innerHTML = '';
     state.filmstrip.forEach((val,i) => {
-      grid.appendChild(buildSlot({
+      const wrap = document.createElement('div');
+      wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '6px';
+      wrap.appendChild(buildSlot({
         value: val, label:'Add image',
         onFile: v => { state.filmstrip[i] = v; },
         onRemove: () => { state.filmstrip.splice(i,1); markDirty(); paintGrid(); }
       }));
+      const moveRow = document.createElement('div');
+      moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
+      const up = document.createElement('button'); up.type='button'; up.className='remove-line-btn'; up.textContent='↑';
+      up.onclick = () => { if (i>0){ [state.filmstrip[i-1], state.filmstrip[i]] = [state.filmstrip[i], state.filmstrip[i-1]]; markDirty(); paintGrid(); } };
+      const down = document.createElement('button'); down.type='button'; down.className='remove-line-btn'; down.textContent='↓';
+      down.onclick = () => { if (i<state.filmstrip.length-1){ [state.filmstrip[i+1], state.filmstrip[i]] = [state.filmstrip[i], state.filmstrip[i+1]]; markDirty(); paintGrid(); } };
+      moveRow.appendChild(up); moveRow.appendChild(down);
+      wrap.appendChild(moveRow);
+      grid.appendChild(wrap);
     });
-    if (state.filmstrip.length < 8){
-      grid.appendChild(buildSlot({
-        value:'', label:'Add frame',
-        onFile: v => { state.filmstrip.push(v); paintGrid(); }, onRemove: ()=>{}
-      }));
-    }
+    grid.appendChild(buildSlot({
+      value:'', label:'Add frame',
+      onFile: v => { state.filmstrip.push(v); paintGrid(); }, onRemove: ()=>{}
+    }));
   }
   paintGrid();
   card.appendChild(grid);
   c.appendChild(card);
-  c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Choose your most cinematic, story-driven frames — these scroll horizontally on the live site.'));
+  c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Choose your most cinematic, story-driven frames — these scroll horizontally and crossfade as the homepage hero background. Use the ↑ / ↓ buttons to reorder.'));
+}
+
+/* ══════════════════════════════════════════
+   SOUL & CINEMA PANELS (fixed — two images)
+══════════════════════════════════════════ */
+function renderSoulCinema(c){
+  c.innerHTML = `<p class="panel-intro">The two hover panels on the homepage — "Photography" and "Films." Each is a single static image.</p>`;
+  const card = document.createElement('div'); card.className='card';
+  card.innerHTML = `<div class="card-title">Soul &amp; Cinema Images</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='420px';
+  grid.appendChild(buildSlot({
+    value: state.soulCinema.photo, label:'Photography panel image',
+    onFile: v => state.soulCinema.photo = v, onRemove: () => state.soulCinema.photo = ''
+  }));
+  grid.appendChild(buildSlot({
+    value: state.soulCinema.film, label:'Films panel image',
+    onFile: v => state.soulCinema.film = v, onRemove: () => state.soulCinema.film = ''
+  }));
+  card.appendChild(grid);
+  card.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB each. These sit behind the "Photography" and "Films" text overlays, so avoid busy edges near the bottom of the frame.'));
+  c.appendChild(card);
 }
 
 /* ══════════════════════════════════════════
@@ -645,14 +693,52 @@ function renderStories(c){
 }
 
 /* ══════════════════════════════════════════
+   FILMS — the /films page (add/edit/delete)
+══════════════════════════════════════════ */
+function renderFilms(c){
+  c.innerHTML = `<p class="panel-intro">The films shown on your Wedding Films page. Each card needs a thumbnail image and a YouTube or Vimeo link — paste a normal YouTube link and it will convert to a playable embed link automatically.</p>`;
+  const wrap = document.createElement('div'); c.appendChild(wrap);
+  function paint(){
+    wrap.innerHTML = '';
+    state.films.forEach((f,i) => {
+      const card = document.createElement('div'); card.className='repeat-card';
+      const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove Film';
+      rm.onclick = () => { state.films.splice(i,1); markDirty(); paint(); };
+      card.appendChild(rm);
+      card.appendChild(buildSlot({ value:f.thumbnail, label:'Thumbnail image', onFile:v=>{f.thumbnail=v;}, onRemove:()=>{f.thumbnail='';} }));
+      const fields = document.createElement('div'); fields.className='repeat-fields';
+      fields.innerHTML = `
+        <div class="form-row"><label>Couple Name</label><input data-f="name" value="${f.name||''}" placeholder="e.g. Anaya & Rohan"></div>
+        <div class="form-row"><label>Location</label><input data-f="location" value="${f.location||''}" placeholder="e.g. Udaipur"></div>
+        <div class="form-row"><label>YouTube / Vimeo Link</label><input data-f="embedUrl" value="${f.embedUrl||''}" placeholder="https://youtube.com/watch?v=..."><div class="form-hint">Paste any normal YouTube link — it's converted automatically.</div></div>`;
+      const nameInp = fields.querySelector('[data-f="name"]');
+      const locInp = fields.querySelector('[data-f="location"]');
+      const urlInp = fields.querySelector('[data-f="embedUrl"]');
+      nameInp.addEventListener('input', () => { f.name = nameInp.value; markDirty(); });
+      locInp.addEventListener('input', () => { f.location = locInp.value; markDirty(); });
+      urlInp.addEventListener('blur', () => { f.embedUrl = toEmbedUrl(urlInp.value); urlInp.value = f.embedUrl; markDirty(); });
+      urlInp.addEventListener('input', () => { f.embedUrl = urlInp.value; markDirty(); });
+      card.appendChild(fields);
+      wrap.appendChild(card);
+    });
+  }
+  paint();
+  const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Film';
+  addBtn.onclick = () => { state.films.push({ name:'', location:'', thumbnail:'', embedUrl:'' }); markDirty(); paint(); };
+  c.appendChild(addBtn);
+  c.appendChild(noteBox('<b>Recommended size:</b> 1280 × 720 px (16:9) · JPG · under 5 MB for the thumbnail. <br><b>Link tip:</b> click away from the link field (or click Save) after pasting — it auto-converts to a proper embed link.'));
+}
+
+/* ══════════════════════════════════════════
    TESTIMONIALS
 ══════════════════════════════════════════ */
 function renderTestimonials(c){
-  c.innerHTML = `<p class="panel-intro">The rotating avatar carousel above your quotes. Add a couple's photo, name, and their words.</p>`;
+  c.innerHTML = `<p class="panel-intro">The rotating avatar carousel above your quotes. Add a couple's photo, name, their words, and an optional gallery of extra photos.</p>`;
   const wrap = document.createElement('div'); c.appendChild(wrap);
   function paint(){
     wrap.innerHTML = '';
     state.testimonials.forEach((t,i) => {
+      if (!t.photos) t.photos = [];
       const card = document.createElement('div'); card.className='repeat-card';
       const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove';
       rm.onclick = () => { state.testimonials.splice(i,1); markDirty(); paint(); };
@@ -665,13 +751,133 @@ function renderTestimonials(c){
       fields.querySelectorAll('input,textarea').forEach(inp => inp.addEventListener('input', () => { t[inp.dataset.f] = inp.value; markDirty(); }));
       card.appendChild(fields);
       wrap.appendChild(card);
+
+      // gallery photos for this testimonial
+      const galWrap = document.createElement('div'); galWrap.style.gridColumn = '1 / -1';
+      const galTitle = document.createElement('div'); galTitle.className='card-title'; galTitle.style.marginTop='6px'; galTitle.textContent = `Gallery (${t.photos.length} photo${t.photos.length===1?'':'s'})`;
+      galWrap.appendChild(galTitle);
+      const galGrid = document.createElement('div'); galGrid.className='slot-grid';
+      function paintGal(){
+        galGrid.innerHTML = '';
+        t.photos.forEach((p,pi) => {
+          galGrid.appendChild(buildSlot({
+            value:p, label:'Add photo',
+            onFile: v => { t.photos[pi] = v; },
+            onRemove: () => { t.photos.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `Gallery (${t.photos.length} photo${t.photos.length===1?'':'s'})`; }
+          }));
+        });
+        galGrid.appendChild(buildSlot({
+          value:'', label:'Add photo',
+          onFile: v => { t.photos.push(v); paintGal(); galTitle.textContent = `Gallery (${t.photos.length} photo${t.photos.length===1?'':'s'})`; },
+          onRemove: ()=>{}
+        }));
+      }
+      paintGal();
+      galWrap.appendChild(galGrid);
+      card.appendChild(galWrap);
     });
   }
   paint();
   const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Testimonial';
-  addBtn.onclick = () => { state.testimonials.push({ name:'', quote:'', photo:'' }); markDirty(); paint(); };
+  addBtn.onclick = () => { state.testimonials.push({ name:'', quote:'', photo:'', photos:[] }); markDirty(); paint(); };
   c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Recommended size:</b> 400 × 400 px (square) · JPG · under 2 MB.'));
+  c.appendChild(noteBox('<b>Recommended size:</b> 400 × 400 px (square) · JPG · under 2 MB for the main photo. Gallery photos work best around 1000 × 1250 px (portrait).'));
+}
+
+/* ══════════════════════════════════════════
+   ABOUT PAGE
+══════════════════════════════════════════ */
+function renderAbout(c){
+  c.innerHTML = `<p class="panel-intro">Your About page — photo, name, tagline, story, and press/recognition list. Separate bio paragraphs with a blank line to create new paragraphs on the live page.</p>`;
+
+  const card = document.createElement('div'); card.className='card';
+  card.innerHTML = `<div class="card-title">Photo</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='260px';
+  grid.appendChild(buildSlot({
+    value: state.about.photo, label:'Upload about photo',
+    onFile: v => state.about.photo = v, onRemove: () => state.about.photo = ''
+  }));
+  card.appendChild(grid);
+  c.appendChild(card);
+
+  const card2 = document.createElement('div'); card2.className='card';
+  card2.innerHTML = `<div class="card-title">Name, Tagline &amp; Story</div>`;
+  const row1 = document.createElement('div'); row1.className='form-row';
+  row1.innerHTML = `<label>Name</label><input id="aboutName" value="${state.about.name||''}" placeholder="e.g. Photowalla">`;
+  const row2 = document.createElement('div'); row2.className='form-row';
+  row2.innerHTML = `<label>Tagline</label><input id="aboutTagline" value="${state.about.tagline||''}" placeholder="e.g. Moment. Memory. Miracle.">`;
+  const row3 = document.createElement('div'); row3.className='form-row';
+  row3.innerHTML = `<label>Bio</label><textarea id="aboutBio" style="min-height:180px" placeholder="Paragraph one...
+
+Paragraph two...">${state.about.bio||''}</textarea><div class="form-hint">Leave a blank line between paragraphs — each becomes its own paragraph on the live site.</div>`;
+  card2.appendChild(row1); card2.appendChild(row2); card2.appendChild(row3);
+  c.appendChild(card2);
+  document.getElementById('aboutName').addEventListener('input', e => { state.about.name = e.target.value; markDirty(); });
+  document.getElementById('aboutTagline').addEventListener('input', e => { state.about.tagline = e.target.value; markDirty(); });
+  document.getElementById('aboutBio').addEventListener('input', e => { state.about.bio = e.target.value; markDirty(); });
+
+  const card3 = document.createElement('div'); card3.className='card';
+  card3.innerHTML = `<div class="card-title">Recognitions / Press (Accolades)</div>`;
+  const listWrap = document.createElement('div');
+  card3.appendChild(listWrap);
+  function paintAccolades(){
+    listWrap.innerHTML = '';
+    if (!state.about.accolades) state.about.accolades = [];
+    state.about.accolades.forEach((line, i) => {
+      const row = document.createElement('div');
+      row.style.display = 'flex'; row.style.gap = '10px'; row.style.marginBottom = '10px';
+      const input = document.createElement('input');
+      input.style.flex = '1'; input.style.background='var(--warm)'; input.style.border='1px solid var(--rule)'; input.style.padding='12px 14px'; input.style.fontSize='13px'; input.style.outline='none';
+      input.value = line;
+      input.placeholder = 'e.g. Featured in Vogue India 2024';
+      input.addEventListener('input', () => { state.about.accolades[i] = input.value; markDirty(); });
+      const rm = document.createElement('button');
+      rm.type='button'; rm.className='remove-line-btn'; rm.textContent='✕';
+      rm.onclick = () => { state.about.accolades.splice(i,1); markDirty(); paintAccolades(); };
+      row.appendChild(input); row.appendChild(rm);
+      listWrap.appendChild(row);
+    });
+  }
+  paintAccolades();
+  const addLineBtn = document.createElement('button'); addLineBtn.className='add-btn'; addLineBtn.style.marginTop='6px'; addLineBtn.textContent='+ Add Line';
+  addLineBtn.onclick = () => { state.about.accolades.push(''); markDirty(); paintAccolades(); };
+  card3.appendChild(addLineBtn);
+  c.appendChild(card3);
+
+  c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1100 px (portrait) · JPG · under 5 MB for the photo.'));
+}
+
+/* ══════════════════════════════════════════
+   STORE
+══════════════════════════════════════════ */
+function renderStore(c){
+  c.innerHTML = `<p class="panel-intro">Products shown on your Store page. Enter the price as a plain number (e.g. 4999) — no currency symbol or commas needed, the website formats it automatically.</p>`;
+  const wrap = document.createElement('div'); c.appendChild(wrap);
+  function paint(){
+    wrap.innerHTML = '';
+    state.store.forEach((p,i) => {
+      const card = document.createElement('div'); card.className='repeat-card';
+      const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove';
+      rm.onclick = () => { state.store.splice(i,1); markDirty(); paint(); };
+      card.appendChild(rm);
+      card.appendChild(buildSlot({ value:p.image, label:'Product photo', onFile:v=>p.image=v, onRemove:()=>p.image='' }));
+      const fields = document.createElement('div'); fields.className='repeat-fields';
+      fields.innerHTML = `
+        <div class="form-row"><label>Product Name</label><input data-f="name" value="${p.name||''}" placeholder="e.g. Wedding Album (12x12)"></div>
+        <div class="form-row"><label>Price (₹, numbers only)</label><input data-f="price" type="number" value="${p.price||''}" placeholder="e.g. 4999"></div>`;
+      const nameInp = fields.querySelector('[data-f="name"]');
+      const priceInp = fields.querySelector('[data-f="price"]');
+      nameInp.addEventListener('input', () => { p.name = nameInp.value; markDirty(); });
+      priceInp.addEventListener('input', () => { p.price = Number(priceInp.value) || 0; markDirty(); });
+      card.appendChild(fields);
+      wrap.appendChild(card);
+    });
+  }
+  paint();
+  const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Product';
+  addBtn.onclick = () => { state.store.push({ id: Date.now(), name:'', price:0, image:'' }); markDirty(); paint(); };
+  c.appendChild(addBtn);
+  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB for the product photo.'));
 }
 
 /* ══════════════════════════════════════════
@@ -687,114 +893,6 @@ function renderLive(c){
   card.querySelector('input').addEventListener('input', e => { state.liveLink = e.target.value; markDirty(); });
   c.appendChild(card);
   c.appendChild(noteBox('<b>Tip:</b> Go live on YouTube, copy the video link (not the studio link), and paste it here. Leave empty when there\'s no active stream.'));
-}
-
-/* ══════════════════════════════════════════
-   FILMS (Soul + Cinema background video)
-══════════════════════════════════════════ */
-function renderFilms(c){
-  c.innerHTML = `<p class="panel-intro">The full-bleed background film behind your "Soul + Cinema" section.</p>`;
-  const card = document.createElement('div'); card.className='card';
-  card.innerHTML = `<div class="card-title">Background Film</div>`;
-  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='260px';
-  grid.appendChild(buildSlot({
-    value: state.filmsVideo, kind:'video', label:'Upload background film',
-    onFile: v => state.filmsVideo = v, onRemove: () => state.filmsVideo = ''
-  }));
-  card.appendChild(grid);
-  card.appendChild(noteBox('<b>Recommended:</b> 1920 × 1080 px · MP4 · 10–20 second muted loop · under 20 MB. Keep it simple and slow-moving — it plays behind text.'));
-  c.appendChild(card);
-}
-
-/* ══════════════════════════════════════════
-   VIDEO PORTFOLIO (new)
-══════════════════════════════════════════ */
-function renderVideos(c){
-  c.innerHTML = `<p class="panel-intro">Build a video portfolio for the website — add a video straight from your gallery, or paste a YouTube link instead. You'll wire up where this shows on the site separately.</p>`;
-  const wrap = document.createElement('div'); c.appendChild(wrap);
-
-  function paint(){
-    wrap.innerHTML = '';
-    state.videoPortfolio.forEach((v,i) => {
-      const card = document.createElement('div'); card.className='repeat-card';
-      const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove';
-      rm.onclick = () => { state.videoPortfolio.splice(i,1); markDirty(); paint(); };
-      card.appendChild(rm);
-
-      // thumbnail slot
-      const slotWrap = document.createElement('div');
-      function paintThumb(){
-        slotWrap.innerHTML = '';
-        const thumbSrc = v.type === 'youtube' ? (ytId(v.src) ? `https://img.youtube.com/vi/${ytId(v.src)}/hqdefault.jpg` : '') : v.src;
-        const slot = document.createElement('div');
-        slot.className = 'slot' + (thumbSrc ? ' filled' : '');
-        if (thumbSrc){
-          const img = document.createElement('img'); img.src = thumbSrc; slot.appendChild(img);
-          if (v.type === 'youtube'){ const b=document.createElement('span'); b.className='yt-badge'; b.textContent='YouTube'; slot.appendChild(b); }
-        } else {
-          slot.innerHTML = `<div class="slot-plus">▶</div><p class="slot-txt">No video yet</p>`;
-        }
-        slotWrap.appendChild(slot);
-      }
-      paintThumb();
-      card.appendChild(slotWrap);
-
-      const fields = document.createElement('div'); fields.className='repeat-fields';
-      const tabsId = 'vt'+i;
-      fields.innerHTML = `
-        <div class="form-row"><label>Title / Caption</label><input data-f="title" value="${v.title||''}" placeholder="e.g. Riya & Aarav — Highlight Film"></div>
-        <div class="tabs" id="${tabsId}">
-          <button type="button" class="tab-btn ${v.type!=='youtube'?'active':''}" data-t="upload">Upload from Gallery</button>
-          <button type="button" class="tab-btn ${v.type==='youtube'?'active':''}" data-t="youtube">YouTube Link</button>
-        </div>
-        <div id="${tabsId}-body"></div>
-      `;
-      card.appendChild(fields);
-      fields.querySelector('input[data-f=title]').addEventListener('input', e => { v.title = e.target.value; markDirty(); });
-
-      function paintBody(){
-        const body = fields.querySelector('#'+tabsId+'-body');
-        body.innerHTML = '';
-        if (v.type === 'youtube'){
-          const row = document.createElement('div'); row.className='form-row';
-          row.innerHTML = `<label>YouTube URL</label><input value="${v.type==='youtube'?(v.src||''):''}" placeholder="https://youtube.com/watch?v=...">`;
-          row.querySelector('input').addEventListener('input', e => { v.src = e.target.value; markDirty(); paintThumb(); });
-          body.appendChild(row);
-        } else {
-          const input = document.createElement('input');
-          input.type = 'file'; input.accept = 'video/*';
-          const btn = document.createElement('button'); btn.type='button'; btn.className='add-btn'; btn.textContent = v.src ? 'Replace video' : 'Choose video from gallery';
-          input.addEventListener('change', async () => {
-            const file = input.files[0];
-            if (!file) return;
-            const origText = btn.textContent;
-            btn.textContent = 'Uploading…'; btn.disabled = true;
-            try{ v.src = await uploadVideo(file); v.type='upload'; markDirty(); paintThumb(); showToast('Video added'); }
-            catch(err){ showToast(err.message, true); }
-            finally { btn.textContent = v.src ? 'Replace video' : origText; btn.disabled = false; }
-            input.value = '';
-          });
-          btn.onclick = () => input.click();
-          body.appendChild(btn); body.appendChild(input);
-        }
-      }
-      paintBody();
-      fields.querySelectorAll('.tab-btn').forEach(tb => tb.addEventListener('click', () => {
-        fields.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-        tb.classList.add('active');
-        v.type = tb.dataset.t === 'youtube' ? 'youtube' : 'upload';
-        v.src = '';
-        markDirty(); paintBody(); paintThumb();
-      }));
-
-      wrap.appendChild(card);
-    });
-  }
-  paint();
-  const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Video';
-  addBtn.onclick = () => { state.videoPortfolio.push({ id: Date.now(), title:'', type:'upload', src:'' }); markDirty(); paint(); };
-  c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Uploaded from gallery:</b> 1080 × 1920 px (vertical) or 1920 × 1080 px (landscape) · MP4 · under 25 MB — compress longer clips before uploading. <br><b>YouTube link:</b> no size limit, loads faster on the website — best for full films.'));
 }
 
 </script>
