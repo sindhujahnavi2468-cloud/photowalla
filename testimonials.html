@@ -139,7 +139,6 @@ async function loadTestimonials(){
       block.innerHTML = `
         <div class="testi-inner">
           ${t.image ? `<img class="testi-card-img" src="${t.image}" alt="Testimonial">` : `<div class="testi-card-img ph"><div class="ph-icon">+</div><p class="ph-txt">Card image<br>via admin</p></div>`}
-          ${gallery.length ? `<div class="testi-gallery">${gallery.map(p => `<img src="${p}" alt="">`).join('')}</div>` : ''}
         </div>
       `;
       wrap.appendChild(block);
