@@ -60,10 +60,20 @@ section{scroll-margin-top:110px}
 }
 
 /* HERO — image only, no text, no scroll cue */
-.hero{position:relative;height:100svh;min-height:600px;overflow:hidden}
+.hero{position:relative;padding:40px 60px 0;background:var(--cream)}
+.hero-frame{position:relative;height:78vh;min-height:480px;max-height:820px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:#181310}
 .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
 .hero-slide.on{opacity:1}
+.hero-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid rgba(250,248,244,.5);background:rgba(12,9,6,.25);color:#FAF8F4;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:18px;transition:background .2s}
+.hero-arrow:hover{background:rgba(12,9,6,.5)}
+.hero-arrow.prev{left:24px}
+.hero-arrow.next{right:24px}
+@media(max-width:768px){
+  .hero{padding:20px 16px 0}
+  .hero-frame{height:60vh;min-height:360px}
+  .hero-arrow{width:36px;height:36px;font-size:15px}
+}
 
 /* INTRO */
 .intro-section{background:var(--warm);padding:100px 60px 80px;border-top:1px solid var(--rule)}
@@ -192,9 +202,13 @@ section{scroll-margin-top:110px}
 </nav>
 
 <section class="hero" id="hero">
-  <div class="hero-bg">
-    <div class="hero-slide" id="heroSlideA"></div>
-    <div class="hero-slide" id="heroSlideB"></div>
+  <div class="hero-frame">
+    <div class="hero-bg">
+      <div class="hero-slide" id="heroSlideA"></div>
+      <div class="hero-slide" id="heroSlideB"></div>
+    </div>
+    <button class="hero-arrow prev" id="heroPrev" aria-label="Previous">&#8249;</button>
+    <button class="hero-arrow next" id="heroNext" aria-label="Next">&#8250;</button>
   </div>
 </section>
 
@@ -291,24 +305,28 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 let heroSlides = [];
 let heroIdx = 0;
 let activeLayer = 'A';
+
+function showHeroSlide(idx){
+  if (!heroSlides.length) return;
+  heroIdx = (idx + heroSlides.length) % heroSlides.length;
+  const nextLayer = activeLayer === 'A' ? 'B' : 'A';
+  const nextEl = document.getElementById('heroSlide' + nextLayer);
+  const curEl = document.getElementById('heroSlide' + activeLayer);
+  nextEl.style.backgroundImage = `url('${heroSlides[heroIdx]}')`;
+  nextEl.classList.add('on');
+  curEl.classList.remove('on');
+  activeLayer = nextLayer;
+}
+
 function initHero(images){
   heroSlides = (images || []).filter(Boolean);
   if (!heroSlides.length) return;
   const a = document.getElementById('heroSlideA');
   a.style.backgroundImage = `url('${heroSlides[0]}')`;
   a.classList.add('on');
-  if (heroSlides.length > 1){
-    setInterval(() => {
-      heroIdx = (heroIdx + 1) % heroSlides.length;
-      const nextLayer = activeLayer === 'A' ? 'B' : 'A';
-      const nextEl = document.getElementById('heroSlide' + nextLayer);
-      const curEl = document.getElementById('heroSlide' + activeLayer);
-      nextEl.style.backgroundImage = `url('${heroSlides[heroIdx]}')`;
-      nextEl.classList.add('on');
-      curEl.classList.remove('on');
-      activeLayer = nextLayer;
-    }, 4000);
-  }
+
+  document.getElementById('heroPrev').addEventListener('click', () => showHeroSlide(heroIdx - 1));
+  document.getElementById('heroNext').addEventListener('click', () => showHeroSlide(heroIdx + 1));
 }
 
 /* FILMSTRIP — renders once, user scrolls it manually, no JS auto-scroll */
