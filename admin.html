@@ -704,37 +704,67 @@ function renderStories(c){
    FILMS — the /films page (add/edit/delete)
 ══════════════════════════════════════════ */
 function renderFilms(c){
-  c.innerHTML = `<p class="panel-intro">The films shown on your Wedding Films page. Each card needs a thumbnail image and a YouTube or Vimeo link — paste a normal YouTube link and it will convert to a playable embed link automatically.</p>`;
+  c.innerHTML = `<p class="panel-intro">The films shown on your Wedding Films page. Each card needs a thumbnail image, plus either a video uploaded directly from your gallery or a YouTube/Vimeo link.</p>`;
   const wrap = document.createElement('div'); c.appendChild(wrap);
   function paint(){
     wrap.innerHTML = '';
     state.films.forEach((f,i) => {
+      if (!f.videoType) f.videoType = f.embedUrl ? 'link' : 'upload';
       const card = document.createElement('div'); card.className='repeat-card';
       const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove Film';
       rm.onclick = () => { state.films.splice(i,1); markDirty(); paint(); };
       card.appendChild(rm);
-      card.appendChild(buildSlot({ value:f.thumbnail, label:'Thumbnail image', onFile:v=>{f.thumbnail=v;}, onRemove:()=>{f.thumbnail='';} }));
+      card.appendChild(buildSlot({ value:f.thumbnail, label:'Thumbnail image', onFile:v=>{f.thumbnail=v;markDirty();}, onRemove:()=>{f.thumbnail='';markDirty();} }));
+
       const fields = document.createElement('div'); fields.className='repeat-fields';
       fields.innerHTML = `
         <div class="form-row"><label>Couple Name</label><input data-f="name" value="${f.name||''}" placeholder="e.g. Anaya & Rohan"></div>
         <div class="form-row"><label>Location</label><input data-f="location" value="${f.location||''}" placeholder="e.g. Udaipur"></div>
-        <div class="form-row"><label>YouTube / Vimeo Link</label><input data-f="embedUrl" value="${f.embedUrl||''}" placeholder="https://youtube.com/watch?v=..."><div class="form-hint">Paste any normal YouTube link — it's converted automatically.</div></div>`;
+        <div class="tabs" style="margin-top:4px">
+          <button type="button" class="tab-btn vidTab" data-v="upload">Upload Video</button>
+          <button type="button" class="tab-btn vidTab" data-v="link">YouTube / Vimeo Link</button>
+        </div>
+        <div class="videoField"></div>`;
       const nameInp = fields.querySelector('[data-f="name"]');
       const locInp = fields.querySelector('[data-f="location"]');
-      const urlInp = fields.querySelector('[data-f="embedUrl"]');
       nameInp.addEventListener('input', () => { f.name = nameInp.value; markDirty(); });
       locInp.addEventListener('input', () => { f.location = locInp.value; markDirty(); });
-      urlInp.addEventListener('blur', () => { f.embedUrl = toEmbedUrl(urlInp.value); urlInp.value = f.embedUrl; markDirty(); });
-      urlInp.addEventListener('input', () => { f.embedUrl = urlInp.value; markDirty(); });
+
+      const videoField = fields.querySelector('.videoField');
+      const tabBtns = fields.querySelectorAll('.vidTab');
+      function paintVideoField(){
+        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.v === f.videoType));
+        videoField.innerHTML = '';
+        if (f.videoType === 'upload'){
+          const slotGrid = document.createElement('div'); slotGrid.className='slot-grid'; slotGrid.style.maxWidth='150px'; slotGrid.style.marginTop='8px';
+          slotGrid.appendChild(buildSlot({
+            value: f.videoFile, kind:'video', label:'Upload film video',
+            onFile: v => { f.videoFile = v; f.embedUrl=''; markDirty(); },
+            onRemove: () => { f.videoFile=''; markDirty(); }
+          }));
+          videoField.appendChild(slotGrid);
+          videoField.appendChild(noteBox('<b>Recommended:</b> MP4, under 25 MB. For full-length films, use a YouTube/Vimeo link instead — it plays smoother and doesn\\'t hit an upload limit.'));
+        } else {
+          const row = document.createElement('div'); row.className='form-row'; row.style.marginTop='8px';
+          row.innerHTML = `<label>YouTube / Vimeo Link</label><input data-f="embedUrl" value="${f.embedUrl||''}" placeholder="https://youtube.com/watch?v=..."><div class="form-hint">Paste any normal YouTube link — it's converted automatically.</div>`;
+          videoField.appendChild(row);
+          const urlInp = row.querySelector('input');
+          urlInp.addEventListener('blur', () => { f.embedUrl = toEmbedUrl(urlInp.value); urlInp.value = f.embedUrl; f.videoFile=''; markDirty(); });
+          urlInp.addEventListener('input', () => { f.embedUrl = urlInp.value; markDirty(); });
+        }
+      }
+      tabBtns.forEach(b => b.addEventListener('click', () => { f.videoType = b.dataset.v; markDirty(); paintVideoField(); }));
+      paintVideoField();
+
       card.appendChild(fields);
       wrap.appendChild(card);
     });
   }
   paint();
   const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Film';
-  addBtn.onclick = () => { state.films.push({ name:'', location:'', thumbnail:'', embedUrl:'' }); markDirty(); paint(); };
+  addBtn.onclick = () => { state.films.push({ name:'', location:'', thumbnail:'', videoType:'upload', videoFile:'', embedUrl:'' }); markDirty(); paint(); };
   c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Recommended size:</b> 1280 × 720 px (16:9) · JPG · under 5 MB for the thumbnail. <br><b>Link tip:</b> click away from the link field (or click Save) after pasting — it auto-converts to a proper embed link.'));
+  c.appendChild(noteBox('<b>Recommended size:</b> 1280 × 720 px (16:9) · JPG · under 5 MB for the thumbnail. <br><b>Video:</b> upload directly for short films (best under 25 MB), or paste a YouTube/Vimeo link for full-length films.'));
 }
 
 /* ══════════════════════════════════════════
