@@ -263,7 +263,6 @@ async function loadState(){
     const data = await res.json();
     const rec = data.record || {};
     state = {
-      state = {
       heroSlides: rec.heroSlides || (rec.hero ? [rec.hero] : []),
       intro: rec.intro || { left:'', right:'', mobile:'' },
       frames: (rec.frames && rec.frames.length) ? padFrames(rec.frames) : new Array(14).fill(''),
