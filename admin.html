@@ -148,7 +148,7 @@ input,textarea{font-family:'Montserrat',sans-serif}
       <div class="nav-item" data-section="intro"><span class="ic">✎</span> Intro Section</div>
       <div class="nav-item" data-section="grid"><span class="ic">▦</span> Photography Grid + Entrance</div>
       <div class="nav-item" data-section="filmstrip"><span class="ic">▭</span> Selected Frames</div>
-      <div class="nav-item" data-section="soulcinema"><span class="ic">◑</span> Soul &amp; Cinema Panels</div>
+      <div class="nav-item" data-section="soulcinema"><span class="ic">◑</span> Soul + Cinema</div>
       <div class="nav-item" data-section="stories"><span class="ic">♥</span> Love Stories</div>
       <div class="nav-item" data-section="films"><span class="ic">▶</span> Films</div>
       <div class="nav-item" data-section="testimonials"><span class="ic">✦</span> Testimonials</div>
@@ -228,7 +228,7 @@ let state = {
   intro: { left:'', right:'', mobile:'' },
   frames: new Array(14).fill(''),
   filmstrip: [],
-  soulCinema: { photo:'', film:'' },
+  soulCinema: { video:'', heading:'Soul + Cinema', text:'' },
   stories: [],
   films: [],
   testimonials: [],
@@ -265,7 +265,7 @@ async function loadState(){
       intro: rec.intro || { left:'', right:'', mobile:'' },
       frames: (rec.frames && rec.frames.length) ? padFrames(rec.frames) : new Array(14).fill(''),
       filmstrip: rec.filmstrip || [],
-      soulCinema: rec.soulCinema || { photo:'', film:'' },
+      soulCinema: rec.soulCinema || { video:'', heading:'Soul + Cinema', text:'' },
       stories: rec.stories || [],
       films: rec.films || [],
       testimonials: rec.testimonials || [],
@@ -393,7 +393,7 @@ function toEmbedUrl(url){
 ══════════════════════════════════════════ */
 const titles = {
   hero:'Hero Section', intro:'Intro Section', grid:'Photography Grid + Entrance',
-  filmstrip:'Selected Frames', soulcinema:'Soul &amp; Cinema Panels', stories:'Love Stories',
+  filmstrip:'Selected Frames', soulcinema:'Soul + Cinema', stories:'Love Stories',
   films:'Films', testimonials:'Testimonials', about:'About Page', store:'Store', live:'Live Stream'
 };
 let currentSection = 'hero';
@@ -599,21 +599,29 @@ function renderFilmstrip(c){
    SOUL & CINEMA PANELS (fixed — two images)
 ══════════════════════════════════════════ */
 function renderSoulCinema(c){
-  c.innerHTML = `<p class="panel-intro">The two hover panels on the homepage — "Photography" and "Films." Each is a single static image.</p>`;
+  c.innerHTML = `<p class="panel-intro">The full-width "Soul + Cinema" section on the homepage — a background video with a heading and paragraph over it.</p>`;
+
   const card = document.createElement('div'); card.className='card';
-  card.innerHTML = `<div class="card-title">Soul &amp; Cinema Images</div>`;
-  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='420px';
+  card.innerHTML = `<div class="card-title">Background Video</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='260px';
   grid.appendChild(buildSlot({
-    value: state.soulCinema.photo, label:'Photography panel image',
-    onFile: v => state.soulCinema.photo = v, onRemove: () => state.soulCinema.photo = ''
-  }));
-  grid.appendChild(buildSlot({
-    value: state.soulCinema.film, label:'Films panel image',
-    onFile: v => state.soulCinema.film = v, onRemove: () => state.soulCinema.film = ''
+    value: state.soulCinema.video, kind:'video', label:'Upload background video',
+    onFile: v => state.soulCinema.video = v, onRemove: () => state.soulCinema.video = ''
   }));
   card.appendChild(grid);
-  card.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB each. These sit behind the "Photography" and "Films" text overlays, so avoid busy edges near the bottom of the frame.'));
+  card.appendChild(noteBox('<b>Recommended:</b> 1920 × 1080 px · MP4 · 10–20 second muted loop · under 25 MB. Keep it slow-moving — text sits on top of it.'));
   c.appendChild(card);
+
+  const card2 = document.createElement('div'); card2.className='card';
+  card2.innerHTML = `<div class="card-title">Heading &amp; Text</div>`;
+  const row1 = document.createElement('div'); row1.className='form-row';
+  row1.innerHTML = `<label>Heading</label><input id="scHeadingInput" value="${state.soulCinema.heading||''}" placeholder="e.g. Soul + Cinema">`;
+  const row2 = document.createElement('div'); row2.className='form-row';
+  row2.innerHTML = `<label>Paragraph Text</label><textarea id="scTextInput" style="min-height:120px" placeholder="A few lines about your films...">${state.soulCinema.text||''}</textarea>`;
+  card2.appendChild(row1); card2.appendChild(row2);
+  c.appendChild(card2);
+  document.getElementById('scHeadingInput').addEventListener('input', e => { state.soulCinema.heading = e.target.value; markDirty(); });
+  document.getElementById('scTextInput').addEventListener('input', e => { state.soulCinema.text = e.target.value; markDirty(); });
 }
 
 /* ══════════════════════════════════════════
