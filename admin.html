@@ -551,7 +551,7 @@ function renderIntro(c){
    PHOTOGRAPHY GRID (14 slots)
 ══════════════════════════════════════════ */
 function renderGrid(c){
-  c.innerHTML = `<p class="panel-intro">Manage the 14 image slots in the magazine-style collage grid on the homepage. Click any slot to upload a new image. <strong>These same 14 photos also fill the entrance grid</strong> — the screen visitors see before clicking "Enter" — so you only need to upload here once.</p>`;
+  c.innerHTML = `<p class="panel-intro">Manage the 14 image slots in the magazine-style collage grid on the homepage. Click any slot to upload a new image. This is separate from the Entrance Screen grid.</p>`;
   const filled = state.frames.filter(Boolean).length;
   const stats = document.createElement('div'); stats.className='stats-row';
   stats.innerHTML = `
@@ -572,7 +572,7 @@ function renderGrid(c){
   });
   card.appendChild(grid);
   c.appendChild(card);
-  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) or 1300 × 1000 px (landscape) — any orientation works, the grid crops automatically. JPG preferred, under 10 MB. <br><b>Note:</b> these 14 photos power both the homepage collage grid <em>and</em> the entrance screen — no separate upload for the entrance page.'));
+  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) or 1300 × 1000 px (landscape) — any orientation works, the grid crops automatically. JPG preferred, under 10 MB.'));
 
   function refreshStats(){
     markDirty();
