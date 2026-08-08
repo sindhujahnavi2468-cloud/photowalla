@@ -787,12 +787,7 @@ function renderTestimonials(c){
   c.appendChild(addBtn);
   c.appendChild(noteBox('<b>Recommended size:</b> card image aspect ratio 3:5 (matches the live page), JPG, under 8MB. Gallery photos work best square (1:1), under 5MB each.'));
 }
-  paint();
-  const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Testimonial';
-  addBtn.onclick = () => { state.testimonials.push({ name:'', quote:'', photo:'', photos:[] }); markDirty(); paint(); };
-  c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Recommended size:</b> 400 × 400 px (square) · JPG · under 2 MB for the main photo. Gallery photos work best around 1000 × 1250 px (portrait).'));
-}
+
 
 /* ══════════════════════════════════════════
    ABOUT PAGE
