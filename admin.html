@@ -497,17 +497,39 @@ function noteBox(text){
    HERO
 ══════════════════════════════════════════ */
 function renderHero(c){
-  c.innerHTML = `<p class="panel-intro">This is the full-screen image behind your homepage headline — the very first thing a couple sees.</p>`;
+  c.innerHTML = `<p class="panel-intro">The full-screen background behind your homepage headline. Add one or more images — with more than one, they crossfade automatically every few seconds. This is separate from the Selected Frames strip.</p>`;
   const card = document.createElement('div'); card.className='card';
-  card.innerHTML = `<div class="card-title">Hero Background Image</div>`;
-  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.maxWidth='260px';
-  grid.appendChild(buildSlot({
-    value: state.hero, label:'Upload hero image',
-    onFile: v => state.hero = v, onRemove: () => state.hero = ''
-  }));
+  card.innerHTML = `<div class="card-title">Hero Background Images</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid';
+  function paintGrid(){
+    grid.innerHTML = '';
+    state.heroSlides.forEach((val,i) => {
+      const wrap = document.createElement('div');
+      wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '6px';
+      wrap.appendChild(buildSlot({
+        value: val, label:'Add image',
+        onFile: v => { state.heroSlides[i] = v; },
+        onRemove: () => { state.heroSlides.splice(i,1); markDirty(); paintGrid(); }
+      }));
+      const moveRow = document.createElement('div');
+      moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
+      const up = document.createElement('button'); up.type='button'; up.className='remove-line-btn'; up.textContent='↑';
+      up.onclick = () => { if (i>0){ [state.heroSlides[i-1], state.heroSlides[i]] = [state.heroSlides[i], state.heroSlides[i-1]]; markDirty(); paintGrid(); } };
+      const down = document.createElement('button'); down.type='button'; down.className='remove-line-btn'; down.textContent='↓';
+      down.onclick = () => { if (i<state.heroSlides.length-1){ [state.heroSlides[i+1], state.heroSlides[i]] = [state.heroSlides[i], state.heroSlides[i+1]]; markDirty(); paintGrid(); } };
+      moveRow.appendChild(up); moveRow.appendChild(down);
+      wrap.appendChild(moveRow);
+      grid.appendChild(wrap);
+    });
+    grid.appendChild(buildSlot({
+      value:'', label:'Add hero image',
+      onFile: v => { state.heroSlides.push(v); paintGrid(); }, onRemove: ()=>{}
+    }));
+  }
+  paintGrid();
   card.appendChild(grid);
-  card.appendChild(noteBox('<b>Recommended size:</b> 1920 × 1080 px (landscape) · JPG · under 8 MB. Choose a wide, well-lit shot — the middle third stays clear of text, but the top and bottom get darkened for readability.'));
   c.appendChild(card);
+  c.appendChild(noteBox('<b>Recommended size:</b> 1920 × 1080 px (landscape) · JPG · under 8 MB each. Choose wide, well-lit shots — the top and bottom get darkened for readability. Use ↑ / ↓ to reorder; they crossfade in that order.'));
 }
 
 /* ══════════════════════════════════════════
