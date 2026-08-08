@@ -581,7 +581,41 @@ function renderGrid(c){
     stats.children[1].querySelector('.stat-num').textContent = 14-f;
   }
 }
+/* ══════════════════════════════════════════
+   ENTRANCE SCREEN GRID (14 slots — separate
+   from the Photography Grid)
+══════════════════════════════════════════ */
+function renderEntranceGrid(c){
+  c.innerHTML = `<p class="panel-intro">Manage the 14 images shown on the entrance screen — the grid visitors see before clicking "Enter". Separate from the Photography Grid.</p>`;
+  const filled = state.entranceFrames.filter(Boolean).length;
+  const stats = document.createElement('div'); stats.className='stats-row';
+  stats.innerHTML = `
+    <div class="stat-card"><div class="stat-num">${filled}</div><div class="stat-lbl">Images Uploaded</div></div>
+    <div class="stat-card"><div class="stat-num">${14-filled}</div><div class="stat-lbl">Empty Slots</div></div>
+    <div class="stat-card"><div class="stat-num">14</div><div class="stat-lbl">Total Slots</div></div>`;
+  c.appendChild(stats);
 
+  const card = document.createElement('div'); card.className='card';
+  card.innerHTML = `<div class="card-title">All 14 Entrance Screen Slots</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid';
+  state.entranceFrames.forEach((val, i) => {
+    grid.appendChild(buildSlot({
+      value: val, numberLabel: String(i+1).padStart(2,'0'), label:'Add image',
+      onFile: v => { state.entranceFrames[i] = v; refreshStats(); },
+      onRemove: () => { state.entranceFrames[i] = ''; refreshStats(); }
+    }));
+  });
+  card.appendChild(grid);
+  c.appendChild(card);
+  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) or 1300 × 1000 px (landscape) — any orientation works, the grid crops automatically. JPG preferred, under 10 MB.'));
+
+  function refreshStats(){
+    markDirty();
+    const f = state.entranceFrames.filter(Boolean).length;
+    stats.children[0].querySelector('.stat-num').textContent = f;
+    stats.children[1].querySelector('.stat-num').textContent = 14-f;
+  }
+}
 /* ══════════════════════════════════════════
    FILMSTRIP
 ══════════════════════════════════════════ */
