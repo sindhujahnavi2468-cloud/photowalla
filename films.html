@@ -63,7 +63,7 @@ img{max-width:100%;display:block}
 .film-lightbox{position:fixed;inset:0;background:rgba(5,4,3,.95);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px}
 .film-lightbox.open{display:flex}
 .film-lightbox .lb-inner{width:100%;max-width:960px;aspect-ratio:16/9}
-.film-lightbox iframe{width:100%;height:100%;border:0}
+.film-lightbox iframe,.film-lightbox video{width:100%;height:100%;border:0;background:#000}
 .lightbox-close{position:absolute;top:22px;right:26px;background:none;border:none;color:#FAF8F4;font-size:32px;cursor:pointer;line-height:1}
 </style>
 </head>
@@ -130,22 +130,35 @@ img{max-width:100%;display:block}
 
 <div class="film-lightbox" id="filmLightbox">
   <button class="lightbox-close" id="filmLightboxClose" aria-label="Close">&times;</button>
-  <div class="lb-inner"><iframe id="filmFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+  <div class="lb-inner">
+    <iframe id="filmFrame" src="" allow="autoplay; fullscreen" allowfullscreen style="display:none"></iframe>
+    <video id="filmVideo" src="" controls autoplay playsinline style="display:none"></video>
+  </div>
 </div>
-
 <script>
 /* Each film in JSONBin: { name, location, thumbnail, embedUrl }
    embedUrl = a YouTube/Vimeo EMBED link, e.g. https://www.youtube.com/embed/VIDEO_ID */
 const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
 const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 
-function openFilm(url){
-  document.getElementById('filmFrame').src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1';
+function openFilm(type, src){
+  const iframe = document.getElementById('filmFrame');
+  const video = document.getElementById('filmVideo');
+  if (type === 'upload'){
+    iframe.style.display = 'none'; iframe.src = '';
+    video.style.display = 'block'; video.src = src; video.play();
+  } else {
+    video.style.display = 'none'; video.pause(); video.src = '';
+    iframe.style.display = 'block';
+    iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+  }
   document.getElementById('filmLightbox').classList.add('open');
 }
 function closeFilm(){
   document.getElementById('filmLightbox').classList.remove('open');
   document.getElementById('filmFrame').src = '';
+  const video = document.getElementById('filmVideo');
+  video.pause(); video.src = '';
 }
 document.getElementById('filmLightboxClose').addEventListener('click', closeFilm);
 document.getElementById('filmLightbox').addEventListener('click', e => { if (e.target.id === 'filmLightbox') closeFilm(); });
@@ -161,8 +174,10 @@ async function loadFilms(){
     films.forEach((f, i) => {
       const card = document.createElement('div');
       card.className = 'film-card';
+            const vType = f.videoType === 'upload' ? 'upload' : 'link';
+      const vSrc = vType === 'upload' ? (f.videoFile || '') : (f.embedUrl || '');
       card.innerHTML = `
-        <div class="film-frame" onclick="openFilm('${(f.embedUrl||'').replace(/'/g,"\\'")}')">
+        <div class="film-frame" onclick="openFilm('${vType}', '${vSrc.replace(/'/g,"\\'")}')">
           ${f.thumbnail ? `<img src="${f.thumbnail}" alt="${f.name||''}">` : `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Thumbnail<br>via admin</p></div>`}
           <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
