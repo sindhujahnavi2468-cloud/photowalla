@@ -9,9 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--cream:#FAF8F4;--warm:#F5F2EC;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF}
+:root{--cream:#FAF8F4;--warm:#F5F2EC;--parchment:#EDE8DF;--charcoal:#1C1C1C;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF}
 body{background:var(--cream);color:var(--charcoal);font-family:'Montserrat',sans-serif;font-weight:300}
 img{max-width:100%;display:block}
+.ph{background:var(--parchment);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(168,132,74,.3)}
+.ph-icon{width:32px;height:32px;border:1px solid rgba(168,132,74,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px}
+.ph-txt{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(168,132,74,.5);text-align:center;line-height:1.9}
 
 .site-nav{background:rgba(250,248,244,.98);border-bottom:1px solid var(--rule);padding:18px 24px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:500}
 .nav-logo img{height:32px;display:block}
@@ -20,6 +23,11 @@ img{max-width:100%;display:block}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);border-color:var(--gold-l)}
 .nav-links a.nav-enquire{color:var(--gold)}
 @media(max-width:640px){.nav-links{gap:14px 18px}.nav-links a{font-size:9.5px;letter-spacing:2px}.nav-logo img{height:26px}}
+
+.cart-btn{position:fixed;top:20px;right:22px;z-index:600;width:46px;height:46px;border-radius:50%;background:var(--brown);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.cart-btn svg{width:20px;height:20px;stroke:#FAF8F4;fill:none;stroke-width:1.6}
+.cart-count{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#fff;font-size:10px;font-weight:600;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+@media(max-width:640px){.cart-btn{top:14px;right:14px;width:40px;height:40px}}
 
 .site-footer{background:var(--brown);border-top:1px solid rgba(255,255,255,.08)}
 .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:60px 60px 44px}
@@ -34,10 +42,50 @@ img{max-width:100%;display:block}
 .footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
 @media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:30px;padding:40px 24px 30px}.footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}}
 
-.store-empty{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;gap:16px}
-.store-empty .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
-.store-empty h1{font-family:'Cormorant SC',serif;font-size:clamp(30px,5vw,52px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em}
-.store-empty p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--grey);max-width:440px}
+.page-hero{padding:80px 24px 50px;text-align:center;background:var(--warm);border-bottom:1px solid var(--rule)}
+.page-hero .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px}
+.page-hero h1{font-family:'Cormorant SC',serif;font-size:clamp(30px,5vw,56px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em}
+.page-hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--grey);margin-top:14px}
+
+.store-section{padding:70px 60px 100px}
+.store-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;max-width:1300px;margin:0 auto}
+.product-card{display:flex;flex-direction:column}
+.product-img-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;background:var(--parchment)}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.product-card:hover .product-img-wrap img{transform:scale(1.04)}
+.product-info{padding-top:14px}
+.product-name{font-family:'Cormorant SC',serif;font-size:15px;letter-spacing:1px;color:var(--brown);text-transform:uppercase}
+.product-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--gold);margin-top:4px}
+.add-cart-btn{margin-top:12px;width:100%;background:transparent;border:1px solid var(--brown);color:var(--brown);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:11px;cursor:pointer;transition:background .25s,color .25s}
+.add-cart-btn:hover{background:var(--brown);color:#FAF8F4}
+.add-cart-btn.added{background:var(--gold);border-color:var(--gold);color:#fff}
+.store-empty{grid-column:1/-1;text-align:center;padding:70px 24px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--grey)}
+@media(max-width:1024px){.store-grid{grid-template-columns:repeat(3,1fr);gap:22px}}
+@media(max-width:768px){.store-section{padding:44px 20px 70px}.store-grid{grid-template-columns:repeat(2,1fr);gap:16px}.product-name{font-size:12px}.product-price{font-size:14px}}
+
+.cart-overlay{position:fixed;inset:0;background:rgba(20,12,4,.5);z-index:900;display:none}
+.cart-overlay.open{display:block}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:92vw;background:var(--cream);z-index:950;transform:translateX(100%);transition:transform .35s ease;display:flex;flex-direction:column}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{padding:24px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+.cart-header h3{font-family:'Cormorant SC',serif;font-size:18px;letter-spacing:2px;text-transform:uppercase;color:var(--brown)}
+.cart-close{background:none;border:none;font-size:26px;color:var(--brown);cursor:pointer;line-height:1}
+.cart-items{flex:1;overflow-y:auto;padding:18px 24px}
+.cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.cart-item img{width:64px;height:80px;object-fit:cover;flex-shrink:0}
+.cart-item-info{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.cart-item-name{font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--brown)}
+.cart-item-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold)}
+.qty-row{display:flex;align-items:center;gap:10px;margin-top:4px}
+.qty-btn{width:24px;height:24px;border:1px solid var(--rule);background:#fff;cursor:pointer;font-size:14px;color:var(--brown);display:flex;align-items:center;justify-content:center}
+.qty-val{font-size:13px;min-width:16px;text-align:center}
+.remove-item{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);text-decoration:underline;cursor:pointer;margin-top:2px;background:none;border:none;align-self:flex-start}
+.cart-empty-msg{text-align:center;padding:60px 20px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--grey)}
+.cart-footer{padding:22px 24px;border-top:1px solid var(--rule)}
+.cart-total-row{display:flex;justify-content:space-between;font-family:'Cormorant SC',serif;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--brown);margin-bottom:16px}
+.checkout-btn{width:100%;background:var(--gold);color:#fff;border:none;padding:15px;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background .25s}
+.checkout-btn:hover{background:var(--gold-l)}
+.checkout-btn:disabled{opacity:.4;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -55,10 +103,21 @@ img{max-width:100%;display:block}
   </div>
 </nav>
 
-<section class="store-empty">
-  <span class="section-label">Coming Soon</span>
+<button class="cart-btn" id="cartBtn" aria-label="Open cart">
+  <svg viewBox="0 0 24 24"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+  <span class="cart-count" id="cartCount" style="display:none">0</span>
+</button>
+
+<section class="page-hero">
+  <span class="section-label">Prints &amp; Keepsakes</span>
   <h1>The Photowalla Store</h1>
-  <p>Prints, albums and keepsakes will live here soon. Tell us what you'd like to sell and we'll build it out for you.</p>
+  <p>Take a piece of your story home.</p>
+</section>
+
+<section class="store-section">
+  <div class="store-grid" id="storeGrid">
+    <div class="store-empty">Loading products&hellip;</div>
+  </div>
 </section>
 
 <footer class="site-footer">
@@ -68,7 +127,7 @@ img{max-width:100%;display:block}
       <p class="footer-tagline">Luxury &amp; Editorial Photography</p>
       <p class="footer-location">Bhilwara &nbsp;&middot;&nbsp; Jaipur &nbsp;&middot;&nbsp; Udaipur</p>
     </div>
-   <div class="footer-col">
+    <div class="footer-col">
       <p class="footer-col-title">Navigate</p>
       <a href="/stories">Stories</a>
       <a href="/testimonials">Testimonials</a>
@@ -94,5 +153,204 @@ img{max-width:100%;display:block}
     <p>Crafted with love for love stories.</p>
   </div>
 </footer>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button class="cart-close" id="cartClose" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItemsWrap">
+    <div class="cart-empty-msg">Your cart is empty.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>Send Order via WhatsApp</button>
+  </div>
+</div>
+
+<script>
+/* WHATSAPP NUMBER THE ORDER GETS SENT TO */
+const PHOTOGRAPHER_WHATSAPP = '917239888777';
+
+/* Products load from JSONBin — add them via the admin panel later under
+   a "store" array, each item shaped like:
+   { id, name, price, image }  (price as a plain number, e.g. 1499) */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
+
+let PRODUCTS = [];
+let cart = [];
+
+function loadCartFromStorage(){
+  try{
+    const saved = localStorage.getItem('photowalla_cart');
+    if (saved) cart = JSON.parse(saved);
+  } catch(e){ cart = []; }
+}
+function saveCartToStorage(){
+  try{ localStorage.setItem('photowalla_cart', JSON.stringify(cart)); } catch(e){}
+}
+
+function formatPrice(n){
+  const num = Number(n) || 0;
+  return '₹' + num.toLocaleString('en-IN');
+}
+
+function renderProducts(){
+  const grid = document.getElementById('storeGrid');
+  if (!PRODUCTS.length){
+    grid.innerHTML = `<div class="store-empty">Products coming soon — add them via admin.</div>`;
+    return;
+  }
+  grid.innerHTML = '';
+  PRODUCTS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-img-wrap">
+        ${p.image ? `<img src="${p.image}" alt="${p.name||''}">` : `<div class="ph" style="width:100%;height:100%"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>`}
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name || 'Untitled'}</div>
+        <div class="product-price">${formatPrice(p.price)}</div>
+        <button class="add-cart-btn" data-id="${p.id}">Add to Cart</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      addToCart(btn.getAttribute('data-id'));
+      btn.textContent = 'Added ✓';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1200);
+    });
+  });
+}
+
+function addToCart(id){
+  const product = PRODUCTS.find(p => String(p.id) === String(id));
+  if (!product) return;
+  const existing = cart.find(c => String(c.id) === String(id));
+  if (existing){ existing.qty += 1; }
+  else { cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, qty: 1 }); }
+  saveCartToStorage();
+  renderCart();
+}
+
+function changeQty(id, delta){
+  const item = cart.find(c => String(c.id) === String(id));
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(c => String(c.id) !== String(id));
+  saveCartToStorage();
+  renderCart();
+}
+
+function removeItem(id){
+  cart = cart.filter(c => String(c.id) !== String(id));
+  saveCartToStorage();
+  renderCart();
+}
+
+function cartTotal(){
+  return cart.reduce((sum, c) => sum + (Number(c.price) || 0) * c.qty, 0);
+}
+function cartCount(){
+  return cart.reduce((sum, c) => sum + c.qty, 0);
+}
+
+function renderCart(){
+  const wrap = document.getElementById('cartItemsWrap');
+  const countEl = document.getElementById('cartCount');
+  const totalEl = document.getElementById('cartTotal');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  const count = cartCount();
+  if (count > 0){
+    countEl.style.display = 'flex';
+    countEl.textContent = count;
+  } else {
+    countEl.style.display = 'none';
+  }
+
+  if (!cart.length){
+    wrap.innerHTML = `<div class="cart-empty-msg">Your cart is empty.</div>`;
+    totalEl.textContent = formatPrice(0);
+    checkoutBtn.disabled = true;
+    return;
+  }
+
+  wrap.innerHTML = '';
+  cart.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      ${item.image ? `<img src="${item.image}" alt="${item.name||''}">` : `<div class="ph" style="width:64px;height:80px"><div class="ph-icon">+</div></div>`}
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name || ''}</div>
+        <div class="cart-item-price">${formatPrice(item.price)}</div>
+        <div class="qty-row">
+          <button class="qty-btn" data-action="dec" data-id="${item.id}">&minus;</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" data-action="inc" data-id="${item.id}">+</button>
+        </div>
+        <button class="remove-item" data-action="remove" data-id="${item.id}">Remove</button>
+      </div>`;
+    wrap.appendChild(row);
+  });
+
+  wrap.querySelectorAll('[data-action="inc"]').forEach(b => b.addEventListener('click', () => changeQty(b.getAttribute('data-id'), 1)));
+  wrap.querySelectorAll('[data-action="dec"]').forEach(b => b.addEventListener('click', () => changeQty(b.getAttribute('data-id'), -1)));
+  wrap.querySelectorAll('[data-action="remove"]').forEach(b => b.addEventListener('click', () => removeItem(b.getAttribute('data-id'))));
+
+  totalEl.textContent = formatPrice(cartTotal());
+  checkoutBtn.disabled = false;
+}
+
+function openCart(){
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+document.getElementById('cartBtn').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if (!cart.length) return;
+  const lines = cart.map(c => `• ${c.name} × ${c.qty} — ${formatPrice((Number(c.price)||0) * c.qty)}`).join('\n');
+  const msg =
+`🛍️ *New Store Order — Photowalla*
+
+${lines}
+
+💰 *Total:* ${formatPrice(cartTotal())}
+
+_Sent from photowalla.in store_`;
+
+  window.open(`https://wa.me/${PHOTOGRAPHER_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+});
+
+async function loadStoreProducts(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
+    const data = await res.json();
+    PRODUCTS = (data.record && data.record.store) || [];
+  } catch(e){
+    PRODUCTS = [];
+  }
+  renderProducts();
+}
+
+loadCartFromStorage();
+renderCart();
+loadStoreProducts();
+</script>
 </body>
 </html>
