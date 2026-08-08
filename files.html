@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photowalla — Films</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--cream:#FAF8F4;--warm:#F5F2EC;--parchment:#EDE8DF;--charcoal:#1C1C1C;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF}
+body{background:var(--charcoal);color:var(--cream);font-family:'Montserrat',sans-serif;font-weight:300}
+img{max-width:100%;display:block}
+.ph{background:#242017;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(201,169,110,.25)}
+.ph-icon{width:32px;height:32px;border:1px solid rgba(201,169,110,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold-l);font-size:16px}
+.ph-txt{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(201,169,110,.4);text-align:center;line-height:1.9}
+
+.site-nav{background:rgba(28,28,28,.97);border-bottom:1px solid rgba(255,255,255,.08);padding:18px 24px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;z-index:500}
+.nav-logo img{height:32px;display:block;filter:brightness(0) invert(1)}
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;row-gap:10px}
+.nav-links a{font-family:'Cormorant SC',serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.75);text-decoration:none;padding-bottom:3px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold-l);border-color:var(--gold-l)}
+.nav-links a.nav-enquire{color:var(--gold-l)}
+@media(max-width:640px){.nav-links{gap:14px 18px}.nav-links a{font-size:9.5px;letter-spacing:2px}.nav-logo img{height:26px}}
+
+.site-footer{background:#151210;border-top:1px solid rgba(255,255,255,.08)}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:60px 60px 44px}
+.footer-logo{height:30px;filter:brightness(0) invert(1)}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold-l);margin-top:14px;line-height:1.5}
+.footer-location{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.35);margin-top:8px}
+.footer-col{display:flex;flex-direction:column;gap:11px}
+.footer-col-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.footer-col a{font-size:12px;color:rgba(250,248,244,.55);text-decoration:none}
+.footer-col a:hover{color:#FAF8F4}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 60px;display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:30px;padding:40px 24px 30px}.footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}}
+
+.page-hero{padding:80px 24px 50px;text-align:center}
+.page-hero .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-l);display:block;margin-bottom:14px}
+.page-hero h1{font-family:'Cormorant SC',serif;font-size:clamp(30px,5vw,56px);font-weight:600;color:#FAF8F4;text-transform:uppercase;letter-spacing:.03em}
+.page-hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(250,248,244,.55);margin-top:14px}
+
+.films-section{padding:20px 60px 100px}
+.films-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:34px;max-width:1200px;margin:0 auto}
+.film-card{display:block}
+.film-frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#000;cursor:pointer}
+.film-frame img{width:100%;height:100%;object-fit:cover}
+.film-frame .ph{width:100%;height:100%}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:rgba(250,248,244,.15);border:1px solid rgba(250,248,244,.5);display:flex;align-items:center;justify-content:center;transition:background .25s}
+.film-frame:hover .play-btn{background:var(--gold)}
+.play-btn svg{width:20px;height:20px;fill:#FAF8F4;margin-left:3px}
+.film-cap{margin-top:16px}
+.film-cap .film-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#FAF8F4}
+.film-cap .film-loc{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-l);margin-top:4px}
+.films-empty{grid-column:1/-1;text-align:center;padding:60px 24px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:rgba(250,248,244,.5)}
+@media(max-width:900px){
+  .films-section{padding:10px 24px 70px}
+  .films-grid{grid-template-columns:1fr;gap:44px}
+}
+
+.film-lightbox{position:fixed;inset:0;background:rgba(5,4,3,.95);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px}
+.film-lightbox.open{display:flex}
+.film-lightbox .lb-inner{width:100%;max-width:960px;aspect-ratio:16/9}
+.film-lightbox iframe{width:100%;height:100%;border:0}
+.lightbox-close{position:absolute;top:22px;right:26px;background:none;border:none;color:#FAF8F4;font-size:32px;cursor:pointer;line-height:1}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/index.html" class="nav-logo"><img src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla"></a>
+  <div class="nav-links">
+    <a href="/index.html">Home</a>
+    <a href="/stories.html">Stories</a>
+    <a href="/testimonials.html">Testimonials</a>
+    <a href="/about.html">About</a>
+    <a href="/store.html">Store</a>
+    <a href="/films.html" class="active">Films</a>
+    <a href="/enquiry.html" class="nav-enquire">Enquiry</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <span class="section-label">The Cinema</span>
+  <h1>Wedding Films</h1>
+  <p>Your story, in motion.</p>
+</section>
+
+<section class="films-section">
+  <div class="films-grid" id="filmsGrid">
+    <div class="films-empty">Loading films&hellip;</div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img class="footer-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
+      <p class="footer-tagline">Luxury &amp; Editorial Photography</p>
+      <p class="footer-location">Bhilwara &nbsp;&middot;&nbsp; Jaipur &nbsp;&middot;&nbsp; Udaipur</p>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Navigate</p>
+      <a href="/stories.html">Stories</a>
+      <a href="/testimonials.html">Testimonials</a>
+      <a href="/about.html">About</a>
+      <a href="/store.html">Store</a>
+      <a href="/films.html">Films</a>
+      <a href="/enquiry.html">Enquiry</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Connect</p>
+      <a href="https://www.instagram.com/photowalla.in/" target="_blank">Instagram</a>
+      <a href="https://www.youtube.com/channel/UCsZdjNM-W7ouNUgQ2MyxXlA" target="_blank">YouTube</a>
+      <a href="https://wa.me/917239888777" target="_blank">WhatsApp</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Get In Touch</p>
+      <a href="tel:+917239888777">+91 72398 88777</a>
+      <a href="mailto:Senhimaly@gmail.com">Senhimaly@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Photowalla. All rights reserved.</p>
+    <p>Crafted with love for love stories.</p>
+  </div>
+</footer>
+
+<div class="film-lightbox" id="filmLightbox">
+  <button class="lightbox-close" id="filmLightboxClose" aria-label="Close">&times;</button>
+  <div class="lb-inner"><iframe id="filmFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+</div>
+
+<script>
+/* Each film in JSONBin: { name, location, thumbnail, embedUrl }
+   embedUrl = a YouTube/Vimeo EMBED link, e.g. https://www.youtube.com/embed/VIDEO_ID */
+const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
+const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
+
+function openFilm(url){
+  document.getElementById('filmFrame').src = url + (url.includes('?') ? '&' : '?') + 'autoplay=1';
+  document.getElementById('filmLightbox').classList.add('open');
+}
+function closeFilm(){
+  document.getElementById('filmLightbox').classList.remove('open');
+  document.getElementById('filmFrame').src = '';
+}
+document.getElementById('filmLightboxClose').addEventListener('click', closeFilm);
+document.getElementById('filmLightbox').addEventListener('click', e => { if (e.target.id === 'filmLightbox') closeFilm(); });
+
+async function loadFilms(){
+  const grid = document.getElementById('filmsGrid');
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
+    const data = await res.json();
+    const films = (data.record && data.record.films) || [];
+    if (!films.length){ grid.innerHTML = `<div class="films-empty">Add films via admin.</div>`; return; }
+    grid.innerHTML = '';
+    films.forEach((f, i) => {
+      const card = document.createElement('div');
+      card.className = 'film-card';
+      card.innerHTML = `
+        <div class="film-frame" onclick="openFilm('${(f.embedUrl||'').replace(/'/g,"\\'")}')">
+          ${f.thumbnail ? `<img src="${f.thumbnail}" alt="${f.name||''}">` : `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Thumbnail<br>via admin</p></div>`}
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+        <div class="film-cap">
+          <div class="film-name">${f.name || ''}</div>
+          <div class="film-loc">${f.location || ''}</div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  } catch(e){
+    grid.innerHTML = `<div class="films-empty">Couldn't load films right now.</div>`;
+  }
+}
+loadFilms();
+</script>
+</body>
+</html>
