@@ -743,7 +743,8 @@ function renderFilms(c){
             onRemove: () => { f.videoFile=''; markDirty(); }
           }));
           videoField.appendChild(slotGrid);
-          videoField.appendChild(noteBox('<b>Recommended:</b> MP4, under 25 MB. For full-length films, use a YouTube/Vimeo link instead — it plays smoother and doesn't hit an upload limit.'));
+          l
+                    videoField.appendChild(noteBox("<b>Recommended:</b> MP4, under 25 MB. For full-length films, use a YouTube/Vimeo link instead — it plays smoother and doesn't hit an upload limit."));
         } else {
           const row = document.createElement('div'); row.className='form-row'; row.style.marginTop='8px';
           row.innerHTML = `<label>YouTube / Vimeo Link</label><input data-f="embedUrl" value="${f.embedUrl||''}" placeholder="https://youtube.com/watch?v=..."><div class="form-hint">Paste any normal YouTube link — it's converted automatically.</div>`;
