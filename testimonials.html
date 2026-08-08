@@ -43,17 +43,12 @@ img{max-width:100%;display:block}
 .page-hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--grey);margin-top:14px}
 
 /* testimonial blocks — card image (client's ready-made graphic) + photo gallery */
-.testi-block{padding:70px 60px}
-.testi-inner{display:grid;grid-template-columns:340px 1fr;gap:20px;max-width:1300px;margin:0 auto;align-items:start}
+.testi-block{padding:70px 60px;display:flex;justify-content:center}
+.testi-inner{max-width:700px;width:100%}
 .testi-card-img{width:100%;box-shadow:0 12px 34px rgba(0,0,0,.18)}
 .testi-card-img.ph{aspect-ratio:3/5}
-.testi-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-self:stretch}
-.testi-gallery img{width:100%;height:100%;aspect-ratio:1/1;object-fit:cover}
-.testi-gallery .ph{aspect-ratio:1/1}
 @media(max-width:900px){
   .testi-block{padding:40px 20px}
-  .testi-inner{grid-template-columns:1fr;gap:16px}
-  .testi-gallery{grid-template-columns:repeat(3,1fr)}
 }
 
 .testi-empty{padding:100px 24px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--grey)}
