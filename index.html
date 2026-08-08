@@ -391,13 +391,14 @@ async function loadFromBin(){
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
     const data = await res.json();
     const state = data.record || {};
-    if (state.frames) renderFramesOnSite(state.frames);
+    if (state.frames) renderMagazineGrid(state.frames);
+    if (state.entranceFrames) renderEntranceGrid(state.entranceFrames);
     if (state.intro) renderSectionImg('intro', state.intro);
     renderSoulCinema(state.soulCinema);
     renderStoriesPreview(state.stories || []);
-    const images = (state.filmstrip && state.filmstrip.length) ? state.filmstrip : (state.hero ? [state.hero] : []);
-    buildFilmTrack(images);
-    initHero(images);
+    buildFilmTrack(state.filmstrip || []);
+    const heroImages = (state.heroSlides && state.heroSlides.length) ? state.heroSlides : (state.filmstrip || []);
+    initHero(heroImages);
   } catch(e){ console.log('Could not load content', e); }
 }
 loadFromBin();
