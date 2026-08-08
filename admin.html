@@ -225,9 +225,10 @@ if (localStorage.getItem('pw_admin_session') === '1') enterAdmin();
    state.store, etc).
 ══════════════════════════════════════════ */
 let state = {
-  hero: '',
+  heroSlides: [],
   intro: { left:'', right:'', mobile:'' },
   frames: new Array(14).fill(''),
+  entranceFrames: new Array(14).fill(''),
   filmstrip: [],
   soulCinema: { video:'', heading:'Soul + Cinema', text:'' },
   stories: [],
