@@ -332,7 +332,7 @@ function buildFilmTrack(images){
   });
 }
 
-function renderFramesOnSite(frames){
+function renderMagazineGrid(frames){
   const slotClasses = ['mg-r1c1','mg-r1c2','mg-r1c3','mg-r1c4','mg-r1c5','mg-r2c1','mg-r2c2','mg-r2c4','mg-r2c5','mg-r3c1','mg-r3c2','mg-r3c3','mg-r3c4','mg-r3c5'];
   slotClasses.forEach((cls, i) => {
     if (frames[i]){
@@ -340,10 +340,13 @@ function renderFramesOnSite(frames){
       if (cell){ cell.innerHTML = `<img src="${frames[i]}" alt="">`; cell.classList.remove('ph'); }
     }
   });
+}
+
+function renderEntranceGrid(entranceFrames){
   for (let i = 0; i < 14; i++){
-    if (frames[i]){
+    if (entranceFrames[i]){
       const cell = document.getElementById('entC'+(i+1));
-      if (cell) cell.innerHTML = `<img src="${frames[i]}" alt="">`;
+      if (cell) cell.innerHTML = `<img src="${entranceFrames[i]}" alt="">`;
     }
   }
 }
