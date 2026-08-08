@@ -267,7 +267,13 @@ const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 document.getElementById('enterBtn').addEventListener('click', function(){
   document.getElementById('entrance').classList.add('hidden');
   document.body.classList.remove('locked');
+  sessionStorage.setItem('photowalla_entered', '1');
 });
+
+if (sessionStorage.getItem('photowalla_entered') === '1'){
+  document.getElementById('entrance').classList.add('hidden');
+  document.body.classList.remove('locked');
+}
 
 const obs = new IntersectionObserver(es => {
   es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
