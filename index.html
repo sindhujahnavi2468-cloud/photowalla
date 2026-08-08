@@ -28,24 +28,11 @@ section{scroll-margin-top:110px}
 .nav-links a.nav-enquire{color:var(--gold)}
 @media(max-width:640px){.nav-links{gap:14px 18px}.nav-links a{font-size:9.5px;letter-spacing:2px}.nav-logo img{height:26px}}
 
-/* FOOTER */
-.site-footer{background:var(--brown);border-top:1px solid rgba(255,255,255,.08)}
-.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;padding:60px 60px 44px}
-.footer-logo{height:30px;filter:brightness(0) invert(1)}
-.footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold-l);margin-top:14px;line-height:1.5}
-.footer-location{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(250,248,244,.35);margin-top:8px}
-.footer-col{display:flex;flex-direction:column;gap:11px}
-.footer-col-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.footer-col a{font-size:12px;color:rgba(250,248,244,.55);text-decoration:none;transition:color .2s}
-.footer-col a:hover{color:#FAF8F4}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 60px;display:flex;align-items:center;justify-content:space-between}
-.footer-bottom p{font-size:10px;letter-spacing:1px;color:rgba(250,248,244,.25)}
-@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:30px;padding:40px 24px 30px}.footer-bottom{flex-direction:column;gap:8px;text-align:center;padding:16px 24px}}
-
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-/* ENTRANCE — matches reference: 5x3 desktop, 3x5 mobile, brand centered */
+/* ENTRANCE — 5x3 desktop / 3x5 mobile, all cells identical size via CSS grid,
+   just the logo + Enter, no tagline text */
 #entrance{position:fixed;inset:0;z-index:5000;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);background:#0c0906;transition:opacity 1s ease,visibility 1s ease}
 #entrance.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .ent-cell{position:relative;overflow:hidden}
@@ -53,33 +40,21 @@ section{scroll-margin-top:110px}
 .ent-cell .ph-icon{border-color:rgba(201,169,110,.35);color:var(--gold-l)}
 .ent-cell .ph-txt{color:rgba(201,169,110,.4)}
 .ent-cell img{width:100%;height:100%;object-fit:cover;display:block}
-.ent-mid{position:relative;grid-column:3;grid-row:2;background:#0c0906;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:2;padding:20px}
-.ent-brand-logo{height:34px;filter:brightness(0) invert(1)}
-.ent-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;letter-spacing:1px;color:var(--gold-l)}
-.ent-btn{margin-top:10px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FAF8F4;border:1px solid rgba(250,248,244,.55);padding:14px 40px;background:transparent;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.ent-mid{position:relative;grid-column:3;grid-row:2;background:#0c0906;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;z-index:2;padding:20px}
+.ent-brand-logo{height:38px;filter:brightness(0) invert(1)}
+.ent-btn{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FAF8F4;border:1px solid rgba(250,248,244,.55);padding:14px 40px;background:transparent;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .ent-btn:hover{background:var(--gold);border-color:var(--gold);color:#fff}
 @media(max-width:768px){
   #entrance{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(5,1fr)}
   .ent-mid{grid-column:2;grid-row:3}
-  .ent-brand-logo{height:26px}
+  .ent-brand-logo{height:30px}
 }
 
-/* HERO — synced slideshow */
-.hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* HERO — image only, no text, no scroll cue */
+.hero{position:relative;height:100svh;min-height:600px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:#181310}
-.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
 .hero-slide.on{opacity:1}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,4,.15) 0%,rgba(20,12,4,.6) 100%);pointer-events:none}
-.hero-content{position:relative;text-align:center;padding:0 24px;max-width:860px;z-index:2}
-.hero-eyebrow{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-l);margin-bottom:28px;opacity:0;transform:translateY(12px);animation:fadeUp 1s .3s forwards}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,8vw,100px);font-weight:400;line-height:1.02;color:#FAF8F4;margin-bottom:28px;opacity:0;transform:translateY(18px);animation:fadeUp 1s .55s forwards}
-.hero-title em{font-style:italic;color:var(--gold-l)}
-.hero-sub{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,248,244,.58);opacity:0;transform:translateY(12px);animation:fadeUp 1s .8s forwards}
-.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 1.3s forwards;cursor:pointer;z-index:2}
-.hero-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-l)}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold-l),transparent);animation:pulse 2s infinite}
-@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
 
 /* INTRO */
 .intro-section{background:var(--warm);padding:100px 60px 80px;border-top:1px solid var(--rule)}
@@ -101,14 +76,13 @@ section{scroll-margin-top:110px}
   .intro-body p{font-size:13px;line-height:1.85;font-weight:400;margin-bottom:20px}
 }
 
-/* FILMSTRIP */
+/* FILMSTRIP — static, user-scrollable only. No auto-scroll, no JS-driven
+   scrollIntoView. This is what was dragging the whole page down. */
 .filmstrip-section{background:var(--charcoal);padding:56px 0;position:relative;border-top:1px solid var(--rule)}
 .filmstrip-label{display:block;padding:0 32px;margin-bottom:22px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,248,244,.5)}
-.filmstrip-inner{position:relative}
 .filmstrip-track{display:flex;gap:0;overflow-x:auto;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}
 .filmstrip-track::-webkit-scrollbar{display:none}
-.fs-frame{flex:0 0 auto;width:260px;height:340px;overflow:hidden;position:relative;opacity:.5;transition:opacity .6s ease}
-.fs-frame.fs-active{opacity:1}
+.fs-frame{flex:0 0 auto;width:260px;height:340px;overflow:hidden}
 .fs-frame .ph{width:100%;height:100%;background:#242017;border:none;border-right:1px solid rgba(201,169,110,.12)}
 @media(max-width:768px){.fs-frame{width:180px;height:240px}}
 
@@ -152,8 +126,8 @@ section{scroll-margin-top:110px}
   .sc-overlay{padding:26px}
 }
 
-/* STORIES PREVIEW */
-.stories-section{background:var(--cream);padding:100px 60px;border-top:1px solid var(--rule)}
+/* STORIES PREVIEW — 3 only */
+.stories-section{background:var(--cream);padding:100px 60px 110px;border-top:1px solid var(--rule)}
 .stories-header{text-align:center;margin-bottom:56px}
 .stories-header .section-label{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block}
 .stories-header h2{font-family:'Cormorant SC',serif;font-size:clamp(28px,4vw,52px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em;margin-bottom:14px}
@@ -165,9 +139,9 @@ section{scroll-margin-top:110px}
 .story-cap{margin-top:12px;font-family:'Cormorant SC',serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brown)}
 .story-cap .story-loc{color:var(--gold)}
 .stories-viewall{text-align:center;margin-top:48px}
-.stories-empty{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--grey)}
+.stories-empty{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--grey);grid-column:1/-1}
 @media(max-width:768px){
-  .stories-section{padding:60px 24px}
+  .stories-section{padding:60px 24px 70px}
   .stories-grid{grid-template-columns:repeat(2,1fr);gap:16px;max-width:420px}
 }
 @media(max-width:420px){
@@ -194,7 +168,6 @@ section{scroll-margin-top:110px}
   <div class="ent-cell" id="entC14"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>
   <div class="ent-mid">
     <img class="ent-brand-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
-    <span class="ent-sub">Luxury &amp; Editorial Photography</span>
     <button class="ent-btn" id="enterBtn">Enter</button>
   </div>
 </div>
@@ -217,15 +190,6 @@ section{scroll-margin-top:110px}
     <div class="hero-slide" id="heroSlideA"></div>
     <div class="hero-slide" id="heroSlideB"></div>
   </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="hero-eyebrow">Photowalla &nbsp;&middot;&nbsp; Luxury &amp; Editorial</p>
-    <h1 class="hero-title">Where <em>Moments</em><br>Become Heirlooms</h1>
-    <p class="hero-sub">Wedding &nbsp;&middot;&nbsp; Pre-Wedding &nbsp;&middot;&nbsp; Editorial &nbsp;&middot;&nbsp; Portraits</p>
-  </div>
-  <div class="hero-scroll" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})">
-    <span>Scroll</span><div class="scroll-line"></div>
-  </div>
 </section>
 
 <section class="intro-section" id="intro">
@@ -247,9 +211,7 @@ section{scroll-margin-top:110px}
 
 <section class="filmstrip-section">
   <span class="filmstrip-label">Selected Frames</span>
-  <div class="filmstrip-inner">
-    <div class="filmstrip-track" id="filmTrack"></div>
-  </div>
+  <div class="filmstrip-track" id="filmTrack"></div>
 </section>
 
 <section class="portfolio-section" id="photography">
@@ -309,40 +271,6 @@ section{scroll-margin-top:110px}
   <div class="stories-viewall"><a href="/stories.html" class="text-link">View All Stories &rarr;</a></div>
 </section>
 
-<footer class="site-footer">
-  <div class="footer-top">
-    <div class="footer-brand">
-      <img class="footer-logo" src="https://res.cloudinary.com/nqapapkj/image/upload/v1786144637/PHOTOWALLA_zaflfw.png" alt="Photowalla">
-      <p class="footer-tagline">Luxury &amp; Editorial Photography</p>
-      <p class="footer-location">Bhilwara &nbsp;&middot;&nbsp; Jaipur &nbsp;&middot;&nbsp; Udaipur</p>
-    </div>
-    <div class="footer-col">
-      <p class="footer-col-title">Navigate</p>
-      <a href="/stories.html">Stories</a>
-      <a href="/testimonials.html">Testimonials</a>
-      <a href="/about.html">About</a>
-      <a href="/store.html">Store</a>
-      <a href="/films.html">Films</a>
-      <a href="/enquiry.html">Enquiry</a>
-    </div>
-    <div class="footer-col">
-      <p class="footer-col-title">Connect</p>
-      <a href="https://www.instagram.com/photowalla.in/" target="_blank">Instagram</a>
-      <a href="https://www.youtube.com/channel/UCsZdjNM-W7ouNUgQ2MyxXlA" target="_blank">YouTube</a>
-      <a href="https://wa.me/917239888777" target="_blank">WhatsApp</a>
-    </div>
-    <div class="footer-col">
-      <p class="footer-col-title">Get In Touch</p>
-      <a href="tel:+917239888777">+91 72398 88777</a>
-      <a href="mailto:Senhimaly@gmail.com">Senhimaly@gmail.com</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2025 Photowalla. All rights reserved.</p>
-    <p>Crafted with love for love stories.</p>
-  </div>
-</footer>
-
 <script>
 const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
 const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
@@ -357,41 +285,16 @@ const obs = new IntersectionObserver(es => {
 }, { threshold: .1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* HERO + FILMSTRIP SYNCED SLIDESHOW */
+/* HERO crossfade only — pure opacity swap, never touches page scroll */
 let heroSlides = [];
 let heroIdx = 0;
 let activeLayer = 'A';
-function buildFilmTrack(images){
-  const track = document.getElementById('filmTrack');
-  track.innerHTML = '';
-  images.forEach(src => {
-    const div = document.createElement('div');
-    div.className = 'fs-frame';
-    div.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover">`;
-    track.appendChild(div);
-  });
-}
-function highlightFilm(i){
-  const track = document.getElementById('filmTrack');
-  const kids = Array.from(track.children);
-  kids.forEach((f,idx) => f.classList.toggle('fs-active', idx === i));
-  const target = kids[i];
-  if (!target) return;
-  /* Scroll only the filmstrip's own horizontal track — never the page.
-     (scrollIntoView was doing this before and it was dragging the
-     whole page down to the filmstrip section on every rotation.) */
-  const targetCenter = target.offsetLeft + target.offsetWidth / 2;
-  const trackCenter = track.clientWidth / 2;
-  track.scrollTo({ left: targetCenter - trackCenter, behavior: 'smooth' });
-}
-function initHeroFilmstrip(images){
+function initHero(images){
   heroSlides = (images || []).filter(Boolean);
   if (!heroSlides.length) return;
   const a = document.getElementById('heroSlideA');
   a.style.backgroundImage = `url('${heroSlides[0]}')`;
   a.classList.add('on');
-  buildFilmTrack(heroSlides);
-  highlightFilm(0);
   if (heroSlides.length > 1){
     setInterval(() => {
       heroIdx = (heroIdx + 1) % heroSlides.length;
@@ -402,9 +305,29 @@ function initHeroFilmstrip(images){
       nextEl.classList.add('on');
       curEl.classList.remove('on');
       activeLayer = nextLayer;
-      highlightFilm(heroIdx);
     }, 4000);
   }
+}
+
+/* FILMSTRIP — renders once, user scrolls it manually, no JS auto-scroll */
+function buildFilmTrack(images){
+  const track = document.getElementById('filmTrack');
+  track.innerHTML = '';
+  if (!images.length){
+    for (let i = 0; i < 5; i++){
+      const div = document.createElement('div');
+      div.className = 'fs-frame';
+      div.innerHTML = `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>`;
+      track.appendChild(div);
+    }
+    return;
+  }
+  images.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'fs-frame';
+    div.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover">`;
+    track.appendChild(div);
+  });
 }
 
 function renderFramesOnSite(frames){
@@ -431,19 +354,17 @@ function renderSectionImg(section, data){
   if (mob && (data.mobile || data.left)){ mob.innerHTML=''; mob.style.backgroundImage=`url('${data.mobile || data.left}')`; mob.style.backgroundSize='cover'; mob.style.backgroundPosition='center'; mob.classList.remove('ph'); }
 }
 
-/* SOUL + CINEMA images: state.soulCinema = { photo: url, film: url } */
 function renderSoulCinema(data){
   if (!data) return;
   if (data.photo){ const el = document.getElementById('scPhotoImg'); el.innerHTML = `<img src="${data.photo}" style="width:100%;height:100%;object-fit:cover">`; el.classList.remove('ph'); }
   if (data.film){ const el = document.getElementById('scFilmImg'); el.innerHTML = `<img src="${data.film}" style="width:100%;height:100%;object-fit:cover">`; el.classList.remove('ph'); }
 }
 
-/* STORIES PREVIEW — links to pretty URL /{slug} */
 function renderStoriesPreview(stories){
   const grid = document.getElementById('storiesGrid');
   if (!grid || !stories.length) return;
   grid.innerHTML = '';
-  stories.slice(0, 6).forEach(s => {
+  stories.slice(0, 3).forEach(s => {
     const href = s.slug ? `/${s.slug}` : `/stories/story.html?id=${s.id}`;
     grid.innerHTML += `
       <a class="story-card" href="${href}">
@@ -462,8 +383,9 @@ async function loadFromBin(){
     if (state.intro) renderSectionImg('intro', state.intro);
     renderSoulCinema(state.soulCinema);
     renderStoriesPreview(state.stories || []);
-    const slides = (state.filmstrip && state.filmstrip.length) ? state.filmstrip : (state.hero ? [state.hero] : []);
-    initHeroFilmstrip(slides);
+    const images = (state.filmstrip && state.filmstrip.length) ? state.filmstrip : (state.hero ? [state.hero] : []);
+    buildFilmTrack(images);
+    initHero(images);
   } catch(e){ console.log('Could not load content', e); }
 }
 loadFromBin();
