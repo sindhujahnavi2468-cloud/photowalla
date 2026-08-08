@@ -42,20 +42,18 @@ img{max-width:100%;display:block}
 .page-hero h1{font-family:'Cormorant SC',serif;font-size:clamp(30px,5vw,56px);font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:.03em}
 .page-hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--grey);margin-top:14px}
 
-/* testimonial blocks */
-.testi-block{position:relative;padding:90px 60px;overflow:hidden}
-.testi-watermark{position:absolute;top:6%;left:0;right:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(50px,11vw,150px);color:rgba(255,255,255,.14);white-space:nowrap;pointer-events:none;letter-spacing:.02em}
-.testi-inner{position:relative;z-index:2;display:grid;grid-template-columns:340px 1fr;gap:60px;max-width:1200px;margin:0 auto;align-items:center}
-.testi-photo{width:100%;aspect-ratio:3/4}
-.testi-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(24px,3vw,36px);color:#FAF8F4;margin-bottom:20px}
-.testi-quote{font-family:'Libre Baskerville',serif;font-style:italic;font-size:15px;line-height:2.1;color:rgba(250,248,244,.88)}
-.testi-gallery{position:relative;z-index:2;max-width:1200px;margin:50px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.testi-gallery img{width:100%;aspect-ratio:4/5;object-fit:cover}
-.testi-gallery .ph{aspect-ratio:4/5}
+/* testimonial blocks — card image (client's ready-made graphic) + photo gallery */
+.testi-block{padding:70px 60px}
+.testi-inner{display:grid;grid-template-columns:340px 1fr;gap:20px;max-width:1300px;margin:0 auto;align-items:start}
+.testi-card-img{width:100%;box-shadow:0 12px 34px rgba(0,0,0,.18)}
+.testi-card-img.ph{aspect-ratio:3/5}
+.testi-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-self:stretch}
+.testi-gallery img{width:100%;height:100%;aspect-ratio:1/1;object-fit:cover}
+.testi-gallery .ph{aspect-ratio:1/1}
 @media(max-width:900px){
-  .testi-block{padding:60px 24px}
-  .testi-inner{grid-template-columns:1fr;gap:28px}
-  .testi-gallery{grid-template-columns:repeat(2,1fr);margin-top:30px}
+  .testi-block{padding:40px 20px}
+  .testi-inner{grid-template-columns:1fr;gap:16px}
+  .testi-gallery{grid-template-columns:repeat(3,1fr)}
 }
 
 .testi-empty{padding:100px 24px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--grey)}
@@ -121,6 +119,10 @@ img{max-width:100%;display:block}
 </footer>
 
 <script>
+/* Each testimonial in JSONBin is now just:
+   { image: "url" (the client's ready-made testimonial graphic),
+     gallery: ["url1","url2", ...] (extra wedding photos) }
+   No name/quote text — all of that lives inside the uploaded image. */
 const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
 const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 const PALETTE = ['#7C8CA0', '#A98A94', '#6B1F1F', '#3A2717'];
@@ -135,21 +137,15 @@ async function loadTestimonials(){
     wrap.innerHTML = '';
     list.forEach((t, i) => {
       const bg = PALETTE[i % PALETTE.length];
-      const nameUpper = (t.name || '').toUpperCase();
-      const photos = Array.isArray(t.photos) ? t.photos.filter(Boolean) : [];
+      const gallery = Array.isArray(t.gallery) ? t.gallery.filter(Boolean) : [];
       const block = document.createElement('section');
       block.className = 'testi-block';
       block.style.background = bg;
       block.innerHTML = `
-        <div class="testi-watermark">${nameUpper} &nbsp; ${nameUpper} &nbsp; ${nameUpper}</div>
         <div class="testi-inner">
-          ${t.photo ? `<img class="testi-photo" src="${t.photo}" alt="${t.name||''}">` : `<div class="testi-photo ph"><div class="ph-icon">+</div><p class="ph-txt">Photo<br>via admin</p></div>`}
-          <div>
-            <div class="testi-name">${t.name || ''}</div>
-            <p class="testi-quote">${(t.quote || '').replace(/\\n/g,'<br><br>')}</p>
-          </div>
+          ${t.image ? `<img class="testi-card-img" src="${t.image}" alt="Testimonial">` : `<div class="testi-card-img ph"><div class="ph-icon">+</div><p class="ph-txt">Card image<br>via admin</p></div>`}
+          ${gallery.length ? `<div class="testi-gallery">${gallery.map(p => `<img src="${p}" alt="">`).join('')}</div>` : ''}
         </div>
-        ${photos.length ? `<div class="testi-gallery">${photos.map(p => `<img src="${p}" alt="">`).join('')}</div>` : ''}
       `;
       wrap.appendChild(block);
     });
@@ -159,4 +155,3 @@ loadTestimonials();
 </script>
 </body>
 </html>
-            
