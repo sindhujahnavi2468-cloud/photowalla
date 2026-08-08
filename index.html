@@ -391,6 +391,19 @@ async function loadFromBin(){
   } catch(e){ console.log('Could not load content', e); }
 }
 loadFromBin();
+function initEntranceShuffle(){
+  const entrance = document.getElementById('entrance');
+  const layouts = ['layout-wide','layout-tall'];
+  let idx = 0;
+  function applyLayout(){
+    entrance.classList.remove('layout-wide','layout-tall');
+    entrance.classList.add(layouts[idx]);
+    idx = (idx + 1) % layouts.length;
+  }
+  applyLayout();
+  setInterval(applyLayout, 3000);
+}
+initEntranceShuffle();
 </script>
 </body>
 </html>
