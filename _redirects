@@ -1,1 +1,7 @@
-/stories/:slug  /stories/story.html?slug=:slug  200
+/about           /about.html            200
+/store           /store.html            200
+/testimonials    /testimonials.html     200
+/films           /films.html            200
+/stories         /stories.html          200
+/enquiry         /enquiry.html          200
+/:slug           /stories/story.html    200
