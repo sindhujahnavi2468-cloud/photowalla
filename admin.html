@@ -415,8 +415,8 @@ function renderSection(name){
   const c = document.getElementById('sectionContent');
   c.innerHTML = '';
   const renderers = {
-    hero:renderHero, intro:renderIntro, grid:renderGrid, filmstrip:renderFilmstrip,
-    soulcinema:renderSoulCinema, stories:renderStories, films:renderFilms,
+    hero:renderHero, intro:renderIntro, grid:renderGrid, entrance:renderEntranceGrid,
+    filmstrip:renderFilmstrip, soulcinema:renderSoulCinema, stories:renderStories, films:renderFilms,
     testimonials:renderTestimonials, about:renderAbout, store:renderStore, live:renderLive
   };
   renderers[name](c);
