@@ -33,8 +33,9 @@ section{scroll-margin-top:110px}
 
 /* ENTRANCE — 5x3 desktop / 3x5 mobile, all cells identical size via CSS grid,
    just the logo + Enter, no tagline text */
-#entrance{position:fixed;inset:0;z-index:5000;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));background:#0c0906;transition:opacity 1s ease,visibility 1s ease}
-#entrance.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#entrance{position:fixed;inset:0;z-index:5000;display:grid;background:#0c0906;transition:opacity 1s ease,visibility 1s ease}
+#entrance.layout-wide{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr))}
+#entrance.layout-tall{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr))}
 .ent-cell{position:relative;overflow:hidden;min-height:0}
 .ent-cell .ph{width:100%;height:100%;background:#181310;border-color:rgba(201,169,110,.25)}
 .ent-cell .ph-icon{border-color:rgba(201,169,110,.35);color:var(--gold-l)}
