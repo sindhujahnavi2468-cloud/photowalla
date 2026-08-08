@@ -263,9 +263,11 @@ async function loadState(){
     const data = await res.json();
     const rec = data.record || {};
     state = {
-      hero: rec.hero || '',
+      state = {
+      heroSlides: rec.heroSlides || (rec.hero ? [rec.hero] : []),
       intro: rec.intro || { left:'', right:'', mobile:'' },
       frames: (rec.frames && rec.frames.length) ? padFrames(rec.frames) : new Array(14).fill(''),
+      entranceFrames: (rec.entranceFrames && rec.entranceFrames.length) ? padFrames(rec.entranceFrames) : new Array(14).fill(''),
       filmstrip: rec.filmstrip || [],
       soulCinema: rec.soulCinema || { video:'', heading:'Soul + Cinema', text:'' },
       stories: rec.stories || [],
