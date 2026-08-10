@@ -127,7 +127,47 @@ function getPathSlug(){
   if (last && last !== 'story.html' && last !== 'stories') return decodeURIComponent(last);
   return null;
 }
+function loadImageMeta(src){
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => resolve({ src, portrait: img.naturalHeight > img.naturalWidth });
+    img.onerror = () => resolve({ src, portrait: false });
+    img.src = src;
+  });
+}
 
+async function renderGallery(photos){
+  const gal = document.getElementById('storyGallery');
+  gal.innerHTML = '';
+  const metas = await Promise.all(photos.map(loadImageMeta));
+  let i = 0;
+  while (i < metas.length){
+    const m = metas[i];
+    const row = document.createElement('div');
+    if (!m.portrait){
+      row.className = 'gallery-row row-1';
+      row.appendChild(makeGalleryImg(m.src));
+      i++;
+    } else if (metas[i+1] && metas[i+1].portrait){
+      row.className = 'gallery-row row-2';
+      row.appendChild(makeGalleryImg(m.src));
+      row.appendChild(makeGalleryImg(metas[i+1].src));
+      i += 2;
+    } else {
+      row.className = 'gallery-row row-1';
+      row.appendChild(makeGalleryImg(m.src));
+      i++;
+    }
+    gal.appendChild(row);
+  }
+}
+function makeGalleryImg(src){
+  const img = document.createElement('img');
+  img.src = src;
+  img.addEventListener('click', () => openLightbox(src));
+  return img;
+         }
+  
 async function loadStory(){
   const slug = getParam('slug') || getPathSlug();
   const id = getParam('id');
