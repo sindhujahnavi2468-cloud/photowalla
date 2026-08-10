@@ -130,8 +130,12 @@ function getPathSlug(){
 function loadImageMeta(src){
   return new Promise(resolve => {
     const img = new Image();
-    img.onload = () => resolve({ src, portrait: img.naturalHeight > img.naturalWidth });
-    img.onerror = () => resolve({ src, portrait: false });
+    img.onload = () => resolve({
+      src,
+      portrait: img.naturalHeight > img.naturalWidth,
+      ratio: img.naturalWidth / img.naturalHeight
+    });
+    img.onerror = () => resolve({ src, portrait: false, ratio: 3/2 });
     img.src = src;
   });
 }
