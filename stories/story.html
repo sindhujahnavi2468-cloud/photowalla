@@ -143,116 +143,39 @@ function loadImageMeta(src){
   });
 }
 
-/* ---------- Justified gallery (preserves true aspect ratios, no cropping) ---------- */
-const GALLERY_GAP = 2;
-const TARGET_ROW_HEIGHT = 560;   // desktop ideal row height in px
-const MOBILE_BREAKPOINT = 640;
-const PANORAMA_RATIO = 2.2;      // very wide photos get their own full-width row
-
-let _galleryMetas = null;
-let _resizeTimer = null;
-
 async function renderGallery(photos){
-  const metas = await Promise.all(photos.map(loadImageMeta));
-  _galleryMetas = metas;
-  layoutGallery(metas);
-
-  window.addEventListener('resize', () => {
-    clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(() => { if (_galleryMetas) layoutGallery(_galleryMetas); }, 150);
-  });
-}
-
-function layoutGallery(metas){
   const gal = document.getElementById('storyGallery');
   gal.innerHTML = '';
-  const containerWidth = gal.clientWidth || gal.parentElement.clientWidth;
-
-  // Mobile: one full-width photo per row, natural ratio, no cropping.
-  if (containerWidth < MOBILE_BREAKPOINT){
-    metas.forEach(m => {
-      const row = document.createElement('div');
-      row.className = 'gallery-row gallery-row--single';
-      const img = makeGalleryImg(m.src, m.ratio);
-      img.style.width = '100%';
-      img.style.height = 'auto';
-      row.appendChild(img);
-      gal.appendChild(row);
-    });
-    return;
-  }
-
+  const metas = await Promise.all(photos.map(loadImageMeta));
   let i = 0;
   while (i < metas.length){
     const m = metas[i];
-
-    // Panoramic photo: its own full-bleed row.
-    if (m.ratio >= PANORAMA_RATIO){
-      const row = document.createElement('div');
-      row.className = 'gallery-row gallery-row--single';
-      const h = Math.min(TARGET_ROW_HEIGHT, containerWidth / m.ratio);
-      const img = makeGalleryImg(m.src, m.ratio);
-      img.style.height = h + 'px';
-      img.style.width = 'auto';
-      row.appendChild(img);
-      gal.appendChild(row);
-      i++;
-      continue;
-    }
-
-    // Greedily accumulate photos until the row would fill the container width.
-    let rowMetas = [m];
-    let ratioSum = m.ratio;
-    let j = i + 1;
-    while (j < metas.length && metas[j].ratio < PANORAMA_RATIO){
-      const estWidth = ratioSum * TARGET_ROW_HEIGHT + rowMetas.length * GALLERY_GAP;
-      if (estWidth >= containerWidth) break;
-      rowMetas.push(metas[j]);
-      ratioSum += metas[j].ratio;
-      j++;
-    }
-
-    const isLastRow = j >= metas.length;
-    const totalGap = (rowMetas.length - 1) * GALLERY_GAP;
-    const filledWidth = ratioSum * TARGET_ROW_HEIGHT + totalGap;
     const row = document.createElement('div');
-
-    if (isLastRow && filledWidth < containerWidth){
-      // Leftover row: don't stretch to fill — sits at natural size.
-      row.className = 'gallery-row gallery-row--last';
-      rowMetas.forEach(rm => {
-        const img = makeGalleryImg(rm.src, rm.ratio);
-        img.style.height = TARGET_ROW_HEIGHT + 'px';
-        img.style.width = 'auto';
-        row.appendChild(img);
-      });
+    if (!m.portrait){
+      row.className = 'gallery-row row-1';
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
+      i++;
+    } else if (metas[i+1] && metas[i+1].portrait){
+      row.className = 'gallery-row row-2';
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
+      row.appendChild(makeGalleryImg(metas[i+1].src, metas[i+1].ratio));
+      i += 2;
     } else {
-      // Full row: compute exact height so widths sum to the container width.
-      const rowHeight = (containerWidth - totalGap) / ratioSum;
-      row.className = 'gallery-row';
-      rowMetas.forEach(rm => {
-        const img = makeGalleryImg(rm.src, rm.ratio);
-        img.style.height = rowHeight + 'px';
-        img.style.width = 'auto';
-        row.appendChild(img);
-      });
+      row.className = 'gallery-row row-1';
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
+      i++;
     }
-
     gal.appendChild(row);
-    i = j;
   }
 }
-
 function makeGalleryImg(src, ratio){
   const img = document.createElement('img');
   img.src = src;
-  img.loading = 'lazy';
-  img.decoding = 'async';
   if (ratio) img.style.aspectRatio = ratio;
   img.addEventListener('click', () => openLightbox(src));
   return img;
 }
-  
+
 async function loadStory(){
   const slug = getParam('slug') || getPathSlug();
   const id = getParam('id');
