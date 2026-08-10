@@ -17,7 +17,8 @@ body{background:var(--cream);color:var(--charcoal);font-family:'Montserrat',sans
 img{max-width:100%;display:block}
 
 .story-nav{position:sticky;top:0;z-index:100;background:rgba(250,248,244,.97);border-bottom:1px solid var(--rule);padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
-.story-nav .brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--brown);text-decoration:none}
+.story-nav .brand{display:block;text-decoration:none}
+.story-nav .brand img{height:40px;display:block}
 .back-link{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-l);padding-bottom:2px}
 .back-link:hover{color:var(--brown);border-color:var(--brown)}
 
@@ -39,6 +40,7 @@ img{max-width:100%;display:block}
 .story-gallery img:hover{opacity:.9}
 @media(max-width:768px){
   .story-body{padding:50px 24px}
+  .story-nav .brand img{height:30px}
 }
 
 .lightbox{position:fixed;inset:0;background:rgba(10,7,4,.94);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px}
@@ -58,7 +60,7 @@ footer a{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px
 <body>
 
 <nav class="story-nav">
-  <a href="/" class="brand">Photowalla</a>
+  <a href="/" class="brand"><img src="https://res.cloudinary.com/nqapapkj/image/upload/v1786197230/photowalla_logo_transparent_1_kqyhll.png" alt="Photowalla"></a>
   <a href="/stories" class="back-link">&larr; All Stories</a>
 </nav>
 
