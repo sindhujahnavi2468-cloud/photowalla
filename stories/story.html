@@ -165,12 +165,13 @@ async function renderGallery(photos){
     gal.appendChild(row);
   }
 }
-function makeGalleryImg(src){
+function makeGalleryImg(src, ratio){
   const img = document.createElement('img');
   img.src = src;
+  if (ratio) img.style.aspectRatio = ratio;
   img.addEventListener('click', () => openLightbox(src));
   return img;
-         }
+}
   
 async function loadStory(){
   const slug = getParam('slug') || getPathSlug();
