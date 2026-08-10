@@ -157,17 +157,9 @@ async function loadStory(){
 
     const photos = Array.isArray(story.photos) ? story.photos.filter(Boolean) : [];
     if (photos.length){
-      const gal = document.getElementById('storyGallery');
-      gal.innerHTML = '';
-      photos.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.addEventListener('click', () => openLightbox(src));
-        gal.appendChild(img);
-      });
+      await renderGallery(photos);
       document.getElementById('gallerySection').style.display = 'block';
-    }
-
+  }
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch(e){
