@@ -150,16 +150,16 @@ async function renderGallery(photos){
     const row = document.createElement('div');
     if (!m.portrait){
       row.className = 'gallery-row row-1';
-      row.appendChild(makeGalleryImg(m.src));
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
       i++;
     } else if (metas[i+1] && metas[i+1].portrait){
       row.className = 'gallery-row row-2';
-      row.appendChild(makeGalleryImg(m.src));
-      row.appendChild(makeGalleryImg(metas[i+1].src));
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
+      row.appendChild(makeGalleryImg(metas[i+1].src, metas[i+1].ratio));
       i += 2;
     } else {
       row.className = 'gallery-row row-1';
-      row.appendChild(makeGalleryImg(m.src));
+      row.appendChild(makeGalleryImg(m.src, m.ratio));
       i++;
     }
     gal.appendChild(row);
