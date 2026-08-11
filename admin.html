@@ -71,6 +71,7 @@ input,textarea{font-family:'Montserrat',sans-serif}
 
 .slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
 .slot{position:relative;aspect-ratio:3/4;border:1.5px dashed var(--rule);background:var(--warm);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:border-color .2s}
+.mosaic-slot-grid .slot{aspect-ratio:2/3}
 .slot:hover{border-color:var(--gold)}
 .slot.filled{border-style:solid}
 .slot img,.slot video{width:100%;height:100%;object-fit:cover}
@@ -502,7 +503,7 @@ function renderHero(c){
   c.innerHTML = `<p class="panel-intro">The full-screen background behind your homepage headline. Add one or more images — with more than one, they crossfade automatically every few seconds. This is separate from the Selected Frames strip.</p>`;
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Hero Background Images</div>`;
-  const grid = document.createElement('div'); grid.className='slot-grid';
+ const grid = document.createElement('div'); grid.className='slot-grid mosaic-slot-grid';
   function paintGrid(){
     grid.innerHTML = '';
     state.heroSlides.forEach((val,i) => {
@@ -694,7 +695,7 @@ c.innerHTML = `<p class="panel-intro">A horizontal scrolling strip of frames sho
   paintGrid();
   card.appendChild(grid);
   c.appendChild(card);
-c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Photos show exactly as uploaded. Use ↑ / ↓ to reorder — visitors scroll the strip manually.'));
+c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1200 px (2:3 portrait) · JPG · under 5 MB each. Upload in this exact ratio for the cleanest fit — the preview box below now matches the live frame shape. Use ↑ / ↓ to reorder — visitors scroll the strip manually.'));
 }
 
 /* ══════════════════════════════════════════
