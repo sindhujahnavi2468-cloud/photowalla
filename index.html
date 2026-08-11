@@ -58,7 +58,7 @@ section{scroll-margin-top:110px}
 }
 /* HERO — image only, no text, no scroll cue */
 .hero{position:relative;padding:0;background:var(--cream)}
-.hero-frame{position:relative;width:100%;height:78vh;min-height:480px;max-height:820px;overflow:hidden}
+hero-frame{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:#181310}
 .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
 .hero-slide.on{opacity:1}
@@ -68,7 +68,6 @@ section{scroll-margin-top:110px}
 .hero-arrow.next{right:24px}
 @media(max-width:768px){
   .hero{padding:0}
-  .hero-frame{height:60vh;min-height:360px}
   .hero-arrow{width:36px;height:36px;font-size:15px}
 }
 /* INTRO */
@@ -86,7 +85,7 @@ section{scroll-margin-top:110px}
   .intro-headline{font-size:clamp(26px,7vw,40px);margin-bottom:28px;line-height:1.1}
   .intro-body-wrap{display:flex;flex-direction:column;gap:0}
   .intro-side-img{display:none}
-  .intro-mobile-img{display:block;width:100%;height:220px;margin-bottom:28px}
+  .intro-mobile-img{display:block;width:100%;aspect-ratio:2/3;margin-bottom:28px}
   .intro-body{padding:0}
   .intro-body p{font-size:13px;line-height:1.85;font-weight:400;margin-bottom:20px}
 }
@@ -227,7 +226,7 @@ section{scroll-margin-top:110px}
   <div class="intro-body-wrap">
     <div class="intro-side-img ph" id="introImgLeft"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>
     <div class="intro-body reveal">
-      <div class="intro-mobile-img ph" id="introImgMobile" style="height:220px;margin-bottom:28px"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>
+     <div class="intro-mobile-img ph" id="introImgMobile"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>
       <p>Photowalla was built on a simple idea — that a wedding deserves to be documented the way a story is told, not the way an event is logged. Every frame is composed with the same care an editor gives a magazine cover: considered light, honest emotion, nothing rushed.</p>
       <p>Working out of Bhilwara, Jaipur and Udaipur, Photowalla brings a distinctly modern, editorial sensibility to Rajasthan's rich wedding traditions — celebrating families who want their biggest day held with the same warmth they felt living it.</p>
       <a href="/enquiry" class="text-link">Begin Your Story</a>
