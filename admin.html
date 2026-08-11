@@ -504,7 +504,7 @@ function renderHero(c){
   c.innerHTML = `<p class="panel-intro">The full-screen background behind your homepage headline. Add one or more images — with more than one, they crossfade automatically every few seconds. This is separate from the Selected Frames strip.</p>`;
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Hero Background Images</div>`;
- const grid = document.createElement('div'); grid.className='slot-grid mosaic-slot-grid';
+ const grid = document.createElement('div'); grid.className='slot-grid';
   function paintGrid(){
     grid.innerHTML = '';
     state.heroSlides.forEach((val,i) => {
@@ -543,7 +543,7 @@ function renderIntro(c){
   c.innerHTML = `<p class="panel-intro">The two portrait images flanking your "Modern Approach to an Age Old Tradition" story text.</p>`;
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Intro Images</div>`;
-  const grid = document.createElement('div'); grid.className='slot-grid'; grid.style.gridTemplateColumns='repeat(auto-fill,minmax(150px,1fr))'; grid.style.maxWidth='420px';
+ const grid = document.createElement('div'); grid.className='slot-grid mosaic-slot-grid'; grid.style.gridTemplateColumns='repeat(auto-fill,minmax(150px,1fr))'; grid.style.maxWidth='420px';
   grid.appendChild(buildSlot({ value: state.intro.left, label:'Left image', onFile:v=>state.intro.left=v, onRemove:()=>state.intro.left='' }));
   grid.appendChild(buildSlot({ value: state.intro.right, label:'Right image', onFile:v=>state.intro.right=v, onRemove:()=>state.intro.right='' }));
   card.appendChild(grid);
@@ -696,7 +696,7 @@ c.innerHTML = `<p class="panel-intro">A horizontal scrolling strip of frames sho
   paintGrid();
   card.appendChild(grid);
   c.appendChild(card);
-c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1200 px (2:3 portrait) · JPG · under 5 MB each. Upload in this exact ratio for the cleanest fit — the preview box below now matches the live frame shape. Use ↑ / ↓ to reorder — visitors scroll the strip manually.'));
+c.appendChild(noteBox('<b>Recommended size:</b> up to 7200 × 10800 px (2:3 portrait) · JPG · under 30 MB each. Upload in this exact ratio for the cleanest fit — the preview box below matches the live frame shape. Use ↑ / ↓ to reorder — visitors scroll the strip manually.'));
 }
 
 /* ══════════════════════════════════════════
