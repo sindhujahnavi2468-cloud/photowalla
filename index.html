@@ -103,20 +103,19 @@ section{scroll-margin-top:110px}
 
 /* MOSAIC SLIDER — sliding grayscale photo grid, arrows scroll it left/right.
    Each cell holds a 2:3 portrait image (recommended source: 7200x10800px). */
-.mosaic-section{position:relative;background:var(--cream);padding:44px 0;border-top:1px solid var(--rule)}
-.mosaic-track{display:grid;grid-template-rows:repeat(4,1fr);grid-auto-flow:column;grid-auto-columns:160px;gap:2px;overflow-x:auto;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none;padding:0 64px}
-.mosaic-track::-webkit-scrollbar{display:none}
+.mosaic-section{position:relative;background:var(--cream);padding:0;border-top:1px solid var(--rule);overflow:hidden}
+.mosaic-track{display:grid;grid-template-rows:repeat(4,1fr);grid-auto-flow:column;grid-auto-columns:160px;gap:0;width:max-content}
 .mosaic-cell{width:160px;aspect-ratio:2/3;overflow:hidden}
 .mosaic-cell .ph{width:100%;height:100%;background:#181310;border-color:rgba(201,169,110,.25)}
 .mosaic-cell .ph-icon{border-color:rgba(201,169,110,.35);color:var(--gold-l)}
 .mosaic-cell .ph-txt{color:rgba(201,169,110,.4)}
-.mosaic-cell img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(100%)}
-.mosaic-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid var(--rule);background:var(--cream);color:var(--brown);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:18px;transition:background .2s}
-.mosaic-arrow:hover{background:var(--parchment)}
-.mosaic-arrow.prev{left:12px}
-.mosaic-arrow.next{right:12px}
+.mosaic-cell img{width:100%;height:100%;object-fit:cover;display:block}
+@keyframes mosaicSlide{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
 @media(max-width:768px){
-.mosaic-track{grid-template-rows:repeat(3,1fr);grid-auto-columns:110px;padding:0 44px}
+.mosaic-track{grid-template-rows:repeat(3,1fr);grid-auto-columns:110px}
 .mosaic-cell{width:110px}
 }
 
@@ -250,9 +249,7 @@ section{scroll-margin-top:110px}
 </section>
 
 <section class="mosaic-section" id="mosaic">
-  <button class="mosaic-arrow prev" id="mosaicPrev" aria-label="Previous">&#8249;</button>
   <div class="mosaic-track" id="mosaicTrack"></div>
-  <button class="mosaic-arrow next" id="mosaicNext" aria-label="Next">&#8250;</button>
 </section>
 
 <section class="portfolio-section" id="photography">
@@ -374,29 +371,28 @@ function buildFilmTrack(images){
 /* MOSAIC SLIDER — renders once, arrows scroll it, no auto-play */
 function buildMosaicGrid(images){
   const track = document.getElementById('mosaicTrack');
-  track.innerHTML = '';
-  if (!images.length){
-    for (let i = 0; i < 12; i++){
-      const div = document.createElement('div');
-      div.className = 'mosaic-cell';
-      div.innerHTML = `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div>`;
-      track.appendChild(div);
-    }
-    return;
+  track.style.animation = 'none';
+
+  let list = images.filter(Boolean);
+  if (!list.length) list = new Array(12).fill(null);
+
+  function cellHTML(src){
+    return src
+      ? `<div class="mosaic-cell"><img src="${src}" alt=""></div>`
+      : `<div class="mosaic-cell"><div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Image<br>via admin</p></div></div>`;
   }
-  images.forEach(src => {
-    const div = document.createElement('div');
-    div.className = 'mosaic-cell';
-    div.innerHTML = `<img src="${src}" alt="">`;
-    track.appendChild(div);
+
+  // duplicate the set once so the loop is seamless — track slides exactly
+  // 50% (one full set width) then snaps back to 0% invisibly.
+  const doubled = list.concat(list);
+  track.innerHTML = doubled.map(cellHTML).join('');
+
+  // ~1.5s per frame = 2x the speed of a 3s-per-frame pace
+  const duration = list.length * 1.5;
+  requestAnimationFrame(() => {
+    track.style.animation = `mosaicSlide ${duration}s linear infinite`;
   });
 }
-document.getElementById('mosaicPrev').addEventListener('click', () => {
-  document.getElementById('mosaicTrack').scrollBy({ left: -480, behavior: 'smooth' });
-});
-document.getElementById('mosaicNext').addEventListener('click', () => {
-  document.getElementById('mosaicTrack').scrollBy({ left: 480, behavior: 'smooth' });
-});
 
 function renderMagazineGrid(frames){
   const slotClasses = ['mg-r1c1','mg-r1c2','mg-r1c3','mg-r1c4','mg-r1c5','mg-r2c1','mg-r2c2','mg-r2c4','mg-r2c5','mg-r3c1','mg-r3c2','mg-r3c3','mg-r3c4','mg-r3c5'];
