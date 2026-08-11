@@ -801,7 +801,7 @@ function renderStories(c){
   const addBtn = document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent='+ Add Love Story';
   addBtn.onclick = () => { state.stories.push({ id: Date.now(), slug:'', cover:'', name:'', location:'', text:'', photos:[] }); markDirty(); paint(); };
   c.appendChild(addBtn);
-  c.appendChild(noteBox('<b>Recommended size:</b> 1000 × 1300 px (portrait) · JPG · under 8 MB, for both the cover and gallery photos. Add as many gallery photos as the story needs — the sub-page grows to fit them.'));
+ c.appendChild(noteBox('<b>Recommended size:</b> up to 7200 × 10800 px (2:3, vertical shots) or up to 10800 × 7200 px (3:2, horizontal shots) · JPG · under 30 MB, for both the cover and gallery photos. Upload each photo in its natural orientation — the gallery automatically detects vertical vs horizontal and lays each one out full-size in its own row, or pairs two verticals side by side, with no cropping or zooming. Add as many gallery photos as the story needs — the sub-page grows to fit them.'));
 }
 
 /* ══════════════════════════════════════════
