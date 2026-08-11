@@ -373,6 +373,7 @@ function checkFileSize(file, maxMB){
   return file;
 }
 async function uploadImage(file){
+  checkFileSize(file, 30);
   const blob = await compressImageToBlob(file, 1400, 0.75);
   return uploadToCloudinary(blob, 'image');
 }
