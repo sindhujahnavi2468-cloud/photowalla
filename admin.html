@@ -148,7 +148,8 @@ input,textarea{font-family:'Montserrat',sans-serif}
       <div class="nav-item" data-section="intro"><span class="ic">✎</span> Intro Section</div>
       <div class="nav-item" data-section="grid"><span class="ic">▦</span> Photography Grid</div>
 <div class="nav-item" data-section="entrance"><span class="ic">▧</span> Entrance Screen</div>
-      <div class="nav-item" data-section="filmstrip"><span class="ic">▭</span> Selected Frames</div>
+     <div class="nav-item" data-section="filmstrip"><span class="ic">▭</span> Selected Frames</div>
+      <div class="nav-item" data-section="mosaic"><span class="ic">▦</span> Photo Mosaic</div>
       <div class="nav-item" data-section="soulcinema"><span class="ic">◑</span> Soul + Cinema</div>
       <div class="nav-item" data-section="stories"><span class="ic">♥</span> Love Stories</div>
       <div class="nav-item" data-section="films"><span class="ic">▶</span> Films</div>
@@ -230,6 +231,7 @@ let state = {
   frames: new Array(14).fill(''),
   entranceFrames: new Array(14).fill(''),
   filmstrip: [],
+  mosaicGrid: [],
   soulCinema: { video:'', heading:'Soul + Cinema', text:'' },
   stories: [],
   films: [],
@@ -267,7 +269,8 @@ async function loadState(){
       intro: rec.intro || { left:'', right:'', mobile:'' },
       frames: (rec.frames && rec.frames.length) ? padFrames(rec.frames) : new Array(14).fill(''),
       entranceFrames: (rec.entranceFrames && rec.entranceFrames.length) ? padFrames(rec.entranceFrames) : new Array(14).fill(''),
-      filmstrip: rec.filmstrip || [],
+     filmstrip: rec.filmstrip || [],
+      mosaicGrid: rec.mosaicGrid || [],
       soulCinema: rec.soulCinema || { video:'', heading:'Soul + Cinema', text:'' },
       stories: rec.stories || [],
       films: rec.films || [],
@@ -396,7 +399,7 @@ function toEmbedUrl(url){
 ══════════════════════════════════════════ */
 const titles = {
   hero:'Hero Section', intro:'Intro Section', grid:'Photography Grid',
-  entrance:'Entrance Screen', filmstrip:'Selected Frames', soulcinema:'Soul + Cinema', stories:'Love Stories',
+  entrance:'Entrance Screen', filmstrip:'Selected Frames', mosaic:'Photo Mosaic', soulcinema:'Soul + Cinema', stories:'Love Stories',
   films:'Films', testimonials:'Testimonials', about:'About Page', store:'Store', live:'Live Stream'
 };
 let currentSection = 'hero';
@@ -417,8 +420,8 @@ function renderSection(name){
   const c = document.getElementById('sectionContent');
   c.innerHTML = '';
   const renderers = {
-    hero:renderHero, intro:renderIntro, grid:renderGrid, entrance:renderEntranceGrid,
-    filmstrip:renderFilmstrip, soulcinema:renderSoulCinema, stories:renderStories, films:renderFilms,
+   hero:renderHero, intro:renderIntro, grid:renderGrid, entrance:renderEntranceGrid,
+    filmstrip:renderFilmstrip, mosaic:renderMosaic, soulcinema:renderSoulCinema, stories:renderStories, films:renderFilms,
     testimonials:renderTestimonials, about:renderAbout, store:renderStore, live:renderLive
   };
   renderers[name](c);
@@ -651,7 +654,47 @@ function renderFilmstrip(c){
   paintGrid();
   card.appendChild(grid);
   c.appendChild(card);
-  c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Choose your most cinematic, story-driven frames — these scroll horizontally and crossfade as the homepage hero background. Use the ↑ / ↓ buttons to reorder.'));
+c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Choose your most cinematic, story-driven frames — these scroll horizontally and crossfade as the homepage hero background. Use the ↑ / ↓ buttons to reorder.'));
+}
+
+/* ══════════════════════════════════════════
+   PHOTO MOSAIC — sliding grid between Selected
+   Frames and the Photography Grid
+══════════════════════════════════════════ */
+function renderMosaic(c){
+  c.innerHTML = `<p class="panel-intro">A sliding grid of photos shown between "Selected Frames" and the Photography Grid on the homepage. Visitors use the left/right arrows to browse it. Add as many as you like, in any order.</p>`;
+  const card = document.createElement('div'); card.className='card';
+  card.innerHTML = `<div class="card-title">Photo Mosaic Images</div>`;
+  const grid = document.createElement('div'); grid.className='slot-grid';
+  function paintGrid(){
+    grid.innerHTML = '';
+    state.mosaicGrid.forEach((val,i) => {
+      const wrap = document.createElement('div');
+      wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '6px';
+      wrap.appendChild(buildSlot({
+        value: val, label:'Add image',
+        onFile: v => { state.mosaicGrid[i] = v; },
+        onRemove: () => { state.mosaicGrid.splice(i,1); markDirty(); paintGrid(); }
+      }));
+      const moveRow = document.createElement('div');
+      moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
+      const up = document.createElement('button'); up.type='button'; up.className='remove-line-btn'; up.textContent='↑';
+      up.onclick = () => { if (i>0){ [state.mosaicGrid[i-1], state.mosaicGrid[i]] = [state.mosaicGrid[i], state.mosaicGrid[i-1]]; markDirty(); paintGrid(); } };
+      const down = document.createElement('button'); down.type='button'; down.className='remove-line-btn'; down.textContent='↓';
+      down.onclick = () => { if (i<state.mosaicGrid.length-1){ [state.mosaicGrid[i+1], state.mosaicGrid[i]] = [state.mosaicGrid[i], state.mosaicGrid[i+1]]; markDirty(); paintGrid(); } };
+      moveRow.appendChild(up); moveRow.appendChild(down);
+      wrap.appendChild(moveRow);
+      grid.appendChild(wrap);
+    });
+    grid.appendChild(buildSlot({
+      value:'', label:'Add image',
+      onFile: v => { state.mosaicGrid.push(v); paintGrid(); }, onRemove: ()=>{}
+    }));
+  }
+  paintGrid();
+  card.appendChild(grid);
+  c.appendChild(card);
+  c.appendChild(noteBox('<b>Recommended size:</b> full frame 7200 × 10800 px, 2:3 portrait ratio · JPG · under 10 MB each. These display in grayscale in a sliding grid — use ↑ / ↓ to reorder.'));
 }
 
 /* ══════════════════════════════════════════
