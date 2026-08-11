@@ -662,7 +662,7 @@ c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG
    Frames and the Photography Grid
 ══════════════════════════════════════════ */
 function renderMosaic(c){
- c.innerHTML = `<p class="panel-intro">A dense photo grid shown between "Selected Frames" and the Photography Grid on the homepage. It scrolls itself continuously right to left in a seamless loop — no arrows, no gaps. Add as many as you like, in any order.</p>`;
+c.innerHTML = `<p class="panel-intro">A horizontal scrolling strip of frames shown between "Selected Frames" and the Photography Grid on the homepage — same style as Selected Frames. Add, remove, or reorder images.</p>`;
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Photo Mosaic Images</div>`;
   const grid = document.createElement('div'); grid.className='slot-grid';
@@ -694,7 +694,7 @@ function renderMosaic(c){
   paintGrid();
   card.appendChild(grid);
   c.appendChild(card);
- c.appendChild(noteBox('<b>Recommended size:</b> full frame 7200 × 10800 px, 2:3 portrait ratio · JPG · under 10 MB each. Photos show exactly as uploaded — color or B&W, whatever the edit is — packed edge-to-edge in a self-scrolling grid. Use ↑ / ↓ to set the order.'));
+c.appendChild(noteBox('<b>Recommended size:</b> 800 × 1000 px (portrait) · JPG · under 5 MB each. Photos show exactly as uploaded. Use ↑ / ↓ to reorder — visitors scroll the strip manually.'));
 }
 
 /* ══════════════════════════════════════════
