@@ -547,7 +547,7 @@ function renderIntro(c){
   grid.appendChild(buildSlot({ value: state.intro.left, label:'Left image', onFile:v=>state.intro.left=v, onRemove:()=>state.intro.left='' }));
   grid.appendChild(buildSlot({ value: state.intro.right, label:'Right image', onFile:v=>state.intro.right=v, onRemove:()=>state.intro.right='' }));
   card.appendChild(grid);
-  card.appendChild(noteBox('<b>Recommended size:</b> 800 × 1100 px (portrait) · JPG · under 5 MB each. The site automatically reuses the left image on mobile screens.'));
+card.appendChild(noteBox('<b>Recommended size:</b> up to 7200 × 10800 px (2:3 portrait) · JPG · under 30 MB each. The site automatically reuses the left image on mobile screens.'));
   c.appendChild(card);
 }
 
