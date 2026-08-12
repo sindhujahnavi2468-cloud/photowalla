@@ -343,24 +343,33 @@ async function uploadToCloudinary(blob, resourceType){
   return data.secure_url;
 }
 
-function compressImageToBlob(file, maxDim, quality){
+function compressImageToBlob(file, maxDim, quality, warnDim){
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith('image/')){ reject(new Error('Please choose an image file (JPG or PNG).')); return; }
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
+        const longEdge = Math.max(img.width, img.height);
+        if (warnDim && longEdge < warnDim){
+          showToast(`Heads up: this image is ${img.width}×${img.height}px. It may look soft in a large display area — recommended minimum is ${warnDim}px on the long edge.`, true);
+        }
         let w = img.width, h = img.height;
         if (w > maxDim || h > maxDim){
+          // Only downscale if it actually exceeds the ceiling.
           if (w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
           else { w = Math.round(w * maxDim / h); h = maxDim; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.toBlob(blob => {
+            if (blob) resolve(blob); else reject(new Error('Could not process that image.'));
+          }, 'image/jpeg', quality);
+        } else {
+          // Already within budget — upload the original file untouched,
+          // no lossy re-encode.
+          resolve(file);
         }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        canvas.toBlob(blob => {
-          if (blob) resolve(blob); else reject(new Error('Could not process that image.'));
-        }, 'image/jpeg', quality);
       };
       img.onerror = () => reject(new Error('Could not read that image.'));
       img.src = e.target.result;
@@ -375,14 +384,15 @@ function checkFileSize(file, maxMB){
 }
 async function uploadImage(file){
   checkFileSize(file, 30);
-  const blob = await compressImageToBlob(file, 1400, 0.75);
+  const blob = await compressImageToBlob(file, 1600, 0.85, 1200);
   return uploadToCloudinary(blob, 'image');
 }
 async function uploadImageHQ(file){
   checkFileSize(file, 30);
-  const blob = await compressImageToBlob(file, 2600, 0.93);
+  const blob = await compressImageToBlob(file, 3600, 0.9, 3000);
   return uploadToCloudinary(blob, 'image');
 }
+
 async function uploadVideo(file){
   checkFileSize(file, 25);
   return uploadToCloudinary(file, 'video');
@@ -516,10 +526,11 @@ function renderHero(c){
     state.heroSlides.forEach((val,i) => {
       const wrap = document.createElement('div');
       wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '6px';
-      wrap.appendChild(buildSlot({
+            wrap.appendChild(buildSlot({
         value: val, label:'Add image',
         onFile: v => { state.heroSlides[i] = v; },
-        onRemove: () => { state.heroSlides.splice(i,1); markDirty(); paintGrid(); }
+        onRemove: () => { state.heroSlides.splice(i,1); markDirty(); paintGrid(); },
+        hq: true
       }));
       const moveRow = document.createElement('div');
       moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
@@ -531,9 +542,10 @@ function renderHero(c){
       wrap.appendChild(moveRow);
       grid.appendChild(wrap);
     });
-    grid.appendChild(buildSlot({
+        grid.appendChild(buildSlot({
       value:'', label:'Add hero image',
-      onFile: v => { state.heroSlides.push(v); paintGrid(); }, onRemove: ()=>{}
+      onFile: v => { state.heroSlides.push(v); paintGrid(); }, onRemove: ()=>{},
+      hq: true
     }));
   }
   paintGrid();
@@ -550,8 +562,8 @@ function renderIntro(c){
   const card = document.createElement('div'); card.className='card';
   card.innerHTML = `<div class="card-title">Intro Images</div>`;
  const grid = document.createElement('div'); grid.className='slot-grid mosaic-slot-grid'; grid.style.gridTemplateColumns='repeat(auto-fill,minmax(150px,1fr))'; grid.style.maxWidth='420px';
-  grid.appendChild(buildSlot({ value: state.intro.left, label:'Left image', onFile:v=>state.intro.left=v, onRemove:()=>state.intro.left='' }));
-  grid.appendChild(buildSlot({ value: state.intro.right, label:'Right image', onFile:v=>state.intro.right=v, onRemove:()=>state.intro.right='' }));
+    grid.appendChild(buildSlot({ value: state.intro.left, label:'Left image', onFile:v=>state.intro.left=v, onRemove:()=>state.intro.left='', hq:true }));
+  grid.appendChild(buildSlot({ value: state.intro.right, label:'Right image', onFile:v=>state.intro.right=v, onRemove:()=>state.intro.right='', hq:true }));
   card.appendChild(grid);
 card.appendChild(noteBox('<b>Recommended size:</b> up to 7200 × 10800 px (2:3 portrait) · JPG · under 30 MB each. The site automatically reuses the left image on mobile screens.'));
   c.appendChild(card);
@@ -642,8 +654,10 @@ function renderFilmstrip(c){
       wrap.appendChild(buildSlot({
         value: val, label:'Add image',
         onFile: v => { state.filmstrip[i] = v; },
-        onRemove: () => { state.filmstrip.splice(i,1); markDirty(); paintGrid(); }
+        onRemove: () => { state.filmstrip.splice(i,1); markDirty(); paintGrid(); },
+        hq: true
       }));
+
       const moveRow = document.createElement('div');
       moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
       const up = document.createElement('button'); up.type='button'; up.className='remove-line-btn'; up.textContent='↑';
@@ -654,9 +668,10 @@ function renderFilmstrip(c){
       wrap.appendChild(moveRow);
       grid.appendChild(wrap);
     });
-    grid.appendChild(buildSlot({
+        grid.appendChild(buildSlot({
       value:'', label:'Add frame',
-      onFile: v => { state.filmstrip.push(v); paintGrid(); }, onRemove: ()=>{}
+      onFile: v => { state.filmstrip.push(v); paintGrid(); }, onRemove: ()=>{},
+      hq: true
     }));
   }
   paintGrid();
@@ -679,10 +694,11 @@ c.innerHTML = `<p class="panel-intro">A horizontal scrolling strip of frames sho
     state.mosaicGrid.forEach((val,i) => {
       const wrap = document.createElement('div');
       wrap.style.display = 'flex'; wrap.style.flexDirection = 'column'; wrap.style.gap = '6px';
-      wrap.appendChild(buildSlot({
+            wrap.appendChild(buildSlot({
         value: val, label:'Add image',
         onFile: v => { state.mosaicGrid[i] = v; },
-        onRemove: () => { state.mosaicGrid.splice(i,1); markDirty(); paintGrid(); }
+        onRemove: () => { state.mosaicGrid.splice(i,1); markDirty(); paintGrid(); },
+        hq: true
       }));
       const moveRow = document.createElement('div');
       moveRow.style.display = 'flex'; moveRow.style.justifyContent = 'center'; moveRow.style.gap = '6px';
@@ -694,9 +710,10 @@ c.innerHTML = `<p class="panel-intro">A horizontal scrolling strip of frames sho
       wrap.appendChild(moveRow);
       grid.appendChild(wrap);
     });
-    grid.appendChild(buildSlot({
+        grid.appendChild(buildSlot({
       value:'', label:'Add image',
-      onFile: v => { state.mosaicGrid.push(v); paintGrid(); }, onRemove: ()=>{}
+      onFile: v => { state.mosaicGrid.push(v); paintGrid(); }, onRemove: ()=>{},
+      hq: true
     }));
   }
   paintGrid();
@@ -914,7 +931,7 @@ function renderTestimonials(c){
       const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove';
       rm.onclick = () => { state.testimonials.splice(i,1); markDirty(); paint(); };
       card.appendChild(rm);
-      card.appendChild(buildSlot({ value:t.image, label:'Testimonial card image', onFile:v=>t.image=v, onRemove:()=>t.image='' }));
+           card.appendChild(buildSlot({ value:t.image, label:'Testimonial card image', onFile:v=>t.image=v, onRemove:()=>t.image='', hq:true }));
       const fields = document.createElement('div'); fields.className='repeat-fields';
       fields.innerHTML = `<p style="font-size:11.5px;color:var(--grey);line-height:1.7">This is the client's ready-made testimonial graphic — upload it on the left.</p>`;
       card.appendChild(fields);
