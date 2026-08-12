@@ -378,6 +378,11 @@ async function uploadImage(file){
   const blob = await compressImageToBlob(file, 1400, 0.75);
   return uploadToCloudinary(blob, 'image');
 }
+async function uploadImageHQ(file){
+  checkFileSize(file, 30);
+  const blob = await compressImageToBlob(file, 2600, 0.93);
+  return uploadToCloudinary(blob, 'image');
+}
 async function uploadVideo(file){
   checkFileSize(file, 25);
   return uploadToCloudinary(file, 'video');
@@ -431,7 +436,7 @@ function renderSection(name){
 }
 
 /* helper: build a single upload slot */
-function buildSlot({ value, label='', onFile, onRemove, kind='image', numberLabel=null }){
+function buildSlot({ value, label='', onFile, onRemove, kind='image', numberLabel=null, hq=false }){
   const slot = document.createElement('div');
   slot.className = 'slot' + (value ? ' filled' : '');
   const input = document.createElement('input');
@@ -476,7 +481,7 @@ function buildSlot({ value, label='', onFile, onRemove, kind='image', numberLabe
     if (!file) return;
     slot.classList.add('loading');
     try{
-      const url = kind === 'video' ? await uploadVideo(file) : await uploadImage(file);
+     const url = kind === 'video' ? await uploadVideo(file) : (hq ? await uploadImageHQ(file) : await uploadImage(file));
       value = url;
       onFile(url);
       markDirty();
@@ -761,14 +766,14 @@ function renderStories(c){
       photosCol.style.display='flex'; photosCol.style.flexDirection='column'; photosCol.style.gap='16px';
 
       const coverWrap = document.createElement('div');
-      coverWrap.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='' }));
+      coverWrap.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='', hq:true }));
       const coverLbl = document.createElement('div');
       coverLbl.style.cssText='font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);text-align:center;margin-top:4px';
       coverLbl.textContent = 'Listing thumbnail';
       coverWrap.appendChild(coverLbl);
 
-      const heroWrap = document.createElement('div');
-      heroWrap.appendChild(buildSlot({ value:s.heroImage, label:'Story page hero', onFile:v=>s.heroImage=v, onRemove:()=>s.heroImage='' }));
+     const heroWrap = document.createElement('div');
+      heroWrap.appendChild(buildSlot({ value:s.heroImage, label:'Story page hero', onFile:v=>s.heroImage=v, onRemove:()=>s.heroImage='', hq:true }));
       const heroLbl = document.createElement('div');
       heroLbl.style.cssText='font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);text-align:center;margin-top:4px';
       heroLbl.textContent = 'Story page hero';
@@ -802,17 +807,19 @@ function renderStories(c){
       const galGrid = document.createElement('div'); galGrid.className='slot-grid';
       function paintGal(){
         galGrid.innerHTML = '';
-        s.photos.forEach((p,pi) => {
+       s.photos.forEach((p,pi) => {
           galGrid.appendChild(buildSlot({
             value:p, label:'Add photo',
             onFile: v => { s.photos[pi] = v; },
-            onRemove: () => { s.photos.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; }
+            onRemove: () => { s.photos.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; },
+            hq:true
           }));
         });
         galGrid.appendChild(buildSlot({
           value:'', label:'Add photo',
           onFile: v => { s.photos.push(v); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; },
-          onRemove: ()=>{}
+          onRemove: ()=>{},
+          hq:true
         }));
       }
       paintGal();
