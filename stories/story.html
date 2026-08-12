@@ -191,7 +191,7 @@ async function loadStory(){
     if (!story){ loading.style.display='none'; notFound.style.display='flex'; return; }
 
     document.title = `Photowalla — ${story.name || 'Love Story'}`;
-    document.getElementById('storyHeroImg').src = story.cover || '';
+  document.getElementById('storyHeroImg').src = story.heroImage || story.cover || '';
     document.getElementById('storyName').textContent = story.name || '';
     document.getElementById('storyLoc').textContent = story.location || '';
 
