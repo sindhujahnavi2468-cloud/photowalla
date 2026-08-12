@@ -749,13 +749,35 @@ function renderStories(c){
   function paint(){
     wrap.innerHTML = '';
     state.stories.forEach((s,i) => {
-      if (!s.photos) s.photos = [];
+    if (!s.photos) s.photos = [];
+      if (!s.heroImage) s.heroImage = '';
       if (!s.slug) s.slug = uniqueSlug(slugify(s.name), i);
-      const card = document.createElement('div'); card.className='repeat-card';
+     const card = document.createElement('div'); card.className='repeat-card';
       const rm = document.createElement('button'); rm.className='repeat-remove'; rm.textContent='Remove Story';
       rm.onclick = () => { state.stories.splice(i,1); markDirty(); paint(); };
       card.appendChild(rm);
-      card.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='' }));
+
+      const photosCol = document.createElement('div');
+      photosCol.style.display='flex'; photosCol.style.flexDirection='column'; photosCol.style.gap='16px';
+
+      const coverWrap = document.createElement('div');
+      coverWrap.appendChild(buildSlot({ value:s.cover, label:'Cover photo', onFile:v=>s.cover=v, onRemove:()=>s.cover='' }));
+      const coverLbl = document.createElement('div');
+      coverLbl.style.cssText='font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);text-align:center;margin-top:4px';
+      coverLbl.textContent = 'Listing thumbnail';
+      coverWrap.appendChild(coverLbl);
+
+      const heroWrap = document.createElement('div');
+      heroWrap.appendChild(buildSlot({ value:s.heroImage, label:'Story page hero', onFile:v=>s.heroImage=v, onRemove:()=>s.heroImage='' }));
+      const heroLbl = document.createElement('div');
+      heroLbl.style.cssText='font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);text-align:center;margin-top:4px';
+      heroLbl.textContent = 'Story page hero';
+      heroWrap.appendChild(heroLbl);
+
+      photosCol.appendChild(coverWrap);
+      photosCol.appendChild(heroWrap);
+      card.appendChild(photosCol);
+
       const fields = document.createElement('div'); fields.className='repeat-fields';
       fields.innerHTML = `
         <div class="form-row"><label>Couple Name</label><input data-f="name" value="${s.name||''}" placeholder="e.g. Riya & Aarav"><div class="form-hint" id="slugHint${i}">URL: /stories/${s.slug}</div></div>
