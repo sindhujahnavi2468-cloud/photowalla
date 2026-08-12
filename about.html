@@ -93,13 +93,25 @@ img{max-width:100%;display:block}
 const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
 const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 
+/* Cloudinary responsive delivery helper. Inserts f_auto (best format),
+   q_auto (smart quality), dpr_ (retina-aware) and a target width into
+   an existing Cloudinary URL — without touching how images are stored.
+   c_limit means Cloudinary will never upscale past the stored master. */
+function cld(url, width){
+  if (!url || typeof url !== 'string' || !url.includes('/upload/')) return url;
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const parts = ['f_auto', 'q_auto', `dpr_${dpr}`];
+  if (width) parts.push(`w_${Math.round(width)}`, 'c_limit');
+  return url.replace('/upload/', `/upload/${parts.join(',')}/`);
+}
+
 async function loadAbout(){
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, { headers: { 'X-Master-Key': API_KEY } });
     const data = await res.json();
     const about = data.record && data.record.about;
     if (!about) return;
-    if (about.photo){ const el = document.getElementById('aboutPhoto'); el.innerHTML = `<img src="${about.photo}" alt="">`; el.classList.remove('ph'); }
+   if (about.photo){ const el = document.getElementById('aboutPhoto'); el.innerHTML = `<img src="${cld(about.photo, 600)}" alt="">`; el.classList.remove('ph'); }
     if (about.name) document.getElementById('aboutName').textContent = about.name;
     if (about.tagline) document.getElementById('aboutTagline').textContent = about.tagline;
     if (about.bio){
