@@ -108,6 +108,18 @@ img{max-width:100%;display:block}
 const BIN_ID = '6a7370e8f5f4af5e29ef5a2f';
 const API_KEY = '$2a$10$k6B/yUZ/sqKKaHjVGCfMJuTNI1OmXnNCbiK/j1INWem.2xng6mUfm';
 
+/* Cloudinary responsive delivery helper. Inserts f_auto (best format),
+   q_auto (smart quality), dpr_ (retina-aware) and a target width into
+   an existing Cloudinary URL — without touching how images are stored.
+   c_limit means Cloudinary will never upscale past the stored master. */
+function cld(url, width){
+  if (!url || typeof url !== 'string' || !url.includes('/upload/')) return url;
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const parts = ['f_auto', 'q_auto', `dpr_${dpr}`];
+  if (width) parts.push(`w_${Math.round(width)}`, 'c_limit');
+  return url.replace('/upload/', `/upload/${parts.join(',')}/`);
+}
+
 function openFilm(type, src){
   const iframe = document.getElementById('filmFrame');
   const video = document.getElementById('filmVideo');
@@ -145,7 +157,7 @@ async function loadFilms(){
       const vSrc = vType === 'upload' ? (f.videoFile || '') : (f.embedUrl || '');
       card.innerHTML = `
         <div class="film-frame" onclick="openFilm('${vType}', '${vSrc.replace(/'/g,"\\'")}')">
-          ${f.thumbnail ? `<img src="${f.thumbnail}" alt="${f.name||''}">` : `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Thumbnail<br>via admin</p></div>`}
+         ${f.thumbnail ? `<img src="${cld(f.thumbnail, 900)}" alt="${f.name||''}">` : `<div class="ph"><div class="ph-icon">+</div><p class="ph-txt">Thumbnail<br>via admin</p></div>`}
           <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="film-cap">
