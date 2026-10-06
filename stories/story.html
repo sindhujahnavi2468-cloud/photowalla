@@ -95,11 +95,18 @@ footer a{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px
     <p class="story-text" id="storyText"></p>
   </section>
 
-  <section class="story-gallery-section" id="gallerySection" style="display:none">
+   <section class="story-gallery-section" id="preweddingSection" style="display:none">
     <div class="story-gallery-header">
-      <span>The Full Gallery</span>
+      <span>Pre-Wedding</span>
     </div>
-    <div class="story-gallery" id="storyGallery"></div>
+    <div class="story-gallery" id="preweddingGallery"></div>
+  </section>
+
+  <section class="story-gallery-section" id="weddingSection" style="display:none">
+    <div class="story-gallery-header">
+      <span>The Wedding</span>
+    </div>
+    <div class="story-gallery" id="weddingGallery"></div>
   </section>
 
   <footer><a href="/"><img src="https://res.cloudinary.com/nqapapkj/image/upload/v1786197230/photowalla_logo_transparent_1_kqyhll.png" alt="Photowalla" style="height:26px;margin:0 auto;filter:brightness(0) invert(1)"></a></footer>
@@ -152,8 +159,8 @@ function loadImageMeta(src){
   });
 }
 
-async function renderGallery(photos){
-  const gal = document.getElementById('storyGallery');
+async function renderGallery(photos, targetId){
+  const gal = document.getElementById(targetId);
   gal.innerHTML = '';
   const metas = await Promise.all(photos.map(loadImageMeta));
   let i = 0;
@@ -212,11 +219,16 @@ async function loadStory(){
       document.getElementById('storyTextWrap').style.display = 'block';
     }
 
-    const photos = Array.isArray(story.photos) ? story.photos.filter(Boolean) : [];
-    if (photos.length){
-      await renderGallery(photos);
-      document.getElementById('gallerySection').style.display = 'block';
-  }
+       const preweddingPhotos = Array.isArray(story.preweddingPhotos) ? story.preweddingPhotos.filter(Boolean) : [];
+    const weddingPhotos = Array.isArray(story.weddingPhotos) ? story.weddingPhotos.filter(Boolean) : (Array.isArray(story.photos) ? story.photos.filter(Boolean) : []);
+    if (preweddingPhotos.length){
+      await renderGallery(preweddingPhotos, 'preweddingGallery');
+      document.getElementById('preweddingSection').style.display = 'block';
+    }
+    if (weddingPhotos.length){
+      await renderGallery(weddingPhotos, 'weddingGallery');
+      document.getElementById('weddingSection').style.display = 'block';
+    }
     loading.style.display = 'none';
     content.style.display = 'block';
   } catch(e){
