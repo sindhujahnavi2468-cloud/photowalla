@@ -770,8 +770,9 @@ function renderStories(c){
   const wrap = document.createElement('div'); c.appendChild(wrap);
   function paint(){
     wrap.innerHTML = '';
-    state.stories.forEach((s,i) => {
-    if (!s.photos) s.photos = [];
+       state.stories.forEach((s,i) => {
+    if (!s.preweddingPhotos) s.preweddingPhotos = [];
+      if (!s.weddingPhotos) s.weddingPhotos = s.photos || [];
       if (!s.heroImage) s.heroImage = '';
       if (!s.slug) s.slug = uniqueSlug(slugify(s.name), i);
      const card = document.createElement('div'); card.className='repeat-card';
@@ -817,31 +818,36 @@ function renderStories(c){
       card.appendChild(fields);
       wrap.appendChild(card);
 
-      // gallery photos for this story's sub-page
-      const galWrap = document.createElement('div'); galWrap.style.gridColumn = '1 / -1';
-      const galTitle = document.createElement('div'); galTitle.className='card-title'; galTitle.style.marginTop='6px'; galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`;
-      galWrap.appendChild(galTitle);
-      const galGrid = document.createElement('div'); galGrid.className='slot-grid';
-      function paintGal(){
-        galGrid.innerHTML = '';
-       s.photos.forEach((p,pi) => {
+           // gallery photos for this story's sub-page — split into
+      // Pre-Wedding and Wedding sections
+      function buildGallerySection(sectionLabel, arr){
+        const galWrap = document.createElement('div'); galWrap.style.gridColumn = '1 / -1';
+        const galTitle = document.createElement('div'); galTitle.className='card-title'; galTitle.style.marginTop='18px'; galTitle.textContent = `${sectionLabel} (${arr.length} photo${arr.length===1?'':'s'})`;
+        galWrap.appendChild(galTitle);
+        const galGrid = document.createElement('div'); galGrid.className='slot-grid';
+        function paintGal(){
+          galGrid.innerHTML = '';
+          arr.forEach((p,pi) => {
+            galGrid.appendChild(buildSlot({
+              value:p, label:'Add photo',
+              onFile: v => { arr[pi] = v; },
+              onRemove: () => { arr.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `${sectionLabel} (${arr.length} photo${arr.length===1?'':'s'})`; },
+              hq:true
+            }));
+          });
           galGrid.appendChild(buildSlot({
-            value:p, label:'Add photo',
-            onFile: v => { s.photos[pi] = v; },
-            onRemove: () => { s.photos.splice(pi,1); markDirty(); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; },
+            value:'', label:'Add photo',
+            onFile: v => { arr.push(v); paintGal(); galTitle.textContent = `${sectionLabel} (${arr.length} photo${arr.length===1?'':'s'})`; },
+            onRemove: ()=>{},
             hq:true
           }));
-        });
-        galGrid.appendChild(buildSlot({
-          value:'', label:'Add photo',
-          onFile: v => { s.photos.push(v); paintGal(); galTitle.textContent = `Story Gallery (${s.photos.length} photo${s.photos.length===1?'':'s'})`; },
-          onRemove: ()=>{},
-          hq:true
-        }));
+        }
+        paintGal();
+        galWrap.appendChild(galGrid);
+        card.appendChild(galWrap);
       }
-      paintGal();
-      galWrap.appendChild(galGrid);
-      card.appendChild(galWrap);
+      buildGallerySection('Pre-Wedding Gallery', s.preweddingPhotos);
+      buildGallerySection('Wedding Gallery', s.weddingPhotos);
     });
   }
   paint();
