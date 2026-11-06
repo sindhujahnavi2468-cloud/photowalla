@@ -302,11 +302,17 @@ async function saveState(){
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
       body: JSON.stringify(state)
     });
-    if (!res.ok) throw new Error('save failed');
+       if (!res.ok){
+      let detail = '';
+      try{ const j = await res.json(); detail = j.message || ''; }catch(_){}
+      const size = Math.round(JSON.stringify(state).length / 1024);
+      throw new Error(`${res.status} ${detail} (data size: ${size} KB)`);
+    }
     markSaved();
     showToast('Saved — your website will update within a minute');
   } catch(e){
-    showToast('Save failed. Check your Bin ID / Master Key in Settings.', true);
+    console.error(e);
+    showToast('Save failed: ' + e.message, true);
   } finally {
     btn.disabled = false; btn.textContent = 'Save Changes';
   }
